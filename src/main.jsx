@@ -8,6 +8,6 @@ import "./reset.css"
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <SignUp/>
+    <Login/>
   </React.StrictMode>,
 );
