@@ -47,3 +47,11 @@ h6 {
 #__next {
   isolation: isolate;
 }
+
+* {
+  font-family: 'Roboto', Arial, Helvetica, sans-serif;
+}
+
+html {
+  font-size: 87.5%;
+}

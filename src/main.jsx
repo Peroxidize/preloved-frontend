@@ -4,10 +4,10 @@ import SignUp from './SignUp/SignUp';
 import Login from './Login/Login';
 import "@fontsource/roboto";
 import "@fontsource/roboto/700.css";
-import "./reset.css"
+import "./global.css"
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <Login/>
+    <SignUp/>
   </React.StrictMode>,
 );

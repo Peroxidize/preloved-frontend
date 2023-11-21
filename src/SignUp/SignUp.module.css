@@ -1,14 +1,7 @@
-* {
-  font-family: 'Roboto', Arial, Helvetica, sans-serif;
-}
-
-html {
-  font-size: 87.5%;
-}
-
-body {
+.backgroundPhoto {
   background: url('../assets/sign-up-bg.png');
   background-size: cover;
+  padding: 2rem 0;
 }
 
 .container {
@@ -23,44 +16,44 @@ body {
   width: 275px;
 }
 
-legend {
+.legend {
   margin-top: 1rem;
   margin-bottom: 2rem;
 }
 
-a,
-a:visited,
-a:active {
+.link,
+.link:visited,
+.link:active {
   color: black;
 }
 
-.input-container {
+.inputContainer {
   display: flex;
   flex-direction: column;
   gap: 0.25rem;
   margin-bottom: 1.5rem;
 }
 
-.text-input {
+.textInput {
   padding: 0.75rem 1rem;
   border-radius: 10px;
   border: 1px solid black;
   outline: 0;
 }
 
-.date-input {
+.dateInput {
   width: fit-content;
 }
 
-.address-input {
+.addressInput {
   margin-bottom: 0.4rem;
 }
 
-input[type='file'] {
+.fileInput {
   display: none;
 }
 
-.proof-input {
+.proofInput {
   padding: 1rem 2rem;
   border-radius: 10px;
   border: 1px solid black;
@@ -70,15 +63,16 @@ input[type='file'] {
   align-items: center;
   text-align: center;
   color: gray;
+  cursor: pointer;
 }
 
-.image-icon {
+.imageIcon {
   width: 3rem;
   filter: invert(62%) sepia(21%) saturate(0%) hue-rotate(276deg) brightness(77%)
     contrast(88%);
 }
 
-.signup-button {
+.signupButton {
   width: 100%;
   background-color: black;
   color: white;
@@ -87,11 +81,12 @@ input[type='file'] {
   font-weight: bold;
   border-radius: 2rem;
   margin-top: 1rem;
+  cursor: pointer;
 }
 
 @media (min-width: 500px) and (max-width: 768px) {
   .container {
-    margin: 2rem auto;
+    margin: auto;
     width: 80%;
     padding: 4rem;
   }
@@ -99,7 +94,7 @@ input[type='file'] {
 
 @media (min-width: 768px) and (max-width: 900px) {
   .container {
-    margin: 2rem auto;
+    margin: auto;
     width: 70%;
     padding: 4rem;
   }
@@ -107,21 +102,21 @@ input[type='file'] {
 
 @media (min-width: 900px) {
   .container {
-    margin: 2rem auto;
+    margin: auto;
     width: 60%;
     padding: 4rem;
   }
-  .one-row-responsive {
+  .oneRowResponsive {
     display: flex;
     gap: 1rem;
   }
 
-  .date-input {
+  .dateInput {
     width: 100%;
   }
 
-  .input-container,
-  .text-input {
+  .inputContainer,
+  .textInput {
     flex: 1;
   }
 }
