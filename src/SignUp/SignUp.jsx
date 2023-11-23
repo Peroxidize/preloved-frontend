@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
 import logo from '../assets/preloved-logo.jpg';
-import imageIcon from '../assets/imageIcon.svg';
+import imageIcon from '../assets/icons/imageIcon.svg';
 import classes from './SignUp.module.css';
 
 export default function SignUp() {

@@ -1,7 +1,6 @@
 .backgroundPhoto {
   background: url('../assets/sign-up-bg.png');
   background-size: cover;
-  padding: 2rem 0;
 }
 
 .container {
@@ -84,7 +83,26 @@
   cursor: pointer;
 }
 
+.oneRowResponsive {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.inputContainer,
+.textInput {
+  flex: 1;
+}
+
+.oneRowResponsive .textInput {
+  margin-bottom: 0;
+}
+
 @media (min-width: 500px) and (max-width: 768px) {
+  .backgroundPhoto {
+    padding: 2rem 0;
+  }
+
   .container {
     margin: auto;
     width: 80%;
@@ -93,6 +111,10 @@
 }
 
 @media (min-width: 768px) and (max-width: 900px) {
+  .backgroundPhoto {
+    padding: 2rem 0;
+  }
+
   .container {
     margin: auto;
     width: 70%;
@@ -101,23 +123,18 @@
 }
 
 @media (min-width: 900px) {
+  .backgroundPhoto {
+    padding: 2rem 0;
+  }
+  
   .container {
     margin: auto;
     width: 60%;
     padding: 4rem;
   }
-  .oneRowResponsive {
-    display: flex;
-    gap: 1rem;
-  }
 
   .dateInput {
     width: 100%;
-  }
-
-  .inputContainer,
-  .textInput {
-    flex: 1;
   }
 }
 

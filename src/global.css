@@ -55,3 +55,14 @@ h6 {
 html {
   font-size: 87.5%;
 }
+
+::-webkit-scrollbar {
+  height: 0.5rem;
+  width: 0.5rem;
+  /* background-color: rgb(241, 241, 241); */
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 100vw;
+  background-color: rgb(167, 167, 167);
+}
