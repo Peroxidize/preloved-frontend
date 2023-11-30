@@ -1,43 +1,79 @@
 .backgroundPhoto {
-  background: url('../assets/sign-up-bg.png');
-  background-size: cover;
+    background: url('../assets/sign-up-bg.png');
+    background-size: cover;
 }
 
 .body {
-  display: flex;
-  flex-direction: row-reverse;
+    display: flex;
+    flex-direction: row-reverse;
 }
 
 .container {
-  width: 45.5vw;
-  height: 100vh;
-  background-color: white;
-  margin: auto;
-  display: flex;
-  flex-direction: column;
-  padding-left: 5vw;
-  padding-right: 5vw;
-  justify-content: center;
+    width: 45.5vw;
+    height: 100vh;
+    background-color: white;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    padding-left: 5vw;
+    padding-right: 5vw;
+    justify-content: center;
 }
 
 .logo {
-  width: 80%;
+    width: 80%;
 }
 
 .text {
-  padding-top: 1em;
-  padding-bottom: 2em;
+    padding-top: 1em;
+    padding-bottom: 2em;
 }
 
 .text h1 {
-  font-size: 2.25rem;
+    font-size: 2.25rem;
 }
 .text p {
-  font-size: 1.25rem;
+    font-size: 1.25rem;
 }
 
 .form_input {
-  display: flex;
-  flex-direction: column;
-  padding-bottom: 1.2em;
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 1.2em;
+}
+
+/* 
+##Device = Tablets, Ipads (portrait)
+##Screen = B/w 768px to 1024px
+*/
+
+@media (min-width: 768px) and (max-width: 1024px) {
+
+}
+
+/* 
+##Device = Tablets, Ipads (landscape)
+##Screen = B/w 768px to 1024px
+*/
+
+@media (min-width: 768px) and (max-width: 1024px) and (orientation: landscape) {
+
+}
+
+/* 
+##Device = Low Resolution Tablets, Mobiles (Landscape)
+##Screen = B/w 481px to 767px
+*/
+
+@media (min-width: 481px) and (max-width: 767px) {
+
+}
+
+/* 
+##Device = Most of the Smartphones Mobiles (Portrait)
+##Screen = B/w 320px to 479px
+*/
+
+@media (min-width: 280px) and (max-width: 480px) {
+    
 }

@@ -70,10 +70,74 @@
 
 .display_clothing img {
     border-radius: 10px;
-    max-width: 200px;
-    max-height: 200px;
+    max-width: 300px;
+    max-height: 300px;
+    background-color: #E9E9E9;
 }
 
 .display_clothing img:hover {
     cursor: pointer;
+}
+
+/* 
+##Device = Tablets, Ipads (landscape)
+##Screen = B/w 768px to 1024px
+*/
+
+@media (min-width: 768px) and (max-width: 1024px) and (orientation: landscape) {
+
+}
+
+/* 
+##Device = Low Resolution Tablets, Mobiles (Landscape)
+##Screen = B/w 481px to 767px
+*/
+
+@media (min-width: 481px) and (max-width: 767px) {
+
+}
+
+/* 
+##Device = Most of the Smartphones Mobiles (Portrait)
+##Screen = B/w 320px to 479px
+*/
+
+@media (min-width: 280px) and (max-width: 480px) {
+.nav_bar {
+    margin: 1em;
+}
+
+.logo {
+    display: none;
+}
+
+.search_bar {
+    width: 100vw;
+}
+
+.search_bar input {
+    width: 90vw;
+    height: 2.5em;
+    display: flex;
+    border: none;
+    background-color: #E9E9E9;
+    border-radius: 34px;
+    justify-content: center;
+}
+
+.search_bar img {
+    padding-left: 0.5em;
+    left: 0.5em; /* Adjust the positioning of the search icon */
+    top: 50%;
+    transform: translateY(-50%);
+    position: absolute;
+}
+
+.shopping_cart {
+    display: none;
+}
+
+.nav_bar p {
+    display: none;
+}
 }
