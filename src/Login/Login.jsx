@@ -5,7 +5,7 @@ import logo from '../assets/preloved-logo.jpg';
 import styles from './login.module.css';
 import signUpClass from '../SignUp/SignUp.module.css';
 
-const domain = 'http://192.168.137.1:8000/';
+const domain = 'https://prelovedbackends.azurewebsites.net/';
 
 export default function Login() {
   const [email, setEmail] = useState('');
@@ -18,9 +18,9 @@ export default function Login() {
       formData.append('password', password);
 
       const response = await axios
-        .post(domain + 'auth/login/', form)
+        .post(domain + 'auth/login/', formData)
         .then((response) => {
-          alert('Response:', response.data);
+          console.log(response.data)
         })
         .catch((error) => {
           alert('Error:', error);
