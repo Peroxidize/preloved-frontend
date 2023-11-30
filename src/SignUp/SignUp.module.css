@@ -98,6 +98,16 @@
   margin-bottom: 0;
 }
 
+.radioGroupContainer {
+  display: flex;
+  gap: 2rem;
+}
+
+.radioContainer {
+  display: flex;
+  gap: 0.5rem;
+}
+
 @media (min-width: 500px) and (max-width: 768px) {
   .backgroundPhoto {
     padding: 2rem 0;
