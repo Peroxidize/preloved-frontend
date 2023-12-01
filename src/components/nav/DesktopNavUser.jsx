@@ -1,10 +1,10 @@
-import classes from '../assets/componentCSS/DesktopNav.module.css'
+import classes from '../../assets/componentCSS/DesktopNav.module.css'
 
-import logo from '../assets/preloved-logo.jpg';
-import searchIcon from '../assets/icons/search_icon.svg'
-import profileIcon from '../assets/icons/accountCircle.svg'
-import cartIcon from '../assets/icons/shopping_cart.svg'
-import ticketIcon from '../assets/icons/ticket.svg'
+import logo from '../../assets/preloved-logo.jpg';
+import searchIcon from '../../assets/icons/search_icon.svg'
+import profileIcon from '../../assets/icons/accountCircle.svg'
+import cartIcon from '../../assets/icons/shopping_cart.svg'
+import ticketIcon from '../../assets/icons/ticket.svg'
 
 export default function DesktopNav() {
     return (
