@@ -10,17 +10,25 @@ import checkeredSweater from '../assets/clothes/checkered-sweater.jpg';
 import greySlacks from '../assets/clothes/grey-slacks.jpg';
 import khakiJacket from '../assets/clothes/khaki-jacket.jpg';
 import greenSweater from '../assets/clothes/green-sweater.jpg';
+import magentaShirt from '../assets/clothes/magenta-shirt.png';
+import creamJacket from '../assets/clothes/cream-jacket.png';
+import creamSlacks from '../assets/clothes/cream-slacks.png';
 
 const repeatArray = (array, n) => Array.from({ length: n }, () => array).flat();
+const getImageName = (image) => {
+  const path = image.split('/');
+  const name = path[path.length - 1].split('.');
+  return name[0];
+};
 
 export default function() {
   const clothingItems = [
     beigeJacket,
-    blueBoxer,
     checkeredSweater,
     greySlacks,
     khakiJacket,
     greenSweater,
+    magentaShirt,
   ];
 
   const repeatedClothingItems = repeatArray(clothingItems, 10);
@@ -44,7 +52,7 @@ export default function() {
 
       <div className={css.display_clothing}>
         {repeatedClothingItems.map((item, index) => (
-          <img key={index} src={item} alt={`Clothing Image ${index + 1}`} />
+          <img key={index} src={item} alt={`${getImageName(item)}`} />
         ))}
       </div>
     </div>
