@@ -1,7 +1,7 @@
 .navContainer {
-    padding: 1rem;
+    padding: 1rem 4rem;
     display: flex;
-    justify-content: space-around;
+    justify-content: space-between;
 }
 
 .logo {
@@ -13,6 +13,10 @@
     background-color: #E9E9E9;
     padding:0.5rem 1rem;
     border-radius: 100vw;
+}
+
+.ticketIcon {
+    width: 2.25rem;
 }
 
 .cartIcon {
