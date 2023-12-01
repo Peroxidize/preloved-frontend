@@ -1,0 +1,24 @@
+.navContainer {
+    padding: 1rem;
+    display: flex;
+    justify-content: space-around;
+}
+
+.logo {
+    width: 15rem;
+}
+
+.searchbar {
+    width: 55%;
+    background-color: #E9E9E9;
+    padding:0.5rem 1rem;
+    border-radius: 100vw;
+}
+
+.cartIcon {
+    width: 2rem;
+}
+
+.profileIcon {
+    width: 2.5rem;
+}
