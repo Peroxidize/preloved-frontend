@@ -1,4 +1,4 @@
-import DesktopNav from "../components/DesktopNav";
+import DesktopNav from "../components/nav/DesktopNavUser";
 
 export default function TicketCenterUser() {
     return(
