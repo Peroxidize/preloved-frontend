@@ -48,7 +48,7 @@
 }
 
 .multiple1 {
-    display: flex;
+    display: none;
     justify-content: center;
     margin-top: 40px;
 }

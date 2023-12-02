@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Link, Navigate, redirect, useNavigate } from 'react-router-dom';
 
@@ -11,6 +11,7 @@ import FrontPage from '../FrontPage/FrontPage';
 
 const domain = 'https://prelovedbackends.azurewebsites.net/';
 const body = document.body;
+let spinner;
 
 const removeStyle = () => {
   body.classList.remove(styles.body);
@@ -21,8 +22,8 @@ function errorMessage(isLoggedIn) {
   document.getElementById("error").style.display = isLoggedIn ? 'none' : 'block';
 }
 
-function displaySpinner(active) {
-  document.getElementById("spinner").style.display = active ? 'flex' : 'none';
+function displaySpinner(isActive) {
+  document.getElementById("spinner").style.display = isActive ? 'flex' : 'none';
 }
   
 function evaluatePostRequest(response) {
@@ -37,27 +38,26 @@ export default function Login() {
 
   body.classList.add(styles.body);
   body.classList.add(styles.backgroundPhoto);
-  displaySpinner(false);
-
+  
   async function handlePostRequest(e) {
     e.preventDefault();
+    displaySpinner(true);
 
     const formData = new FormData();
     formData.append('email', email);
     formData.append('password', password);
 
-    displaySpinner(true);
     await axios
     .post(domain + 'auth/login/', formData)
     .then((response) => {
       setIsLoggedIn(evaluatePostRequest(JSON.stringify(response)));
       errorMessage(isLoggedIn);
-      displaySpinner(false);
     }).catch((error) => {
       console.log(error);
-      displaySpinner(false);
       errorMessage(isLoggedIn);
     });
+
+    displaySpinner(false);
   }
 
   return (
@@ -105,10 +105,10 @@ export default function Login() {
           <button type="submit" className={signUpClass.signupButton}>
             Log In
           </button>
-          <div id="spinner" class={styles.multiple1}>
-            <div class={styles.ball1}></div>
-            <div class={styles.ball2}></div>
-            <div class={styles.ball3}></div>
+          <div id="spinner" className={styles.multiple1}>
+            <div className={styles.ball1}></div>
+            <div className={styles.ball2}></div>
+            <div className={styles.ball3}></div>
           </div>
           {isLoggedIn && removeStyle()}
           {isLoggedIn && (<Navigate to="frontpage/" replace={true}/>)}
