@@ -22,42 +22,28 @@ export default function Login() {
   const [password, setPassword] = useState('');
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-  const handlePostRequest = async () => {
-    try {
-      const formData = new FormData();
-      formData.append('email', email);
-      formData.append('password', password);
-
-      const response = await axios
-        .post(domain + 'auth/login/', formData)
-        .then((response) => {
-          const responseAsString = JSON.stringify(response);
-          const pattern = /"status":200/;
-          const result = pattern.test(responseAsString);
-          if (result) {
-            setIsLoggedIn(true);
-            console.log("Username and password is correct");
-          } else {
-            console.log("Invalid username/password!");
-          }
-        })
-        .catch((error) => {
-          // alert('Error:', error);
-        });
-      // alert(response);
-    } catch (error) {
-      // alert(error);
-    }
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    await handlePostRequest();
-  };
-
   body.classList.add(styles.body);
   body.classList.add(styles.backgroundPhoto);
+  
+  function evaluatePostRequest(response) {
+    // returns boolean
+    return /"status":200/.test(response);
+  }
+
+  async function handlePostRequest(e) {
+    e.preventDefault();
+    const formData = new FormData();
+    formData.append('email', email);
+    formData.append('password', password);
+  
+    await axios
+      .post(domain + 'auth/login/', formData)
+      .then((response) => {
+        setIsLoggedIn(evaluatePostRequest(JSON.stringify(response)));
+      }).catch((error) => {
+        console.log(error);
+      });
+  }
 
   return (
     <div className={styles.backgroundPhoto}>
@@ -75,7 +61,7 @@ export default function Login() {
             </Link>
           </p>
         </div>
-        <form onSubmit={handleSubmit} method="post">
+        <form onSubmit={handlePostRequest} method="post">
           <div className={styles.form_input}>
             <label htmlFor="username">Username</label>
             <input

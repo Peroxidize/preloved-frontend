@@ -25,7 +25,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
         <Route path="/frontpage" Component={FrontPage} />
         <Route path="/ordering" Component={Ordering} />
         <Route path="/invoice" Component={Invoice} />
-        <Route path="/ticketscreen" Component={TicketCenterUser} />
+        <Route path="/ticketscreen" Component={TicketScreenSeller} />
       </Routes>
     </Router>    
   </React.StrictMode>,
