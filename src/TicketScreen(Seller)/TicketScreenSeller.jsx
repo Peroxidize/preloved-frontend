@@ -52,7 +52,7 @@ export default function() {
                   </span>
                   <span className={css.center_button}>
                     <button type="submit" className={css.confirm_button}>
-                        Log In
+                        Submit
                     </button> 
                   </span>
                 </div>

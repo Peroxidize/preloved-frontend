@@ -1,15 +1,21 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { Link, Navigate, redirect, useNavigate } from 'react-router-dom';
 
 import logo from '../assets/preloved-logo.jpg';
 import styles from './login.module.css';
+import frontpagestyles from '../FrontPage/frontpage.module.css';
 import signUpClass from '../SignUp/SignUp.module.css';
+
+import FrontPage from '../FrontPage/FrontPage';
 
 const domain = 'https://prelovedbackends.azurewebsites.net/';
 
 export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const navigate = useNavigate();
 
   const handlePostRequest = async () => {
     try {
@@ -20,10 +26,20 @@ export default function Login() {
       const response = await axios
         .post(domain + 'auth/login/', formData)
         .then((response) => {
-          console.log(response.data)
+          const responseAsString = JSON.stringify(response);
+          // console.log(responseAsString);
+          const pattern = /"status":200/;
+          const result = pattern.test(responseAsString);
+          console.log(result);
+          if (result) {
+            setIsLoggedIn(true);
+            console.log("Username and password is correct");
+          } else {
+            console.log("Invalid username/password!");
+          }
         })
         .catch((error) => {
-          alert('Error:', error);
+          // alert('Error:', error);
         });
       // alert(response);
     } catch (error) {
@@ -37,8 +53,8 @@ export default function Login() {
     await handlePostRequest();
   };
 
-  const navigateSignup = () => {
-    // TODO
+  const removeStyle = () => {
+    body.classList.remove(styles);
   };
 
   const body = document.body;
@@ -53,9 +69,12 @@ export default function Login() {
           <h1>Log in</h1>
           <p>
             No account yet?{' '}
-            <a href="" onClick={navigateSignup}>
-              Sign Up
-            </a>
+            <Link to="signup/" 
+              className={signUpClass.link}
+              onClick={removeStyle}
+            >
+              Click Here
+            </Link>
           </p>
         </div>
         <form onSubmit={handleSubmit} method="post">
@@ -84,6 +103,7 @@ export default function Login() {
           <button type="submit" className={signUpClass.signupButton}>
             Log In
           </button>
+          {isLoggedIn && (<Navigate to="frontpage/" replace={true}/>)}
         </form>
       </div>
     </div>
