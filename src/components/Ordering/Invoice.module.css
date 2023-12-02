@@ -1,0 +1,104 @@
+.container {
+  padding: 2rem;
+}
+
+.backAndTitle {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.cardContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.cardLogo {
+  width: 3rem;
+  height: 3rem;
+  object-fit: contain;
+}
+
+.inputContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  margin-bottom: 1rem;
+}
+
+.textInput {
+  padding: 0.75rem 1rem;
+  border-radius: 10px;
+  border: 1px solid black;
+  outline: 0;
+  width: 100%;
+}
+
+.twoInputRow {
+  display:flex;
+  gap: 1rem;
+}
+
+.expDate {
+  flex: 4 1 0;
+}
+
+.secCode {
+  flex: 3 1 0;
+}
+
+.signupButton {
+  width: 100%;
+  background-color: black;
+  color: white;
+  border: 0;
+  padding: 1rem;
+  font-weight: bold;
+  border-radius: 2rem;
+  margin-top: 1rem;
+  cursor: pointer;
+}
+
+@media (min-width: 800px) {
+  .container {
+    padding: 2rem 4rem;
+  }
+
+  .cardContainer {
+    gap: 2rem;
+    flex: 1;
+  }
+
+  .cardLogo {
+    width: 4rem;
+    height: 4rem;
+  }
+
+  .desktopTwoColumns {
+    display: flex;
+    gap: 2rem;
+  }
+
+  .formContainer {
+    flex:1;
+  }
+}
+
+@media (min-width: 1000px) {
+  .cardContainer {
+    flex: 2;
+    gap: 4rem;
+  }
+
+  .cardLogo {
+    width: 6rem;
+    height: 6rem;
+  }
+
+  .formContainer {
+    flex:1;
+  }
+}

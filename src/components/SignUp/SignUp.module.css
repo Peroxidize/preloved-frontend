@@ -1,0 +1,155 @@
+.backgroundPhoto {
+  background: url('../assets/sign-up-bg.png');
+  background-size: cover;
+}
+
+.container {
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background-color: white;
+}
+
+.logo {
+  width: 275px;
+}
+
+.legend {
+  margin-top: 1rem;
+  margin-bottom: 2rem;
+}
+
+.link,
+.link:visited,
+.link:active {
+  color: black;
+}
+
+.inputContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  margin-bottom: 1.5rem;
+}
+
+.textInput {
+  padding: 0.75rem 1rem;
+  border-radius: 10px;
+  border: 1px solid black;
+  outline: 0;
+}
+
+.dateInput {
+  width: fit-content;
+}
+
+.addressInput {
+  margin-bottom: 0.4rem;
+}
+
+.fileInput {
+  display: none;
+}
+
+.proofInput {
+  padding: 1rem 2rem;
+  border-radius: 10px;
+  border: 1px solid black;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  color: gray;
+  cursor: pointer;
+}
+
+.imageIcon {
+  width: 3rem;
+  filter: invert(62%) sepia(21%) saturate(0%) hue-rotate(276deg) brightness(77%)
+    contrast(88%);
+}
+
+.signupButton {
+  width: 100%;
+  background-color: black;
+  color: white;
+  border: 0;
+  padding: 1rem;
+  font-weight: bold;
+  border-radius: 2rem;
+  margin-top: 1rem;
+  cursor: pointer;
+}
+
+.oneRowResponsive {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.inputContainer,
+.textInput {
+  flex: 1;
+}
+
+.oneRowResponsive .textInput {
+  margin-bottom: 0;
+}
+
+.radioGroupContainer {
+  display: flex;
+  gap: 2rem;
+}
+
+.radioContainer {
+  display: flex;
+  gap: 0.5rem;
+}
+
+@media (min-width: 500px) and (max-width: 768px) {
+  .backgroundPhoto {
+    padding: 2rem 0;
+  }
+
+  .container {
+    margin: auto;
+    width: 80%;
+    padding: 4rem;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 900px) {
+  .backgroundPhoto {
+    padding: 2rem 0;
+  }
+
+  .container {
+    margin: auto;
+    width: 70%;
+    padding: 4rem;
+  }
+}
+
+@media (min-width: 900px) {
+  .backgroundPhoto {
+    padding: 2rem 0;
+  }
+  
+  .container {
+    margin: auto;
+    width: 60%;
+    padding: 4rem;
+  }
+
+  .dateInput {
+    width: 100%;
+  }
+}
+
+@media (min-width: 1200px) {
+  .container {
+    width: 50%;
+  }
+}
