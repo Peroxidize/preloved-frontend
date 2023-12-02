@@ -17,6 +17,19 @@ const removeStyle = () => {
   body.classList.remove(styles.backgroundPhoto);
 };
 
+function errorMessage(isLoggedIn) {
+  document.getElementById("error").style.display = isLoggedIn ? 'none' : 'block';
+}
+
+function displaySpinner(active) {
+  document.getElementById("spinner").style.display = active ? 'flex' : 'none';
+}
+  
+function evaluatePostRequest(response) {
+  // returns boolean
+  return /"status":"OK!"/.test(response);
+}
+
 export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -24,25 +37,27 @@ export default function Login() {
 
   body.classList.add(styles.body);
   body.classList.add(styles.backgroundPhoto);
-  
-  function evaluatePostRequest(response) {
-    // returns boolean
-    return /"status":200/.test(response);
-  }
+  displaySpinner(false);
 
   async function handlePostRequest(e) {
     e.preventDefault();
+
     const formData = new FormData();
     formData.append('email', email);
     formData.append('password', password);
-  
+
+    displaySpinner(true);
     await axios
-      .post(domain + 'auth/login/', formData)
-      .then((response) => {
-        setIsLoggedIn(evaluatePostRequest(JSON.stringify(response)));
-      }).catch((error) => {
-        console.log(error);
-      });
+    .post(domain + 'auth/login/', formData)
+    .then((response) => {
+      setIsLoggedIn(evaluatePostRequest(JSON.stringify(response)));
+      errorMessage(isLoggedIn);
+      displaySpinner(false);
+    }).catch((error) => {
+      console.log(error);
+      displaySpinner(false);
+      errorMessage(isLoggedIn);
+    });
   }
 
   return (
@@ -72,6 +87,9 @@ export default function Login() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
             />
+            <p id="error" className={styles.error_message}>
+              Incorrect username or password
+            </p>
           </div>
           <div className={styles.form_input}>
             <label htmlFor="password">Password</label>
@@ -87,6 +105,11 @@ export default function Login() {
           <button type="submit" className={signUpClass.signupButton}>
             Log In
           </button>
+          <div id="spinner" class={styles.multiple1}>
+            <div class={styles.ball1}></div>
+            <div class={styles.ball2}></div>
+            <div class={styles.ball3}></div>
+          </div>
           {isLoggedIn && removeStyle()}
           {isLoggedIn && (<Navigate to="frontpage/" replace={true}/>)}
         </form>
