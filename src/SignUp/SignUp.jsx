@@ -6,6 +6,9 @@ import imageIcon from '../assets/icons/imageIcon.svg';
 import classes from './SignUp.module.css';
 
 const domain = 'https://prelovedbackends.azurewebsites.net/';
+const userNavText = 'Want to create a seller account?';
+const sellerNavText = 'Want to create a user account?';
+
 
 export default function SignUp() {
   const [isStore, setIsStore] = useState(false);
@@ -144,10 +147,19 @@ export default function SignUp() {
           <legend className={classes.legend}>
             <h1>Create your account</h1>
             <p>
-              Want to create a seller account?{' '}
+              {isStore ? sellerNavText : userNavText}{' '}
               <a
                 href="#"
                 onClick={() => setIsStore(!isStore)}
+                className={classes.link}
+              >
+                Click Here
+              </a>
+            </p>
+            <p>
+              Already have an account?{' '}
+              <a
+                href="/"
                 className={classes.link}
               >
                 Click Here

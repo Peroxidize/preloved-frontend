@@ -1,10 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { 
-  Router,
-  Routes,
-  Route
-} from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 import SignUp from './SignUp/SignUp';
 import Login from './Login/Login';
@@ -29,7 +25,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
         <Route path="/frontpage" Component={FrontPage} />
         <Route path="/ordering" Component={Ordering} />
         <Route path="/invoice" Component={Invoice} />
-        <Route path="/ticketscreen" Component={TicketScreenSeller} />
+        <Route path="/ticketscreen" Component={TicketCenterUser} />
       </Routes>
     </Router>    
   </React.StrictMode>,
