@@ -7,10 +7,10 @@ import greenSweater from '../assets/clothes/green-sweater.jpg';
 
 import leftArrow from '../assets/icons/leftArrow.svg';
 import rightArrow from '../assets/icons/rightArrow.svg';
-import visaLogo from '../assets/icons/visaLogo.png';
-import mastercardLogo from '../assets/icons/mastercardLogo.png';
-import amexLogo from '../assets/icons/amexLogo.png';
-import jcbLogo from '../assets/icons/jcbLogo.png';
+import visaLogo from '../assets/logos/visaLogo.png';
+import mastercardLogo from '../assets/logos/mastercardLogo.png';
+import amexLogo from '../assets/logos/amexLogo.png';
+import jcbLogo from '../assets/logos/jcbLogo.png';
 
 import { useState } from 'react';
 

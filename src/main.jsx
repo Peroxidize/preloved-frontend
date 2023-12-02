@@ -11,6 +11,7 @@ import Login from './Login/Login';
 import Ordering from './Ordering/Ordering';
 import Invoice from './Ordering/Invoice';
 import FrontPage from './FrontPage/FrontPage';
+import TicketCenterUser from './TicketCenterUser/TicketCenterUser';
 import TicketScreenSeller from './TicketScreen(Seller)/TicketScreenSeller';
 
 import "@fontsource/roboto";
