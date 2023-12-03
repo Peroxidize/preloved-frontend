@@ -92,8 +92,8 @@ export default function Login() {
       console.log(error);
     }).finally(() => {
       if (isGenerating) {
-        authenticateUser(isLoggedIn, email);
         setIsLoggedIn(isGenerating);
+        authenticateUser(isGenerating, email);
       }
     });
 
