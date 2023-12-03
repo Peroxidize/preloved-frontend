@@ -1,0 +1,53 @@
+.nav_bar {
+    padding-top: 1vw;
+    width: 100vw;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 16px;
+    padding-right: 3em;
+}
+
+.logo {
+    margin-left: 3em;
+    width: 13vw;
+    height: auto;
+}
+
+.search_bar {
+    width: 50vw;
+    position: relative;
+}
+
+.search_bar input {
+    width: 100%;
+    height: 2.5em;
+    display: block;
+    padding-left: 3em;
+    border: none;
+    background-color: #E9E9E9;
+    border-radius: 34px;
+}
+
+.search_bar img {
+    left: 1em;
+    top: 50%;
+    transform: translateY(-50%);
+    position: absolute;
+}
+
+.ticket_icon {
+    width: 2em;
+}
+
+.profile_icon {
+    width: 2em;
+    margin-right: 0.5em;
+}
+
+.logo:hover,
+.ticket_icon:hover,
+.profile_icon:hover,
+.shopping_cart:hover {
+    cursor: pointer;
+}

@@ -30,6 +30,13 @@ export default function Login() {
     e.preventDefault();
     displaySpinner(true);
 
+    if (email === "" && email.length === 0 || 
+        password === "" && password.length === 0) {
+      errorMessage(isLoggedIn);
+      displaySpinner(false);
+      return;
+    }
+
     const formData = new FormData();
     formData.append('email', email);
     formData.append('password', password);
@@ -95,6 +102,7 @@ export default function Login() {
             <div className={styles.ball2}></div>
             <div className={styles.ball3}></div>
           </div>
+          {isLoggedIn && removeStyle()}
           {isLoggedIn && (<Navigate to="frontpage/" replace={true}/>)}
         </form>
       </div>
