@@ -14,7 +14,7 @@ import creamJacket from '../../assets/clothes/cream-jacket.png';
 import creamSlacks from '../../assets/clothes/cream-slacks.png';
 
 const repeatArray = (array: string[], n: number) => Array.from({ length: n }, () => array).flat();
-const getImageName = (image: any) => {
+const getImageName = (image: string) => {
   const path = image.split('/');
   const name = path[path.length - 1].split('.');
   return name[0];

@@ -15,11 +15,11 @@ const removeStyle = () => {
 };
 
 function errorMessage(isLoggedIn: boolean) {
-  (document.getElementById("error")!.style.display = isLoggedIn ? 'none' : 'block');
+  (document.getElementById("error")!.style.opacity = isLoggedIn ? '0' : '100');
 }
 
 function displaySpinner(isActive: boolean) {
-  document.getElementById("spinner")!.style.display = isActive ? 'flex' : 'none';
+  document.getElementById("spinner")!.style.opacity = isActive ? '100' : '0';
 }
   
 function evaluatePostRequest(response: string): boolean {
