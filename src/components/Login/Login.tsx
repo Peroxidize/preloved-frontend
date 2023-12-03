@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import axios from 'axios';
 import { Link, Navigate } from 'react-router-dom';
+import { User, UserType } from '../user';
 
 import logo from '../../assets/preloved-logo.jpg';
 import styles from './login.module.css';
@@ -8,22 +9,8 @@ import signUpClass from '../SignUp/SignUp.module.css';
 
 const domain = 'https://prelovedbackends.azurewebsites.net/';
 const body = document.body;
+let authenticate: boolean;
 let user: User;
-let token: string;
-let isGenerating: boolean;
-
-interface User {
-  email: string;
-  type: userType;
-  token: string;
-  loggedIn: boolean;
-}
-
-enum userType {
-  User,
-  Seller,
-  Admin,
-}
 
 const removeStyle = (): boolean => {
   body.classList.remove(styles.body);
@@ -43,25 +30,6 @@ function evaluatePostRequest(response: string): boolean {
   return /"status":"OK!"/.test(response);
 }
 
-async function authenticateUser(isLoggedIn: boolean, email: string): Promise<void>{
-  user = {
-    email: email,
-    type: userType.User,
-    token: token,
-    loggedIn: isLoggedIn,
-  }
-  console.log(user);
-}
-
-async function generateToken(): Promise<void> {
-  try {
-    const response = await axios.get(domain + 'auth/csrf_token');
-    token = response.data.csrf_token;
-  } catch(error) {
-    console.log(error);
-  }
-}
-
 export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -71,8 +39,6 @@ export default function Login() {
     e.preventDefault();
     displaySpinner(true);
 
-    await generateToken();
-    
     if (email === "" && email.length === 0 || 
         password === "" && password.length === 0) {
       errorMessage(isLoggedIn);
@@ -85,20 +51,26 @@ export default function Login() {
     formData.append('password', password);
 
     await axios
-    .post(domain + 'auth/login/', formData)
-    .then(async (response) => {
-      isGenerating = evaluatePostRequest(JSON.stringify(response));
+    .post(domain + 'auth/login', formData)
+    .then((response) => {
+      authenticate = evaluatePostRequest(JSON.stringify(response));
+      setIsLoggedIn(evaluatePostRequest(JSON.stringify(response)));
     }).catch((error) => {
       console.log(error);
     }).finally(() => {
-      if (isGenerating) {
-        setIsLoggedIn(isGenerating);
-        authenticateUser(isGenerating, email);
+      if (authenticate === false) {
+        return;
       }
+      user = {
+        email: email,
+        type: UserType.User,
+        loggedIn: authenticate,
+      };
+      localStorage.setItem('userInfo', JSON.stringify(user));
     });
 
     displaySpinner(false);
-    errorMessage(isGenerating);
+    errorMessage(isLoggedIn);
   }
 
   return (
@@ -109,7 +81,7 @@ export default function Login() {
           <h1>Log in</h1>
           <p>
             No account yet?{' '}
-            <Link to="signup/" 
+            <Link to="signup" 
               className={signUpClass.link}
             >
               Click Here
