@@ -9,6 +9,8 @@ import signUpClass from '../SignUp/SignUp.module.css';
 const domain = 'https://prelovedbackends.azurewebsites.net/';
 const body = document.body;
 let user: User;
+let token: string;
+let isGenerating: boolean;
 
 interface User {
   email: string;
@@ -45,15 +47,19 @@ async function authenticateUser(isLoggedIn: boolean, email: string): Promise<voi
   user = {
     email: email,
     type: userType.User,
-    token: await generateToken(),
+    token: token,
     loggedIn: isLoggedIn,
   }
   console.log(user);
 }
 
-async function generateToken(): Promise<string> {
-  const response = await axios.get(domain + 'auth/csrf_token');
-  return response.data.csrf_token;
+async function generateToken(): Promise<void> {
+  try {
+    const response = await axios.get(domain + 'auth/csrf_token');
+    token = response.data.csrf_token;
+  } catch(error) {
+    console.log(error);
+  }
 }
 
 export default function Login() {
@@ -64,6 +70,8 @@ export default function Login() {
   async function handlePostRequest(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     displaySpinner(true);
+
+    await generateToken();
     
     if (email === "" && email.length === 0 || 
         password === "" && password.length === 0) {
@@ -79,16 +87,18 @@ export default function Login() {
     await axios
     .post(domain + 'auth/login/', formData)
     .then(async (response) => {
-      setIsLoggedIn(evaluatePostRequest(JSON.stringify(response)));
-      if (isLoggedIn) {
-        await authenticateUser(isLoggedIn, email);
-      }
+      isGenerating = evaluatePostRequest(JSON.stringify(response));
     }).catch((error) => {
       console.log(error);
+    }).finally(() => {
+      if (isGenerating) {
+        authenticateUser(isLoggedIn, email);
+        setIsLoggedIn(isGenerating);
+      }
     });
 
     displaySpinner(false);
-    errorMessage(isLoggedIn);
+    errorMessage(isGenerating);
   }
 
   return (
