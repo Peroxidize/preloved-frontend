@@ -51,3 +51,8 @@
 .shopping_cart:hover {
     cursor: pointer;
 }
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+}

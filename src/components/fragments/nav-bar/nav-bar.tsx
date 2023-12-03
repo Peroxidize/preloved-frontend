@@ -16,7 +16,12 @@ export default function DesktopNavUser() {
       </div>
       <img src={shopping_cart} className={css.shopping_cart} alt="Shopping Cart" />
       <img src={ticketIcon} className={css.ticket_icon} alt="Ticket Icon" />
-      <img src={profileIcon} className={css.profile_icon} alt="Profile Icon" />
+      <div className={css.dropdown}>
+        <img src={profileIcon} className={css.profile_icon} alt="Profile Icon" />
+        <div className={css.dropdown_content}>
+          
+        </div>
+      </div>
     </div>
   );
 }

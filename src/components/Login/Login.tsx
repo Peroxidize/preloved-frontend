@@ -8,6 +8,20 @@ import signUpClass from '../SignUp/SignUp.module.css';
 
 const domain = 'https://prelovedbackends.azurewebsites.net/';
 const body = document.body;
+let user: User;
+
+interface User {
+  email: string;
+  type: userType;
+  token: string;
+  loggedIn: boolean;
+}
+
+enum userType {
+  User,
+  Seller,
+  Admin,
+}
 
 const removeStyle = (): boolean => {
   body.classList.remove(styles.body);
@@ -24,8 +38,22 @@ function displaySpinner(isActive: boolean) {
 }
   
 function evaluatePostRequest(response: string): boolean {
-  // returns boolean
   return /"status":"OK!"/.test(response);
+}
+
+async function authenticateUser(isLoggedIn: boolean, email: string): Promise<void>{
+  user = {
+    email: email,
+    type: userType.User,
+    token: await generateToken(),
+    loggedIn: isLoggedIn,
+  }
+  console.log(user);
+}
+
+async function generateToken(): Promise<string> {
+  const response = await axios.get(domain + 'auth/csrf_token');
+  return response.data.csrf_token;
 }
 
 export default function Login() {
@@ -39,7 +67,7 @@ export default function Login() {
   async function handlePostRequest(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     displaySpinner(true);
-
+    
     if (email === "" && email.length === 0 || 
         password === "" && password.length === 0) {
       errorMessage(isLoggedIn);
@@ -53,8 +81,11 @@ export default function Login() {
 
     await axios
     .post(domain + 'auth/login/', formData)
-    .then((response) => {
+    .then(async (response) => {
       setIsLoggedIn(evaluatePostRequest(JSON.stringify(response)));
+      if (isLoggedIn) {
+        await authenticateUser(isLoggedIn, email);
+      }
     }).catch((error) => {
       console.log(error);
     });
