@@ -83,6 +83,10 @@
   cursor: pointer;
 }
 
+.signupLoading {
+  background-color: rgb(76, 76, 76);
+}
+
 .oneRowResponsive {
   display: flex;
   flex-wrap: wrap;

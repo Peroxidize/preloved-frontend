@@ -1,66 +1,59 @@
-import { useState } from 'react';
-import axios from 'axios';
+import { useEffect, useState } from "react";
+import axios from "axios";
+import { useMutation } from "react-query";
 
-import logo from '../../assets/preloved-logo.jpg';
-import imageIcon from '../../assets/icons/imageIcon.svg';
-import classes from './SignUp.module.css';
+import logo from "../../assets/preloved-logo.jpg";
+import imageIcon from "../../assets/icons/imageIcon.svg";
+import classes from "./SignUp.module.css";
+import { Navigate } from "react-router-dom";
 
-const domain = 'https://prelovedbackends.azurewebsites.net/';
-const userNavText = 'Want to create a seller account?';
-const sellerNavText = 'Want to create a user account?';
-
+const domain = "https://prelovedbackends.azurewebsites.net/";
+const userNavText = "Want to create a seller account?";
+const sellerNavText = "Want to create a user account?";
 
 export default function SignUp() {
   const [isStore, setIsStore] = useState(false);
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPass, setConfirmPass] = useState('');
-  const [fName, setFName] = useState('');
-  const [lName, setLName] = useState('');
-  const [phone, setPhone] = useState('');
-  const [isFeminine, setIsFeminine] = useState('Masculine');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPass, setConfirmPass] = useState("");
+  const [fName, setFName] = useState("");
+  const [lName, setLName] = useState("");
+  const [phone, setPhone] = useState("");
+  const [isFeminine, setIsFeminine] = useState("Masculine");
+  const [signUpSuccess, setSuccessful] = useState(false);
+
+  const [isLoading, setIsLoading] = useState(false);
+  const mutation = useMutation(
+    (data: FormData) => axios.post(domain + "auth/new_shop_user/", data),
+    {
+      onSuccess: (data) => {
+        console.log(data.data.status);
+        setIsLoading(false);
+        setSuccessful(true);
+      },
+    }
+  );
+
+  useEffect(() => {
+    if (isLoading) document.body.style.cursor = "wait";
+    else {
+      document.body.style.cursor = "default";
+    }
+  }, [isLoading]);
 
   let storeInput = null;
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-
-    try {
-      const formData = new FormData();
-      formData.append('email', email);
-      formData.append('password', password);
-      formData.append('first_name', fName);
-      formData.append('last_name', lName);
-      formData.append('phone_no', phone);
-      formData.append('isFeminine', isFeminine);
-
-      const response = await axios
-        .post(domain + 'auth/new_shop_user/', formData)
-        .then((response) => {
-          console.log(response.data)
-        })
-        .catch((error) => {
-          alert('Error:' + error);
-        });
-      // alert(response);
-    } catch (error) {
-      // alert(error);
-    }
-    // axios
-    //   .post(domain + 'auth/new_shop_user/', {
-    //     email: email,
-    //     password: password,
-    //     first_name: fName,
-    //     last_name: lName,
-    //     phone_no: phone,
-    //     isFeminine: isFeminine,
-    //   })
-    //   .then((response) => {
-    //     console.log(response.data)
-    //   })
-    //   .catch((error) => {
-    //     alert('Error:', error);
-    //   });
+    const formData = new FormData();
+    formData.append("email", email);
+    formData.append("password", password);
+    formData.append("first_name", fName);
+    formData.append("last_name", lName);
+    formData.append("phone_no", phone);
+    formData.append("isFeminine", isFeminine);
+    setIsLoading(true);
+    mutation.mutate(formData);
   }
 
   if (isStore) {
@@ -118,8 +111,8 @@ export default function SignUp() {
               type="radio"
               name="isFeminine"
               id="masculine"
-              checked={isFeminine === 'Masculine'}
-              onChange={() => setIsFeminine('Masculine')}
+              checked={isFeminine === "Masculine"}
+              onChange={() => setIsFeminine("Masculine")}
             />
             <label htmlFor="masculine">Masculine</label>
           </div>
@@ -129,8 +122,8 @@ export default function SignUp() {
               name="isFeminine"
               id="Feminine"
               value=""
-              checked={isFeminine === 'Feminine'}
-              onChange={() => setIsFeminine('Feminine')}
+              checked={isFeminine === "Feminine"}
+              onChange={() => setIsFeminine("Feminine")}
             />
             <label htmlFor="Feminine">Feminine</label>
           </div>
@@ -141,13 +134,14 @@ export default function SignUp() {
 
   return (
     <div className={classes.backgroundPhoto}>
+      {signUpSuccess && <Navigate to="/" replace={true} />}
       <div className={classes.container}>
         <img src={logo} alt="Preloved logo" className={classes.logo} />
         <form action="post" onSubmit={handleSubmit}>
           <legend className={classes.legend}>
             <h1>Create your account</h1>
             <p>
-              {isStore ? sellerNavText : userNavText}{' '}
+              {isStore ? sellerNavText : userNavText}{" "}
               <a
                 href="#"
                 onClick={() => setIsStore(!isStore)}
@@ -157,11 +151,8 @@ export default function SignUp() {
               </a>
             </p>
             <p>
-              Already have an account?{' '}
-              <a
-                href="/"
-                className={classes.link}
-              >
+              Already have an account?{" "}
+              <a href="/" className={classes.link}>
                 Click Here
               </a>
             </p>
@@ -241,7 +232,12 @@ export default function SignUp() {
             </div>
           </div>
           {storeInput}
-          <button type="submit" className={classes.signupButton}>
+          <button
+            type="submit"
+            className={`${classes.signupButton} ${
+              isLoading && classes.signupLoading
+            }`}
+          >
             Sign Up
           </button>
         </form>

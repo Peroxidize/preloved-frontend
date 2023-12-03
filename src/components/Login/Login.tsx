@@ -60,9 +60,6 @@ export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-
-  body.classList.add(styles.body);
-  body.classList.add(styles.backgroundPhoto);
   
   async function handlePostRequest(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -104,7 +101,6 @@ export default function Login() {
             No account yet?{' '}
             <Link to="signup/" 
               className={signUpClass.link}
-              onClick={removeStyle}
             >
               Click Here
             </Link>
