@@ -7,13 +7,6 @@ import styles from './login.module.css';
 import signUpClass from '../SignUp/SignUp.module.css';
 
 const domain = 'https://prelovedbackends.azurewebsites.net/';
-const body = document.body;
-
-const removeStyle = (): boolean => {
-  body.classList.remove(styles.body);
-  body.classList.remove(styles.backgroundPhoto);
-  return true;
-};
 
 function errorMessage(isLoggedIn: boolean) {
   (document.getElementById("error")!.style.opacity = isLoggedIn ? '0' : '100');
@@ -32,9 +25,6 @@ export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-
-  body.classList.add(styles.body);
-  body.classList.add(styles.backgroundPhoto);
   
   async function handlePostRequest(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -73,7 +63,6 @@ export default function Login() {
             No account yet?{' '}
             <Link to="signup/" 
               className={signUpClass.link}
-              onClick={removeStyle}
             >
               Click Here
             </Link>
