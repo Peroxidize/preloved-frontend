@@ -19,7 +19,7 @@ const queryClient = new QueryClient();
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    [<QueryClientProvider client={queryClient}>
+    <QueryClientProvider client={queryClient}>
       <Router>
         <Routes>
           <Route path="/" Component={Login} />
@@ -30,6 +30,6 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
           <Route path="/ticketscreen" Component={TicketScreenSeller} />
         </Routes>
       </Router>
-    </QueryClientProvider>]
+    </QueryClientProvider>
   </React.StrictMode>,
 )

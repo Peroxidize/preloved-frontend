@@ -1,7 +1,6 @@
 .backgroundPhoto {
     background: url('../../assets/sign-up-bg.png');
     background-size: cover;
-    margin-block: -2rem;
 }
 
 .body {
