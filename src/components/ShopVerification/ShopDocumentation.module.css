@@ -1,0 +1,9 @@
+.container {
+    padding: 2rem;
+}
+
+.backAndTitle {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}

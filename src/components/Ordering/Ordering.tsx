@@ -19,7 +19,7 @@ import classes from './Ordering.module.css';
 export default function Ordering() {
   const [selectedOption, setSelectedOption] = useState('');
 
-  const handleOptionChange = (event: any) => {
+  const handleOptionChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSelectedOption(event.target.value);
   };
 

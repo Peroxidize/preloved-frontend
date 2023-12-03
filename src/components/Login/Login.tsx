@@ -85,7 +85,7 @@ export default function Login() {
     formData.append('password', password);
 
     await axios
-    .post(domain + 'auth/login/', formData)
+    .post(domain + 'auth/login', formData)
     .then(async (response) => {
       isGenerating = evaluatePostRequest(JSON.stringify(response));
     }).catch((error) => {

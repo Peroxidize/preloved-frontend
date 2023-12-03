@@ -3,31 +3,45 @@ import axios from "axios";
 import { useMutation } from "react-query";
 
 import logo from "../../assets/preloved-logo.jpg";
-import imageIcon from "../../assets/icons/imageIcon.svg";
 import classes from "./SignUp.module.css";
 import { Navigate } from "react-router-dom";
 
 const domain = "https://prelovedbackends.azurewebsites.net/";
 const userNavText = "Want to create a seller account?";
 const sellerNavText = "Want to create a user account?";
+let endpoint = "auth/new_shop_user";
 
 export default function SignUp() {
   const [isStore, setIsStore] = useState(false);
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPass, setConfirmPass] = useState("");
-  const [fName, setFName] = useState("");
-  const [lName, setLName] = useState("");
-  const [phone, setPhone] = useState("");
-  const [isFeminine, setIsFeminine] = useState("Masculine");
+  const [formState, setFormState] = useState({
+    email: "",
+    password: "",
+    confirmPass: "",
+    fName: "",
+    lName: "",
+    phone: "",
+    isFeminine: "Masculine",
+    street: "",
+    barangay: "",
+    municipality: "",
+  });
+
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = event.target;
+    setFormState((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
+  };
+
   const [signUpSuccess, setSuccessful] = useState(false);
 
   const [isLoading, setIsLoading] = useState(false);
   const mutation = useMutation(
-    (data: FormData) => axios.post(domain + "auth/new_shop_user/", data),
+    (data: FormData) => axios.post(domain + endpoint, data),
     {
       onSuccess: (data) => {
-        console.log(data.data.status);
+        console.log(data);
         setIsLoading(false);
         setSuccessful(true);
       },
@@ -35,23 +49,34 @@ export default function SignUp() {
   );
 
   useEffect(() => {
-    if (isLoading) document.body.style.cursor = "wait";
-    else {
-      document.body.style.cursor = "default";
-    }
+    document.body.style.cursor = isLoading ? "wait" : "default";
   }, [isLoading]);
+
+  useEffect(() => {
+    endpoint = isStore ? "auth/new_shop_owner" : "auth/new_shop_user";
+  }, [isStore]);
 
   let storeInput = null;
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
+
     const formData = new FormData();
-    formData.append("email", email);
-    formData.append("password", password);
-    formData.append("first_name", fName);
-    formData.append("last_name", lName);
-    formData.append("phone_no", phone);
-    formData.append("isFeminine", isFeminine);
+    formData.append("email", formState.email);
+    formData.append("password", formState.password);
+    formData.append("first_name", formState.fName);
+    formData.append("last_name", formState.lName);
+    formData.append("phone_no", formState.phone);
+
+    if (isStore)
+      formData.append(
+        "address",
+        `${formState.street} ${formState.barangay} ${formState.municipality}`
+      );
+    else formData.append("isFeminine", formState.isFeminine);
+
+    console.log(formData);
+    console.log(formState);
     setIsLoading(true);
     mutation.mutate(formData);
   }
@@ -63,8 +88,10 @@ export default function SignUp() {
           <label htmlFor="streetName">Shop Address</label>
           <input
             type="text"
-            name="streetName"
-            id="streetName"
+            name="street"
+            id="street"
+            value={formState.street}
+            onChange={handleChange}
             className={`${classes.textInput} ${classes.addressInput}`}
             placeholder="Street Name"
           />
@@ -73,31 +100,21 @@ export default function SignUp() {
               type="text"
               name="barangay"
               id="barangay"
+              value={formState.barangay}
+              onChange={handleChange}
               className={`${classes.textInput} ${classes.addressInput}`}
               placeholder="Barangay"
             />
             <input
               type="text"
-              name="cityOrMunicipal"
-              id="cityOrMunicipal"
+              name="municipality"
+              id="municipality"
+              value={formState.municipality}
+              onChange={handleChange}
               className={`${classes.textInput} ${classes.addressInput}`}
-              placeholder="City/Municipal"
+              placeholder="City/Municipality"
             />
           </div>
-        </div>
-        <div className={classes.inputContainer}>
-          <p>Verification</p>
-          <label htmlFor="proof" className={classes.proofInput}>
-            <img src={imageIcon} alt="image icon" className="image-icon" />
-            Upload photo of primary ID and store exterior
-          </label>
-          <input
-            type="file"
-            name="proof"
-            id="proof"
-            accept="image/*"
-            className={classes.fileInput}
-          />
         </div>
       </>
     );
@@ -111,8 +128,9 @@ export default function SignUp() {
               type="radio"
               name="isFeminine"
               id="masculine"
-              checked={isFeminine === "Masculine"}
-              onChange={() => setIsFeminine("Masculine")}
+              value="Masculine"
+              checked={formState.isFeminine === "Masculine"}
+              onChange={handleChange}
             />
             <label htmlFor="masculine">Masculine</label>
           </div>
@@ -121,9 +139,9 @@ export default function SignUp() {
               type="radio"
               name="isFeminine"
               id="Feminine"
-              value=""
-              checked={isFeminine === "Feminine"}
-              onChange={() => setIsFeminine("Feminine")}
+              value="Feminine"
+              checked={formState.isFeminine === "Feminine"}
+              onChange={handleChange}
             />
             <label htmlFor="Feminine">Feminine</label>
           </div>
@@ -164,8 +182,8 @@ export default function SignUp() {
               name="email"
               id="email"
               className={classes.textInput}
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              value={formState.email}
+              onChange={handleChange}
             />
           </div>
           <div className={classes.oneRowResponsive}>
@@ -176,8 +194,8 @@ export default function SignUp() {
                 name="password"
                 id="password"
                 className={classes.textInput}
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                value={formState.password}
+                onChange={handleChange}
               />
             </div>
             <div className={classes.inputContainer}>
@@ -187,8 +205,8 @@ export default function SignUp() {
                 name="confirmPass"
                 id="confirmPass"
                 className={classes.textInput}
-                value={confirmPass}
-                onChange={(e) => setConfirmPass(e.target.value)}
+                value={formState.confirmPass}
+                onChange={handleChange}
               />
             </div>
           </div>
@@ -197,22 +215,22 @@ export default function SignUp() {
               <label htmlFor="fname">First Name</label>
               <input
                 type="text"
-                name="fname"
-                id="fname"
+                name="fName"
+                id="fName"
                 className={classes.textInput}
-                value={fName}
-                onChange={(e) => setFName(e.target.value)}
+                value={formState.fName}
+                onChange={handleChange}
               />
             </div>
             <div className={classes.inputContainer}>
               <label htmlFor="lname">Last Name</label>
               <input
                 type="text"
-                name="lname"
-                id="lname"
+                name="lName"
+                id="lName"
                 className={classes.textInput}
-                value={lName}
-                onChange={(e) => setLName(e.target.value)}
+                value={formState.lName}
+                onChange={handleChange}
               />
             </div>
           </div>
@@ -226,8 +244,8 @@ export default function SignUp() {
                 pattern="[0-9]{11}"
                 placeholder="Ex. 09325469943"
                 className={classes.textInput}
-                value={phone}
-                onChange={(e) => setPhone(e.target.value)}
+                value={formState.phone}
+                onChange={handleChange}
               />
             </div>
           </div>
