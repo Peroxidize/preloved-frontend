@@ -9,9 +9,10 @@ import signUpClass from '../SignUp/SignUp.module.css';
 const domain = 'https://prelovedbackends.azurewebsites.net/';
 const body = document.body;
 
-const removeStyle = () => {
+const removeStyle = (): boolean => {
   body.classList.remove(styles.body);
   body.classList.remove(styles.backgroundPhoto);
+  return true;
 };
 
 function errorMessage(isLoggedIn: boolean) {
@@ -38,6 +39,13 @@ export default function Login() {
   async function handlePostRequest(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     displaySpinner(true);
+
+    if (email === "" && email.length === 0 || 
+        password === "" && password.length === 0) {
+      errorMessage(isLoggedIn);
+      displaySpinner(false);
+      return;
+    }
 
     const formData = new FormData();
     formData.append('email', email);
@@ -105,6 +113,7 @@ export default function Login() {
             <div className={styles.ball2}></div>
             <div className={styles.ball3}></div>
           </div>
+          {isLoggedIn && removeStyle()}
           {isLoggedIn && (<Navigate to="frontpage/" replace={true}/>)}
         </form>
       </div>

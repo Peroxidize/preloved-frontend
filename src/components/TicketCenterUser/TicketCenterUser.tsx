@@ -1,4 +1,4 @@
-import DesktopNavUser from "../components/nav/DesktopNavUser";
+import DesktopNavUser from '../nav/DesktopNavUser';
 
 import classes from './TicketCenterUser.module.css';
 

@@ -44,17 +44,18 @@
     position: absolute;
 }
 
+.ticket_icon {
+    width: 2em;
+}
+
+.profile_icon {
+    width: 2em;
+    margin-right: 0.5em;
+}
+
+.ticket_icon:hover,
+.profile_icon:hover,
 .shopping_cart:hover {
-    cursor: pointer;
-}
-
-.nav_bar button {
-    border: none;
-    background-color: white;
-}
-
-.nav_bar button:hover {
-    text-decoration: underline;
     cursor: pointer;
 }
 
