@@ -14,6 +14,7 @@ import TicketScreenSeller from './components/TicketScreen(Seller)/TicketScreenSe
 import "@fontsource/roboto";
 import "@fontsource/roboto/700.css";
 import './index.css';
+import ShopDocumentation from './components/ShopVerification/ShopDocumentation';
 
 const queryClient = new QueryClient();
 
@@ -43,6 +44,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
             <Route path="/ordering" element={<Ordering />} />
             <Route path="/invoice" element={<Invoice />} />
             <Route path="/ticketscreen" element={<TicketScreenSeller />} />
+            <Route path="/shopdocs" element={<ShopDocumentation />} />
           </Route>
         </Routes>
       </Router>
