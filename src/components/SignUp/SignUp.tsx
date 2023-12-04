@@ -85,7 +85,7 @@ export default function SignUp() {
     storeInput = (
       <>
         <div className={classes.inputContainer}>
-          <label htmlFor="streetName">Shop Address</label>
+          <label htmlFor="street">Shop Address</label>
           <input
             type="text"
             name="street"
@@ -212,7 +212,7 @@ export default function SignUp() {
           </div>
           <div className={classes.oneRowResponsive}>
             <div className={classes.inputContainer}>
-              <label htmlFor="fname">First Name</label>
+              <label htmlFor="fName">First Name</label>
               <input
                 type="text"
                 name="fName"
@@ -223,7 +223,7 @@ export default function SignUp() {
               />
             </div>
             <div className={classes.inputContainer}>
-              <label htmlFor="lname">Last Name</label>
+              <label htmlFor="lName">Last Name</label>
               <input
                 type="text"
                 name="lName"
@@ -236,7 +236,7 @@ export default function SignUp() {
           </div>
           <div className={classes.oneRowResponsive}>
             <div className={classes.inputContainer}>
-              <label htmlFor="email">Phone Number</label>
+              <label htmlFor="phone">Phone Number</label>
               <input
                 type="tel"
                 name="phone"
