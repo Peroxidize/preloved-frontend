@@ -17,6 +17,8 @@ const getImageName = (image: string) => {
 };
 
 export default function() {
+  let currentUser;
+
   const clothingItems = [
     beigeJacket,
     checkeredSweater,
@@ -28,10 +30,13 @@ export default function() {
 
   const repeatedClothingItems = repeatArray(clothingItems, 10);
 
+  if (localStorage.getItem('userInfo') !== null) {
+    currentUser = JSON.parse(localStorage.getItem('userInfo')!);
+  }
+
   return (
     <div className={css.wrapper}>
-      <NavBar/>
-
+      <NavBar user={currentUser} />
       <div className={css.display_clothing}>
         {repeatedClothingItems.map((item, index) => (
           <img key={index} src={item} alt={`${getImageName(item)}`} />

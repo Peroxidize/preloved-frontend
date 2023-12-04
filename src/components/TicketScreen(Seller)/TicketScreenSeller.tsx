@@ -1,26 +1,17 @@
 import css from './ticketscreen.module.css';
 
-import logo from '../../assets/preloved-logo.jpg';
-import shopping_cart from '../../assets/icons/shopping_cart.svg';
-import search_icon from '../../assets/icons/search_icon.svg';
+import NavBar from '../fragments/nav-bar/nav-bar';
+
+let currentUser: any;
+
+if (localStorage.getItem('userInfo') !== null) {
+  currentUser = JSON.parse(localStorage.getItem('userInfo')!);
+}
 
 export default function() {
   return (
     <div className={css.wrapper}>
-      <div className={css.nav_bar}>
-        <img src={logo} className={css.logo} alt="Preloved Logo" />
-        <div className={css.search_bar}>
-          <img src={search_icon} alt="Search Icon" />
-          <input type="text" placeholder="Search" />
-        </div>
-        <img src={shopping_cart} className={css.shopping_cart} alt="Shopping Cart" />
-        <button>
-          <p>Sign Up</p>
-        </button>
-        <button>
-          <p>Login</p>
-        </button>
-      </div>
+      <NavBar user={currentUser} />
 
       <div className={css.ticket_screen}>
         <h1>Ticket Screen</h1>
