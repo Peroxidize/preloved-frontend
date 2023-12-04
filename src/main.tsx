@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Outlet, Navigate } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from 'react-query';
 
 import SignUp from './components/SignUp/SignUp';
@@ -17,17 +17,33 @@ import './index.css';
 
 const queryClient = new QueryClient();
 
+
+let currentUser: any;
+if (localStorage.getItem('userInfo') !== null) {
+  currentUser = JSON.parse(localStorage.getItem('userInfo')!);
+} else {
+  currentUser = null;
+}
+
+const PrivateRoutes = () => {
+  return(
+    currentUser !== null ? <Outlet/> : <Navigate to="/"/>
+  )
+};
+
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>
       <Router>
         <Routes>
-          <Route path="/" Component={Login} />
-          <Route path="/signup" Component={SignUp} />
-          <Route path="/frontpage" Component={FrontPage} />
-          <Route path="/ordering" Component={Ordering} />
-          <Route path="/invoice" Component={Invoice} />
-          <Route path="/ticketscreen" Component={TicketScreenSeller} />
+          <Route path="/" element={<Login />} />
+          <Route path="/signup" element={<SignUp />} />
+          <Route element={<PrivateRoutes />}>
+            <Route path="/frontpage" element={<FrontPage />}/>
+            <Route path="/ordering" element={<Ordering />} />
+            <Route path="/invoice" element={<Invoice />} />
+            <Route path="/ticketscreen" element={<TicketScreenSeller />} />
+          </Route>
         </Routes>
       </Router>
     </QueryClientProvider>

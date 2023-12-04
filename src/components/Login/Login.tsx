@@ -54,10 +54,6 @@ export default function Login() {
     .post(domain + 'auth/login', formData)
     .then((response) => {
       authenticate = evaluatePostRequest(JSON.stringify(response));
-      setIsLoggedIn(evaluatePostRequest(JSON.stringify(response)));
-    }).catch((error) => {
-      console.log(error);
-    }).finally(() => {
       if (authenticate === false) {
         return;
       }
@@ -67,6 +63,9 @@ export default function Login() {
         loggedIn: authenticate,
       };
       localStorage.setItem('userInfo', JSON.stringify(user));
+      setIsLoggedIn(evaluatePostRequest(JSON.stringify(response)));
+    }).catch((error) => {
+      console.log(error);
     });
 
     displaySpinner(false);
