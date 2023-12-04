@@ -1,0 +1,24 @@
+.uploadContainer {
+  margin-top: 2rem;
+}
+
+.fileLabel {
+  margin-bottom: 1rem;
+}
+
+.uploadHere {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1rem;
+  border-radius: 1rem;
+  border: 2px dashed black;
+}
+
+.imageIcon {
+  width: 5rem;
+}
+
+.fileInput {
+  display: none;
+}
