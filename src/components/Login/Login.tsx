@@ -8,15 +8,8 @@ import styles from './login.module.css';
 import signUpClass from '../SignUp/SignUp.module.css';
 
 const domain = 'https://prelovedbackends.azurewebsites.net/';
-const body = document.body;
 let authenticate: boolean;
 let user: User;
-
-const removeStyle = (): boolean => {
-  body.classList.remove(styles.body);
-  body.classList.remove(styles.backgroundPhoto);
-  return true;
-};
 
 function errorMessage(isLoggedIn: boolean) {
   (document.getElementById("error")!.style.opacity = isLoggedIn ? '0' : '100');
@@ -63,13 +56,16 @@ export default function Login() {
         loggedIn: authenticate,
       };
       localStorage.setItem('userInfo', JSON.stringify(user));
-      setIsLoggedIn(evaluatePostRequest(JSON.stringify(response)));
+      setIsLoggedIn(true);
     }).catch((error) => {
       console.log(error);
     });
 
     displaySpinner(false);
     errorMessage(isLoggedIn);
+    if (authenticate) {
+      window.location.replace("/frontpage");
+    }
   }
 
   return (
@@ -121,8 +117,7 @@ export default function Login() {
             <div className={styles.ball2}></div>
             <div className={styles.ball3}></div>
           </div>
-          {isLoggedIn && removeStyle()}
-          {isLoggedIn && (<Navigate to="frontpage/" replace={true}/>)}
+          {isLoggedIn && (<Navigate to="/frontpage" replace={true}/>)}
         </form>
       </div>
     </div>
