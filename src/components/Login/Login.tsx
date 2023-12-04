@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Link, Navigate } from 'react-router-dom';
 import { User, UserType } from '../user';
@@ -27,6 +27,14 @@ export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    const userInfo = localStorage.getItem('userInfo');
+  
+    if (userInfo !== null) {
+      window.location.replace("/frontpage");
+    }
+  }, []);
   
   async function handlePostRequest(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -63,9 +71,6 @@ export default function Login() {
 
     displaySpinner(false);
     errorMessage(isLoggedIn);
-    if (authenticate) {
-      window.location.replace("/frontpage");
-    }
   }
 
   return (

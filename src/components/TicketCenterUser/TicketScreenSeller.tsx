@@ -2,16 +2,10 @@ import css from './ticketscreen.module.css';
 
 import NavBar from '../fragments/nav-bar/nav-bar';
 
-let currentUser: any;
-
-if (localStorage.getItem('userInfo') !== null) {
-  currentUser = JSON.parse(localStorage.getItem('userInfo')!);
-}
-
 export default function() {
   return (
     <div className={css.wrapper}>
-      <NavBar user={currentUser} />
+      <NavBar />
 
       <div className={css.ticket_screen}>
         <h1>Ticket Screen</h1>

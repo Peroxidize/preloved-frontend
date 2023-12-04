@@ -12,6 +12,14 @@ const sellerNavText = "Want to create a user account?";
 let endpoint = "auth/new_shop_user";
 
 export default function SignUp() {
+  useEffect(() => {
+    const userInfo = localStorage.getItem('userInfo');
+  
+    if (userInfo !== null) {
+      window.location.replace("/frontpage");
+    }
+  }, []);
+
   const [isStore, setIsStore] = useState(false);
   const [formState, setFormState] = useState({
     email: "",

@@ -1,12 +1,16 @@
+import { User, UserType } from '../user';
 import DesktopNavUser from '../nav/DesktopNavUser';
 
 import classes from './TicketCenterUser.module.css';
+import TicketScreenSeller from './TicketScreenSeller';
 
-export default function TicketCenterUser() {
-    return(
-        <>
-            <DesktopNavUser/>
-            <h1 className={classes.heading}>Ticket Center</h1>
-        </>
-    );
+
+export default function TicketCenter() {
+  const user: User = JSON.parse(localStorage.getItem('userInfo')!);
+
+  return(
+    <>
+      {user.type === UserType.Seller ? <TicketScreenSeller/> : <TicketScreenSeller/>}
+    </>
+  );
 }

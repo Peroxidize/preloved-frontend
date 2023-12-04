@@ -9,7 +9,6 @@ import Ordering from './components/Ordering/Ordering';
 import Invoice from './components/Ordering/Invoice';
 import FrontPage from './components/FrontPage/FrontPage';
 import TicketCenterUser from './components/TicketCenterUser/TicketCenterUser';
-import TicketScreenSeller from './components/TicketScreen(Seller)/TicketScreenSeller';
 
 import "@fontsource/roboto";
 import "@fontsource/roboto/700.css";
@@ -43,7 +42,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
             <Route path="/frontpage" element={<FrontPage />}/>
             <Route path="/ordering" element={<Ordering />} />
             <Route path="/invoice" element={<Invoice />} />
-            <Route path="/ticketscreen" element={<TicketScreenSeller />} />
+            <Route path="/ticketcenter" element={<TicketCenterUser />} />
             <Route path="/shopdocs" element={<ShopDocumentation />} />
           </Route>
         </Routes>
