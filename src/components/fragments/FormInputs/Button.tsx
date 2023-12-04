@@ -1,4 +1,4 @@
-import classes from "../../../../assets/componentCSS/formComponents/Button.module.css";
+import classes from "../../../assets/componentCSS/formComponents/Button.module.css";
 
 interface ButtonProps {
   text: string;

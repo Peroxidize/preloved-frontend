@@ -1,9 +1,9 @@
 import classes from "./ShopDocumentation.module.css";
 import { useState } from "react";
-import Button from "../fragments/FormInputs/FileInput/Button";
+import Button from "../fragments/FormInputs/Button";
 
 import leftArrow from "../../assets/icons/leftArrow.svg";
-import ImageInput from "../fragments/FormInputs/FileInput/ImageInput";
+import ImageInput from "../fragments/FormInputs/ImageInput";
 
 const domain = "https://prelovedbackends.azurewebsites.net/";
 let endpoint = "auth/shop_id_one";
