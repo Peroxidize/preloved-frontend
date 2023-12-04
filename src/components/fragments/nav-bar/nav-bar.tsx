@@ -1,5 +1,5 @@
-import { User, UserType, destroyLocalStorage } from '../../user';
-import { Link, Navigate } from 'react-router-dom';
+import { User, UserType } from '../../user';
+import { Link } from 'react-router-dom';
 
 import css from './nav-bar.module.css';
 
@@ -53,6 +53,11 @@ function getMenu(userType: UserType) {
         </div>
       );
   }
+}
+
+function destroyLocalStorage() {
+  localStorage.clear();
+  window.location.replace("/");
 }
 
 function navigateTicketCenter() {

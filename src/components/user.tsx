@@ -9,7 +9,3 @@ export enum UserType {
     Seller,
     Admin,
 }
-
-export function destroyLocalStorage() {
-    localStorage.clear();
-}
