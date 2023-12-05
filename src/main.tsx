@@ -8,15 +8,14 @@ import Login from './components/Login/Login';
 import Ordering from './components/Ordering/Ordering';
 import Invoice from './components/Ordering/Invoice';
 import FrontPage from './components/FrontPage/FrontPage';
-import TicketCenterUser from './components/TicketCenterUser/TicketCenterUser';
+import TicketCenterUser from './components/TicketCenter/TicketCenter';
+import ShopDocumentation from './components/ShopVerification/ShopDocumentation';
 
 import "@fontsource/roboto";
 import "@fontsource/roboto/700.css";
 import './index.css';
-import ShopDocumentation from './components/ShopVerification/ShopDocumentation';
 
 const queryClient = new QueryClient();
-
 
 let currentUser: any;
 if (localStorage.getItem('userInfo') !== null) {
