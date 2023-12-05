@@ -1,5 +1,5 @@
-import classes from "../../../../assets/componentCSS/formComponents/ImageInput.module.css";
-import imageIcon from "../../../../assets/icons/imageIcon.svg";
+import classes from "../../../assets/componentCSS/formComponents/ImageInput.module.css";
+import imageIcon from "../../../assets/icons/imageIcon.svg";
 
 interface ImageInputProps {
   name: string;
