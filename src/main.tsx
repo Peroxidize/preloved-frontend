@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter as Router, Routes, Route, Outlet, Navigate } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from 'react-query';
+import axios from 'axios';
 
 import SignUp from './components/SignUp/SignUp';
 import Login from './components/Login/Login';
@@ -17,8 +18,10 @@ import './index.css';
 
 const queryClient = new QueryClient();
 
+axios.defaults.withCredentials = true;
+
 let currentUser: any;
-if (localStorage.getItem('userInfo') !== null) {
+if (localStorage.getItem('userInfo') !== null && localStorage.getItem('userInfo') !== undefined) {
   currentUser = JSON.parse(localStorage.getItem('userInfo')!);
 } else {
   currentUser = null;

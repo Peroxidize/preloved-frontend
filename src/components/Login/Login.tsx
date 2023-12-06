@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Link, Navigate } from 'react-router-dom';
-import { User, UserType } from '../user';
+import { User, UserType, link_auth } from '../user';
 
 import logo from '../../assets/preloved-logo.jpg';
 import styles from './login.module.css';
@@ -20,7 +20,18 @@ function displaySpinner(isActive: boolean) {
 }
   
 function evaluatePostRequest(response: string): boolean {
-  return /"status":"OK!"/.test(response);
+  return /"statusText":"OK"/.test(response);
+}
+
+function getUserType(str: string): UserType{
+  switch(str) {
+    case "Shop User":
+      return UserType.User;
+    case "Shop Owner":
+      return UserType.Seller;
+    default:
+      return UserType.Admin;
+  }
 }
 
 export default function Login() {
@@ -31,7 +42,7 @@ export default function Login() {
   useEffect(() => {
     const userInfo = localStorage.getItem('userInfo');
   
-    if (userInfo !== null) {
+    if (userInfo !== null && userInfo !== undefined) {
       window.location.replace("/frontpage");
     }
   }, []);
@@ -52,16 +63,18 @@ export default function Login() {
     formData.append('password', password);
 
     await axios
-    .post(domain + 'auth/login', formData)
+    .post(domain + 'auth/login', formData, {withCredentials: true})
     .then((response) => {
+      console.log(response);
       authenticate = evaluatePostRequest(JSON.stringify(response));
       if (authenticate === false) {
         return;
       }
       user = {
         email: email,
-        type: UserType.User,
-        loggedIn: authenticate,
+        password: password,
+        type: getUserType(response.data.user_type),
+        loggedIn: true,
       };
       localStorage.setItem('userInfo', JSON.stringify(user));
       setIsLoggedIn(true);
@@ -69,8 +82,16 @@ export default function Login() {
       console.log(error);
     });
 
+    (async () => {
+      await axios.get(link_auth, {withCredentials: true}).then((response) => {
+        console.log(response);
+      }).catch((error) => {
+        console.log(error);
+      });
+    })();
+
     displaySpinner(false);
-    errorMessage(isLoggedIn);
+    errorMessage(authenticate);
   }
 
   return (
