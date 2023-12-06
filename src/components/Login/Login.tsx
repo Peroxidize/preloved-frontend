@@ -3,22 +3,22 @@ import axios from 'axios';
 import { Link, Navigate } from 'react-router-dom';
 import { User, UserType, link_auth } from '../user';
 
-import logo from '../../assets/preloved-logo.jpg';
-import styles from './login.module.css';
-import signUpClass from '../SignUp/SignUp.module.css';
+import logo from "../../assets/preloved-logo.jpg";
+import styles from "./login.module.css";
+import signUpClass from "../SignUp/SignUp.module.css";
 
-const domain = 'https://prelovedbackends.azurewebsites.net/';
+const domain = "https://prelovedbackends.azurewebsites.net/";
 let authenticate: boolean;
 let user: User;
 
 function errorMessage(isLoggedIn: boolean) {
-  (document.getElementById("error")!.style.opacity = isLoggedIn ? '0' : '100');
+  document.getElementById("error")!.style.opacity = isLoggedIn ? "0" : "100";
 }
 
 function displaySpinner(isActive: boolean) {
-  document.getElementById("spinner")!.style.opacity = isActive ? '100' : '0';
+  document.getElementById("spinner")!.style.opacity = isActive ? "100" : "0";
 }
-  
+
 function evaluatePostRequest(response: string): boolean {
   return /"statusText":"OK"/.test(response);
 }
@@ -35,8 +35,8 @@ function getUserType(str: string): UserType{
 }
 
 export default function Login() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
@@ -46,21 +46,23 @@ export default function Login() {
       window.location.replace("/frontpage");
     }
   }, []);
-  
+
   async function handlePostRequest(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     displaySpinner(true);
 
-    if (email === "" && email.length === 0 || 
-        password === "" && password.length === 0) {
+    if (
+      (email === "" && email.length === 0) ||
+      (password === "" && password.length === 0)
+    ) {
       errorMessage(isLoggedIn);
       displaySpinner(false);
       return;
     }
 
     const formData = new FormData();
-    formData.append('email', email);
-    formData.append('password', password);
+    formData.append("email", email);
+    formData.append("password", password);
 
     await axios
     .post(domain + 'auth/login', formData, {withCredentials: true})
@@ -101,10 +103,8 @@ export default function Login() {
         <div className={styles.text}>
           <h1>Log in</h1>
           <p>
-            No account yet?{' '}
-            <Link to="signup" 
-              className={signUpClass.link}
-            >
+            No account yet?{" "}
+            <Link to="signup" className={signUpClass.link}>
               Click Here
             </Link>
           </p>
@@ -143,7 +143,7 @@ export default function Login() {
             <div className={styles.ball2}></div>
             <div className={styles.ball3}></div>
           </div>
-          {isLoggedIn && (<Navigate to="/frontpage" replace={true}/>)}
+          {isLoggedIn && <Navigate to="/frontpage" replace={true} />}
         </form>
       </div>
     </div>
