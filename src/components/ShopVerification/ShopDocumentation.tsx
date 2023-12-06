@@ -5,8 +5,8 @@ import Button from "../fragments/FormInputs/Button";
 import leftArrow from "../../assets/icons/leftArrow.svg";
 import ImageInput from "../fragments/FormInputs/ImageInput";
 
-const domain = "https://prelovedbackends.azurewebsites.net/";
-let endpoint = "auth/shop_id_one";
+// const domain = "https://prelovedbackends.azurewebsites.net/";
+// let endpoint = "auth/shop_id_one";
 
 const ShopDocumentation: React.FC = () => {
   const [firstID, setFirstID] = useState<File | null>(null);
