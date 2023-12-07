@@ -1,14 +1,14 @@
-import { User, UserType, link_logout } from '../../user';
-import { Link } from 'react-router-dom';
+import { User, UserType, link_logout } from "../../user";
+import { Link } from "react-router-dom";
 
 import css from "./nav-bar.module.css";
 
-import logo from '../../../assets/preloved-logo.jpg';
-import ticketIcon from '../../../assets/icons/ticket.svg'
-import profileIcon from '../../../assets/icons/accountCircle.svg'
-import shopping_cart from '../../../assets/icons/shopping_cart.svg';
-import search_icon from '../../../assets/icons/search_icon.svg';
-import axios from 'axios';
+import logo from "../../../assets/preloved-logo.jpg";
+import ticketIcon from "../../../assets/icons/ticket.svg";
+import profileIcon from "../../../assets/icons/accountCircle.svg";
+import shopping_cart from "../../../assets/icons/shopping_cart.svg";
+import search_icon from "../../../assets/icons/search_icon.svg";
+import axios from "axios";
 
 const user: User = JSON.parse(localStorage.getItem("userInfo")!);
 
@@ -57,15 +57,9 @@ function getMenu(userType: UserType) {
 }
 
 async function destroyLocalStorage() {
-  await axios.post(link_logout).then((response) => {
-    console.log(response);
-    localStorage.clear();
-    window.location.replace("/");
-  }).catch((error) => {
-    console.log(error);
-    localStorage.clear();
-    window.location.replace("/");
-  });
+  localStorage.clear();
+  await axios.post(link_logout, null, { withCredentials: true });
+  window.location.replace("/");
 }
 
 function navigateTicketCenter() {
