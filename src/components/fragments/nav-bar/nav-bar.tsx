@@ -58,18 +58,8 @@ function getMenu(userType: UserType) {
 
 async function destroyLocalStorage() {
   localStorage.clear();
-  await axios
-    .post(link_logout)
-    .then((response) => {
-      console.log(response);
-      localStorage.clear();
-      window.location.replace("/");
-    })
-    .catch((error) => {
-      console.log(error);
-      localStorage.clear();
-      window.location.replace("/");
-    });
+  await axios.post(link_logout, null, { withCredentials: true });
+  window.location.replace("/");
 }
 
 function navigateTicketCenter() {
