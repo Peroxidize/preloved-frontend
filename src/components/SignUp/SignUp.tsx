@@ -13,8 +13,8 @@ let endpoint = "auth/new_shop_user";
 
 export default function SignUp() {
   useEffect(() => {
-    const userInfo = localStorage.getItem('userInfo');
-  
+    const userInfo = localStorage.getItem("userInfo");
+
     if (userInfo !== null) {
       window.location.replace("/frontpage");
     }
@@ -28,7 +28,7 @@ export default function SignUp() {
     fName: "",
     lName: "",
     phone: "",
-    isFeminine: "Masculine",
+    isFeminine: 0,
     street: "",
     barangay: "",
     municipality: "",
@@ -46,7 +46,8 @@ export default function SignUp() {
 
   const [isLoading, setIsLoading] = useState(false);
   const mutation = useMutation(
-    (data: FormData) => axios.post(domain + endpoint, data),
+    (data: FormData) =>
+      axios.post(domain + endpoint, data, { withCredentials: true }),
     {
       onSuccess: (data) => {
         console.log(data);
@@ -81,7 +82,7 @@ export default function SignUp() {
         "address",
         `${formState.street} ${formState.barangay} ${formState.municipality}`
       );
-    else formData.append("isFeminine", formState.isFeminine);
+    else formData.append("isFeminine", formState.isFeminine.toString());
 
     console.log(formData);
     console.log(formState);
@@ -137,7 +138,7 @@ export default function SignUp() {
               name="isFeminine"
               id="masculine"
               value="Masculine"
-              checked={formState.isFeminine === "Masculine"}
+              checked={formState.isFeminine === 0}
               onChange={handleChange}
             />
             <label htmlFor="masculine">Masculine</label>
@@ -148,7 +149,7 @@ export default function SignUp() {
               name="isFeminine"
               id="Feminine"
               value="Feminine"
-              checked={formState.isFeminine === "Feminine"}
+              checked={formState.isFeminine === 1}
               onChange={handleChange}
             />
             <label htmlFor="Feminine">Feminine</label>
