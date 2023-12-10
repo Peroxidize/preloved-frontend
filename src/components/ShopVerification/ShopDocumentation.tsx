@@ -50,49 +50,51 @@ const ShopDocumentation: React.FC = () => {
   };
 
   return (
-    <div className={classes.container}>
-      <div className={classes.backAndTitle}>
-        <img
-          src={leftArrow}
-          alt="Back to login icon"
-          className={classes.backIcon}
-        />
-        <h1>Shop Documentation</h1>
-      </div>
-      <p className={classes.description}>
-        To proceed to shop curation, we must verify your shop. Prepare two valid
-        IDs and one selfie picture.
-      </p>
-      <form action="" method="post" className={classes.formContainer}>
-        <div className={classes.responsiveContainer}>
-          <div className={classes.flexContainer}>
-            <ImageInput
-              name="firstID"
-              label="Upload first valid ID"
-              onChange={handleFirstIDChange}
-              fileName={firstID?.name}
-              photo={photoFirstID}
-            />
-          </div>
-          <div className={classes.flexContainer}>
-            <ImageInput
-              name="secondID"
-              label="Upload second valid ID"
-              onChange={handleSecondIDChange}
-              fileName={secondID?.name}
-              photo={photoSecondID}
-            />
-          </div>
+    <div className={classes.backgroundPhoto}>
+      <div className={classes.container}>
+        <div className={classes.backAndTitle}>
+          <img
+            src={leftArrow}
+            alt="Back to login icon"
+            className={classes.backIcon}
+          />
+          <h1>Shop Documentation</h1>
         </div>
-        <ImageInput
-          name="selfie"
-          label="Upload selfie"
-          onChange={handleSelfieChange}
-          fileName={selfie?.name}
-          photo={photoSelfie}
-        />
-        <Button text="SUBMIT" />
-      </form>
+        <p className={classes.description}>
+          To proceed to shop curation, we must verify your shop. Prepare two
+          valid IDs and one selfie picture.
+        </p>
+        <form action="" method="post" className={classes.formContainer}>
+          <div className={classes.responsiveContainer}>
+            <div className={classes.flexContainer}>
+              <ImageInput
+                name="firstID"
+                label="Upload first valid ID"
+                onChange={handleFirstIDChange}
+                fileName={firstID?.name}
+                photo={photoFirstID}
+              />
+            </div>
+            <div className={classes.flexContainer}>
+              <ImageInput
+                name="secondID"
+                label="Upload second valid ID"
+                onChange={handleSecondIDChange}
+                fileName={secondID?.name}
+                photo={photoSecondID}
+              />
+            </div>
+          </div>
+          <ImageInput
+            name="selfie"
+            label="Upload selfie"
+            onChange={handleSelfieChange}
+            fileName={selfie?.name}
+            photo={photoSelfie}
+          />
+          <Button text="SUBMIT" />
+        </form>
+      </div>
     </div>
   );
 };

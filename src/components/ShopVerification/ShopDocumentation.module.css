@@ -1,4 +1,10 @@
+.backgroundPhoto {
+  background: url("../../assets/sign-up-bg.png");
+  background-size: cover;
+}
+
 .container {
+  background-color: white;
   padding: 2rem;
 }
 
@@ -44,7 +50,11 @@
 }
 
 @media (min-width: 800px) {
+  .backgroundPhoto {
+    padding: 2rem;
+  }
   .container {
+    padding: 4rem;
     width: 80%;
     margin-inline: auto;
   }
