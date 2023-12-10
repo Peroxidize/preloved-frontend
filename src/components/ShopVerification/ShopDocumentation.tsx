@@ -4,6 +4,9 @@ import Button from "../fragments/FormInputs/Button";
 
 import leftArrow from "../../assets/icons/leftArrow.svg";
 import ImageInput from "../fragments/FormInputs/ImageInput";
+import { Navigate } from "react-router-dom";
+import { LINK_LOGOUT } from "../misc";
+import axios from "axios";
 
 // const domain = "https://prelovedbackends.azurewebsites.net/";
 // let endpoint = "auth/shop_id_one";
@@ -38,6 +41,12 @@ const ShopDocumentation: React.FC = () => {
     reader.readAsDataURL(file);
   };
 
+  async function returnFrontpage() {
+    localStorage.clear();
+    await axios.post(LINK_LOGOUT, null, { withCredentials: true });
+    window.location.replace("/frontpage");
+  }
+
   const handleSelfieChange = (files: FileList) => {
     const file = files[0];
     if (!file) return;
@@ -49,11 +58,16 @@ const ShopDocumentation: React.FC = () => {
     reader.readAsDataURL(file);
   };
 
+  async function handlePostRequest() {
+
+  }
+
   return (
     <div className={classes.container}>
       <div className={classes.backAndTitle}>
         <img
           src={leftArrow}
+          onClick={returnFrontpage}
           alt="Back to login icon"
           className={classes.backIcon}
         />

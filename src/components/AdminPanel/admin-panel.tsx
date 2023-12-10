@@ -1,30 +1,47 @@
-import css from "./admin-panel.module.css";
-import NavBar from "../fragments/nav-bar/nav-bar";
+import { LINK_GET_PENDING_LIST, LINK_LOGOUT } from "../misc";
+import { useEffect } from "react";
 import axios from "axios";
 
-const domain = 'https://prelovedbackends.azurewebsites.net/';
-const pending = 'auth/verification/get_list_pending';
-// const approvereject = 'auth/verification/approve_or_reject';
-// const details = 'auth/verification/get_shop_owner_details';
-// const status = 'auth/verification/document_status';
-// const image = 'auth/verification/get_image';
+import css from "./admin-panel.module.css";
+import leftArrow from "../../assets/icons/leftArrow.svg";
+
+async function logout() {
+  console.log("TESTESTSETTS");
+  localStorage.clear();
+  await axios.get(LINK_LOGOUT)
+  .catch((error) => {
+    console.log(error);
+  });
+  location.href = '/';
+}
 
 export default function() {
 
-  (async () => {
-    await axios.get(domain + pending)
-    .then(response => {
-      console.log(response);
-    }).catch(error => {
-      console.log(error);
-    }); 
-  })();
+  useEffect(() => {
+    const fetch_list = async () => {
+      await axios.get(LINK_GET_PENDING_LIST, {withCredentials: true})
+      .then((response) => {
+        console.log(response);
+        console.log(JSON.stringify(response));
+      }).catch((error) => {
+        console.log(error);
+      });
+    };
+
+    // fetch_list();
+  }, []);
 
   return(
     <div className={css.wrapper}>
-      <NavBar />
-
-      <h1 className={css.title}>Ticket Center</h1>
+      <div className={css.header}>
+        <img
+          src={leftArrow}
+          onClick={() => logout()}
+          alt="Back to login icon"
+          className={css.back_icon}
+        />
+        <h1 className={css.title}>Ticket Center</h1>
+      </div>
     </div>
   );
 }

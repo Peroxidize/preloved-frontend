@@ -1,5 +1,5 @@
-import { User, UserType, link_logout } from "../../user";
 import { Link } from "react-router-dom";
+import { LINK_IS_AUTH, LINK_LOGOUT, User, UserType } from "../../misc";
 
 import css from "./nav-bar.module.css";
 
@@ -9,6 +9,7 @@ import profileIcon from "../../../assets/icons/accountCircle.svg";
 import shopping_cart from "../../../assets/icons/shopping_cart.svg";
 import search_icon from "../../../assets/icons/search_icon.svg";
 import axios from "axios";
+import { useEffect } from "react";
 
 const user: User = JSON.parse(localStorage.getItem("userInfo")!);
 
@@ -20,7 +21,7 @@ function getMenu(userType: UserType) {
           <Link to="/collections" className={css.link}>
             Collections
           </Link>
-          <Link onClick={destroyLocalStorage} to="/" className={css.link}>
+          <Link to="" onClick={destroyLocalStorage} className={css.link}>
             Logout
           </Link>
         </div>
@@ -30,6 +31,12 @@ function getMenu(userType: UserType) {
         <div className={css.dropdown_content}>
           <Link to="/topup" className={css.link}>
             Top-up
+          </Link>
+          <Link to="/shopdocs" className={css.link}>
+            Shop Verification
+          </Link>
+          <Link to="/ticketcenter" className={css.link}>
+            Ticket Center
           </Link>
           <Link to="/collections" className={css.link}>
             Collections
@@ -45,10 +52,7 @@ function getMenu(userType: UserType) {
           <Link to="/adminpanel" className={css.link}>
             Admin Panel
           </Link>
-          <Link to="/collections" className={css.link}>
-            Collections
-          </Link>
-          <Link to="/" onClick={destroyLocalStorage} className={css.link}>
+          <Link to="" onClick={destroyLocalStorage} className={css.link}>
             Logout
           </Link>
         </div>
@@ -58,7 +62,7 @@ function getMenu(userType: UserType) {
 
 async function destroyLocalStorage() {
   localStorage.clear();
-  await axios.post(link_logout, null, { withCredentials: true });
+  await axios.post(LINK_LOGOUT, null, { withCredentials: true });
   window.location.replace("/");
 }
 
@@ -71,6 +75,19 @@ function navigateFrontPage() {
 }
 
 export default function DesktopNavUser() {
+  useEffect(() => {
+    const get_session = async () => {
+      await axios.get(LINK_IS_AUTH)
+      .then((response) => {
+        console.log(response);
+      }).catch((error) => {
+        console.log(error);
+      });
+    };
+
+    // get_session();
+  }, []);
+
   return (
     <div>
       <div className={css.nav_bar}>

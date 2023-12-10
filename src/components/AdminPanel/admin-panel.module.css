@@ -4,7 +4,19 @@
     height: 100vh;
 }
 
+.header {
+  display: flex;
+  margin-bottom: 2rem;
+  align-items: center;
+}
+
 .title {
-    text-align: center;
     margin: 0.5em;
+}
+
+.back_icon {
+  background-color: rgb(255, 255, 255);
+  cursor: pointer;
+  height: 3.5em;
+  margin-left: 3em;
 }

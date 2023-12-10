@@ -8,6 +8,10 @@ import greySlacks from '../../assets/clothes/grey-slacks.jpg';
 import khakiJacket from '../../assets/clothes/khaki-jacket.jpg';
 import greenSweater from '../../assets/clothes/green-sweater.jpg';
 import magentaShirt from '../../assets/clothes/magenta-shirt.png';
+import axios from 'axios';
+
+const domain = 'https://prelovedbackends.azurewebsites.net/';
+const downloadfiles = 'host/storage/q';
 
 const repeatArray = (array: string[], n: number) => Array.from({ length: n }, () => array).flat();
 const getImageName = (image: string) => {
@@ -17,6 +21,15 @@ const getImageName = (image: string) => {
 };
 
 export default function() {
+  // (async () => {
+  //   await axios.get(domain + downloadfiles)
+  //   .then(response => {
+  //     console.log(response);
+  //   }).catch(error => {
+  //     console.log(error);
+  //   }); 
+  // })();
+
   const clothingItems = [
     beigeJacket,
     checkeredSweater,
