@@ -20,10 +20,26 @@
   width: 2rem;
   border-radius: 50%;
   transition: background-color 0.3s ease;
+  cursor: pointer;
 }
 
 .backIcon:hover {
   background-color: rgb(235, 235, 235);
+}
+
+.submittedContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.submittedIcon {
+  width: 19rem;
+}
+
+.submittedText {
+  text-align: center;
 }
 
 .button {

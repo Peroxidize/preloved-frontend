@@ -4,11 +4,16 @@ import Button from "../fragments/FormInputs/Button";
 
 import leftArrow from "../../assets/icons/leftArrow.svg";
 import ImageInput from "../fragments/FormInputs/ImageInput";
+import inProcessIcon from "../../assets/icons/verifyInProcess.svg";
 
 // const domain = "https://prelovedbackends.azurewebsites.net/";
 // let endpoint = "auth/shop_id_one";
 
-const ShopDocumentation: React.FC = () => {
+interface ShopDocsProps {
+  submitted: boolean;
+}
+
+const ShopDocumentation: React.FC<ShopDocsProps> = ({ submitted }) => {
   const [firstID, setFirstID] = useState<File | null>(null);
   const [secondID, setSecondID] = useState<File | null>(null);
   const [selfie, setSelfie] = useState<File | null>(null);
@@ -60,40 +65,58 @@ const ShopDocumentation: React.FC = () => {
           />
           <h1>Shop Documentation</h1>
         </div>
-        <p className={classes.description}>
-          To proceed to shop curation, we must verify your shop. Prepare two
-          valid IDs and one selfie picture.
-        </p>
-        <form action="" method="post" className={classes.formContainer}>
-          <div className={classes.responsiveContainer}>
-            <div className={classes.flexContainer}>
-              <ImageInput
-                name="firstID"
-                label="Upload first valid ID"
-                onChange={handleFirstIDChange}
-                fileName={firstID?.name}
-                photo={photoFirstID}
-              />
-            </div>
-            <div className={classes.flexContainer}>
-              <ImageInput
-                name="secondID"
-                label="Upload second valid ID"
-                onChange={handleSecondIDChange}
-                fileName={secondID?.name}
-                photo={photoSecondID}
-              />
-            </div>
+
+        {submitted ? (
+          <div className={classes.submittedContainer}>
+            <img
+              src={inProcessIcon}
+              alt="Verification in process"
+              className={classes.submittedIcon}
+            />
+            <p className={classes.submittedText}>
+              We have received your documents, and your verification is in
+              process. Verification may take 1-2 business days. Please come back
+              another time!
+            </p>
           </div>
-          <ImageInput
-            name="selfie"
-            label="Upload selfie"
-            onChange={handleSelfieChange}
-            fileName={selfie?.name}
-            photo={photoSelfie}
-          />
-          <Button text="SUBMIT" />
-        </form>
+        ) : (
+          <>
+            <p className={classes.description}>
+              To proceed to shop curation, we must verify your shop. Prepare two
+              valid IDs and one selfie picture.
+            </p>
+            <form action="" method="post" className={classes.formContainer}>
+              <div className={classes.responsiveContainer}>
+                <div className={classes.flexContainer}>
+                  <ImageInput
+                    name="firstID"
+                    label="Upload first valid ID"
+                    onChange={handleFirstIDChange}
+                    fileName={firstID?.name}
+                    photo={photoFirstID}
+                  />
+                </div>
+                <div className={classes.flexContainer}>
+                  <ImageInput
+                    name="secondID"
+                    label="Upload second valid ID"
+                    onChange={handleSecondIDChange}
+                    fileName={secondID?.name}
+                    photo={photoSecondID}
+                  />
+                </div>
+              </div>
+              <ImageInput
+                name="selfie"
+                label="Upload selfie"
+                onChange={handleSelfieChange}
+                fileName={selfie?.name}
+                photo={photoSelfie}
+              />
+              <Button text="SUBMIT" />
+            </form>
+          </>
+        )}
       </div>
     </div>
   );
