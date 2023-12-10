@@ -1,8 +1,14 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import { BrowserRouter as Router, Routes, Route, Outlet, Navigate } from 'react-router-dom';
-import { QueryClient, QueryClientProvider } from 'react-query';
-import axios from 'axios';
+import React from "react";
+import ReactDOM from "react-dom/client";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Outlet,
+  Navigate,
+} from "react-router-dom";
+import { QueryClient, QueryClientProvider } from "react-query";
+import axios from "axios";
 
 import SignUp from "./components/SignUp/SignUp";
 import Login from "./components/Login/Login";
@@ -22,8 +28,11 @@ const queryClient = new QueryClient();
 axios.defaults.withCredentials = true;
 
 let currentUser: any;
-if (localStorage.getItem('userInfo') !== null && localStorage.getItem('userInfo') !== undefined) {
-  currentUser = JSON.parse(localStorage.getItem('userInfo')!);
+if (
+  localStorage.getItem("userInfo") !== null &&
+  localStorage.getItem("userInfo") !== undefined
+) {
+  currentUser = JSON.parse(localStorage.getItem("userInfo")!);
 } else {
   currentUser = null;
 }
@@ -39,12 +48,12 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
         <Routes>
           <Route path="/" element={<Login />} />
           <Route path="/signup" element={<SignUp />} />
+          <Route path="/shopdocs" element={<ShopDocumentation />} />
           <Route element={<PrivateRoutes />}>
             <Route path="/frontpage" element={<FrontPage />} />
             <Route path="/ordering" element={<Ordering />} />
             <Route path="/invoice" element={<Invoice />} />
             <Route path="/ticketcenter" element={<TicketCenterUser />} />
-            <Route path="/shopdocs" element={<ShopDocumentation />} />
             <Route path="/topup" element={<AddBalance />} />
           </Route>
         </Routes>

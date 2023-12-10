@@ -13,10 +13,13 @@
   padding: 1rem;
   border-radius: 1rem;
   border: 2px dashed black;
+  cursor: pointer;
 }
 
 .imageIcon {
-  width: 5rem;
+  width: 10rem;
+  height: 10rem;
+  object-fit: contain;
 }
 
 .fileInput {
