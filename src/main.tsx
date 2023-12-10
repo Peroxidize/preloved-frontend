@@ -77,7 +77,7 @@ const getRoutes = (user: User) => {
     case UserType.UnverifiedSeller:
       return (
         <Route element={<UnverifiedSellerRoutes />}>
-          <Route path="/shopdocs" element={<ShopDocumentation />} />
+          <Route path="/shopdocs" element={<ShopDocumentation submitted={true}  />} />
         </Route>
       );
     default:
