@@ -48,7 +48,10 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
         <Routes>
           <Route path="/" element={<Login />} />
           <Route path="/signup" element={<SignUp />} />
-          <Route path="/shopdocs" element={<ShopDocumentation />} />
+          <Route
+            path="/shopdocs"
+            element={<ShopDocumentation submitted={true} />}
+          />
           <Route element={<PrivateRoutes />}>
             <Route path="/frontpage" element={<FrontPage />} />
             <Route path="/ordering" element={<Ordering />} />
