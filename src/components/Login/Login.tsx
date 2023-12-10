@@ -1,13 +1,13 @@
-import { useEffect, useState } from 'react';
-import axios from 'axios';
-import { Link, Navigate } from 'react-router-dom';
-import { User, UserType, link_auth } from '../user';
+import { useEffect, useState } from "react";
+import axios from "axios";
+import { Link, Navigate } from "react-router-dom";
+import { User, UserType, link_auth } from "../user";
 
 import logo from "../../assets/preloved-logo.jpg";
 import styles from "./login.module.css";
 import signUpClass from "../SignUp/SignUp.module.css";
 
-const domain = "https://prelovedbackends.azurewebsites.net/";
+const domain = "https://prelovedbackend.azurewebsites.net/";
 let authenticate: boolean;
 let user: User;
 
@@ -23,8 +23,8 @@ function evaluatePostRequest(response: string): boolean {
   return /"statusText":"OK"/.test(response);
 }
 
-function getUserType(str: string): UserType{
-  switch(str) {
+function getUserType(str: string): UserType {
+  switch (str) {
     case "Shop User":
       return UserType.User;
     case "Shop Owner":
@@ -40,8 +40,8 @@ export default function Login() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
-    const userInfo = localStorage.getItem('userInfo');
-  
+    const userInfo = localStorage.getItem("userInfo");
+
     if (userInfo !== null && userInfo !== undefined) {
       window.location.replace("/frontpage");
     }
@@ -65,31 +65,35 @@ export default function Login() {
     formData.append("password", password);
 
     await axios
-    .post(domain + 'auth/login', formData, {withCredentials: true})
-    .then((response) => {
-      console.log(response);
-      authenticate = evaluatePostRequest(JSON.stringify(response));
-      if (authenticate === false) {
-        return;
-      }
-      user = {
-        email: email,
-        password: password,
-        type: getUserType(response.data.user_type),
-        loggedIn: true,
-      };
-      localStorage.setItem('userInfo', JSON.stringify(user));
-      setIsLoggedIn(true);
-    }).catch((error) => {
-      console.log(error);
-    });
-
-    (async () => {
-      await axios.get(link_auth, {withCredentials: true}).then((response) => {
+      .post(domain + "auth/login", formData, { withCredentials: true })
+      .then((response) => {
         console.log(response);
-      }).catch((error) => {
+        authenticate = evaluatePostRequest(JSON.stringify(response));
+        if (authenticate === false) {
+          return;
+        }
+        user = {
+          email: email,
+          password: password,
+          type: getUserType(response.data.user_type),
+          loggedIn: true,
+        };
+        localStorage.setItem("userInfo", JSON.stringify(user));
+        setIsLoggedIn(true);
+      })
+      .catch((error) => {
         console.log(error);
       });
+
+    (async () => {
+      await axios
+        .get(link_auth, { withCredentials: true })
+        .then((response) => {
+          console.log(response);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     })();
 
     displaySpinner(false);

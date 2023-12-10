@@ -6,7 +6,7 @@ import logo from "../../assets/preloved-logo.jpg";
 import classes from "./SignUp.module.css";
 import { Navigate } from "react-router-dom";
 
-const domain = "https://prelovedbackends.azurewebsites.net/";
+const domain = "https://prelovedbackend.azurewebsites.net/";
 const userNavText = "Want to create a seller account?";
 const sellerNavText = "Want to create a user account?";
 let endpoint = "auth/new_shop_user";
