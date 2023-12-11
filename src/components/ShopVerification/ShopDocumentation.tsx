@@ -83,7 +83,7 @@ const ShopDocumentation: React.FC<ShopDocsProps> = ({ submitted }) => {
     e.preventDefault();
 
     if (firstID) {
-      await submitID(LINK_SHOP_ID1, firstID);
+      submitID(LINK_SHOP_ID1, firstID);
     }
     if (secondID) {
       // await axios
@@ -94,7 +94,7 @@ const ShopDocumentation: React.FC<ShopDocsProps> = ({ submitted }) => {
       //   .catch((response) => {
       //     console.log(response);
       //   });
-      await submitID(LINK_SHOP_ID2, secondID);
+      submitID(LINK_SHOP_ID2, secondID);
     }
     if (selfie) {
       // await axios
@@ -107,6 +107,7 @@ const ShopDocumentation: React.FC<ShopDocsProps> = ({ submitted }) => {
       //   });
       await submitID(LINK_SHOP_IDSELFIE, selfie);
     }
+    window.location.replace("/shopdocs/submitted");
   }
 
   return (

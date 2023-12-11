@@ -8,6 +8,7 @@ export enum UserType {
   Seller,
   Admin,
   UnverifiedSeller,
+  CompletedSeller,
 }
 
 export const LINK_LOGIN =
@@ -20,6 +21,8 @@ export const LINK_SIGNUP_SELLER =
   "https://prelovedbackend.azurewebsites.net/auth/new_shop_owner";
 export const LINK_IS_AUTH =
   "https://prelovedbackend.azurewebsites.net/auth/is_authenticated";
+export const LINK_GET_CURRENT_USER =
+  "https://prelovedbackend.azurewebsites.net/auth/get_current_user";
 export const LINK_GET_PENDING_LIST =
   "https://prelovedbackend.azurewebsites.net/auth/verification/get_list_pending";
 export const LINK_GET_SELLER_STATUS =
