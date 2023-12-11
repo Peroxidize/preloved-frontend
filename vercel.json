@@ -2,11 +2,11 @@
     "rewrites": [
       {
         "source": "./src/components/Login/Login.tsx",
-        "destination": "https://preloved-frontend.vercel.app/"
+        "destination": "/"
       },
       {
         "source": "./src/components/FrontPage/FrontPage.tsx",
-        "destination": "https://preloved-frontend.vercel.app/frontpage"
+        "destination": "/frontpage"
       }
     ]
   }
