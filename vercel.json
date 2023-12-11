@@ -1,12 +1,5 @@
 {
-    "routes": [
-        { 
-            "src": "/", 
-            "dest": "/src/components/Login/Login.tsx"
-        },
-        {
-            "src": "/frontpage", 
-            "dest": "/src/components/FrontPage/FrontPage.tsx"
-        }
-    ]
-}
+    "rewrites":  [
+        {"source": "/(.*)", "destination": "/"}
+     ]
+ }
