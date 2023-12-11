@@ -1,0 +1,12 @@
+{
+    "rewrites": [
+      {
+        "source": ".//src//components//Login//Login.tsx",
+        "destination": "/"
+      },
+      {
+        "source": ".//src//components//FrontPage//FrontPage.tsx",
+        "destination": "/"
+      }
+    ]
+  }
