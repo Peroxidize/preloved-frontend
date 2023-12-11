@@ -8,30 +8,30 @@ import leftArrow from "../../assets/icons/leftArrow.svg";
 async function logout() {
   console.log("TESTESTSETTS");
   localStorage.clear();
-  await axios.get(LINK_LOGOUT)
-  .catch((error) => {
+  await axios.get(LINK_LOGOUT).catch((error) => {
     console.log(error);
   });
-  location.href = '/';
+  location.href = "/";
 }
 
-export default function() {
-
+export default function AdminPanel() {
   useEffect(() => {
     const fetch_list = async () => {
-      await axios.get(LINK_GET_PENDING_LIST, {withCredentials: true})
-      .then((response) => {
-        console.log(response);
-        console.log(JSON.stringify(response));
-      }).catch((error) => {
-        console.log(error);
-      });
+      await axios
+        .get(LINK_GET_PENDING_LIST, { withCredentials: true })
+        .then((response) => {
+          console.log(response);
+          console.log(JSON.stringify(response));
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     };
 
-    // fetch_list();
+    fetch_list();
   }, []);
 
-  return(
+  return (
     <div className={css.wrapper}>
       <div className={css.header}>
         <img

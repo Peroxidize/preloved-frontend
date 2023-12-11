@@ -1,8 +1,14 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import { BrowserRouter as Router, Routes, Route, Outlet, Navigate } from 'react-router-dom';
-import { QueryClient, QueryClientProvider } from 'react-query';
-import { User, UserType } from './components/misc';
+import React from "react";
+import ReactDOM from "react-dom/client";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Outlet,
+  Navigate,
+} from "react-router-dom";
+import { QueryClient, QueryClientProvider } from "react-query";
+import { User, UserType } from "./components/misc";
 
 import SignUp from "./components/SignUp/SignUp";
 import Login from "./components/Login/Login";
@@ -11,8 +17,8 @@ import Invoice from "./components/Ordering/Invoice";
 import FrontPage from "./components/FrontPage/FrontPage";
 import ShopDocumentation from "./components/ShopVerification/ShopDocumentation";
 import AddBalance from "./components/AddBalance/AddBalance";
-import TicketCenter from './components/TicketCenter/TicketCenter';
-import AdminPanel from './components/AdminPanel/admin-panel';
+import TicketCenter from "./components/TicketCenter/TicketCenter";
+import AdminPanel from "./components/AdminPanel/admin-panel";
 
 import "@fontsource/roboto";
 import "@fontsource/roboto/700.css";
@@ -20,7 +26,7 @@ import "./index.css";
 
 const queryClient = new QueryClient();
 
-const currentUser: User = JSON.parse(localStorage.getItem('userInfo')!);
+const currentUser: User = JSON.parse(localStorage.getItem("userInfo")!);
 
 const AnonymousRoutes = () => {
   return currentUser === null ? <Outlet /> : <Navigate to="/" />;
@@ -31,11 +37,19 @@ const UserRoutes = () => {
 };
 
 const UnverifiedSellerRoutes = () => {
-  return currentUser.type === UserType.UnverifiedSeller ? <Outlet /> : <Navigate to="/" />;
+  return currentUser.type === UserType.UnverifiedSeller ? (
+    <Outlet />
+  ) : (
+    <Navigate to="/" />
+  );
 };
 
 const VerifiedSellerRoutes = () => {
-  return currentUser.type === UserType.Seller ? <Outlet /> : <Navigate to="/" />;
+  return currentUser.type === UserType.Seller ? (
+    <Outlet />
+  ) : (
+    <Navigate to="/" />
+  );
 };
 
 const AdminRoutes = () => {
@@ -44,14 +58,14 @@ const AdminRoutes = () => {
 
 const getRoutes = (user: User) => {
   if (user === null) {
-    return(
+    return (
       <Route element={<AnonymousRoutes />}>
         <Route path="/" element={<Login />} />
         <Route path="/signup" element={<SignUp />} />
       </Route>
     );
   }
-  switch(user.type) {
+  switch (user.type) {
     case UserType.User:
       return (
         <Route element={<UserRoutes />}>
@@ -61,8 +75,8 @@ const getRoutes = (user: User) => {
           <Route path="/ticketcenter" element={<TicketCenter />} />
         </Route>
       );
-    case UserType.Seller: 
-      return(
+    case UserType.Seller:
+      return (
         <Route element={<VerifiedSellerRoutes />}>
           <Route path="/ticketcenter" element={<TicketCenter />} />
           <Route path="/topup" element={<AddBalance />} />
@@ -77,11 +91,14 @@ const getRoutes = (user: User) => {
     case UserType.UnverifiedSeller:
       return (
         <Route element={<UnverifiedSellerRoutes />}>
-          <Route path="/shopdocs" element={<ShopDocumentation submitted={true}  />} />
+          <Route
+            path="/shopdocs"
+            element={<ShopDocumentation submitted={false} />}
+          />
         </Route>
       );
     default:
-      return(
+      return (
         <Route element={<AnonymousRoutes />}>
           <Route path="/" element={<Login />} />
           <Route path="/signup" element={<SignUp />} />
@@ -98,7 +115,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
           <Route path="/" element={<Login />} />
           <Route path="/signup" element={<SignUp />} />
           {getRoutes(currentUser)}
-          <Route path="*" element={<Navigate to="/"/>}/>
+          <Route path="*" element={<Navigate to="/" />} />
         </Routes>
       </Router>
     </QueryClientProvider>
