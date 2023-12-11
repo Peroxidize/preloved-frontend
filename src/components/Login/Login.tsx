@@ -1,7 +1,7 @@
-import { useEffect, useState } from 'react';
-import axios from 'axios';
-import { Link, Navigate } from 'react-router-dom';
-import { LINK_GET_SELLER_STATUS, LINK_LOGIN, User, UserType } from '../misc';
+import { useEffect, useState } from "react";
+import axios from "axios";
+import { Link, Navigate } from "react-router-dom";
+import { LINK_GET_SELLER_STATUS, LINK_LOGIN, User, UserType } from "../misc";
 
 import logo from "../../assets/preloved-logo.jpg";
 import styles from "./login.module.css";
@@ -22,40 +22,51 @@ function evaluatePostRequest(response: string): boolean {
   return /"statusText":"OK"/.test(response);
 }
 
-function evaluateSellerStatus(response: string): boolean {
-  return /is missing/.test(response);
+function evaluateSellerStatus(response: string, user_type: string): string {
+  if (/is missing/.test(response)) {
+    return "Unverified";
+  } else if (/complete/.test(response)) {
+    return "Completed";
+  }
+  return user_type;
 }
 
-function getUserType(str: string): UserType{
-  switch(str) {
+function getUserType(str: string): UserType {
+  switch (str) {
     case "Shop User":
       return UserType.User;
     case "Shop Owner":
       return UserType.Seller;
     case "Admin":
       return UserType.Admin;
-    default:
+    case "Unverified":
       return UserType.UnverifiedSeller;
+    default:
+      return UserType.CompletedSeller;
   }
 }
 
 async function generateUser(response: any) {
   let user_type: string = response.data.user_type;
   if (response.data.shop_owner_id !== null) {
-    await axios.get(LINK_GET_SELLER_STATUS, {params: {id: response.data.shop_owner_id}})
-    .then((response) => {
-      user_type = evaluateSellerStatus(JSON.stringify(response))
-       ? "Unverified" : user_type;
-    }).catch((error) => {
-      console.log(error);
-    });
+    await axios
+      .get(LINK_GET_SELLER_STATUS, {
+        params: { id: response.data.shop_owner_id },
+      })
+      .then((response) => {
+        console.log(response);
+        user_type = evaluateSellerStatus(JSON.stringify(response), user_type);
+        console.log(user_type);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   }
   user = {
     email: response.data.email,
     type: getUserType(user_type),
   };
-  console.log(user);
-  localStorage.setItem('userInfo', JSON.stringify(user));
+  localStorage.setItem("userInfo", JSON.stringify(user));
   location.reload();
 }
 
@@ -65,14 +76,14 @@ export default function Login() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
-    const userInfo: User | null = JSON.parse(localStorage.getItem('userInfo')!);
-  
+    const userInfo: User | null = JSON.parse(localStorage.getItem("userInfo")!);
+
     if (userInfo !== null) {
-      switch(userInfo.type) {
+      switch (userInfo.type) {
         case UserType.User:
           location.href = "/frontpage";
           break;
-        case UserType.Seller: 
+        case UserType.Seller:
           location.href = "/ticketcenter";
           break;
         case UserType.Admin:
@@ -81,6 +92,8 @@ export default function Login() {
         case UserType.UnverifiedSeller:
           location.href = "/shopdocs";
           break;
+        default:
+          location.href = "/shopdocs/submitted";
       }
     }
   }, []);
@@ -103,18 +116,18 @@ export default function Login() {
     formData.append("password", password);
 
     await axios
-    .post(LINK_LOGIN, formData, {withCredentials: true})
-    .then((response) => {
-      console.log(response);
-      authenticate = evaluatePostRequest(JSON.stringify(response));
-      if (authenticate === false) {
-        return;
-      }
-      generateUser(response);
-      setIsLoggedIn(true);
-    }).catch((error) => {
-      console.log(error);
-    });
+      .post(LINK_LOGIN, formData, { withCredentials: true })
+      .then((response) => {
+        authenticate = evaluatePostRequest(JSON.stringify(response));
+        if (authenticate === false) {
+          return;
+        }
+        generateUser(response);
+        setIsLoggedIn(true);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
 
     displaySpinner(false);
     errorMessage(authenticate);
