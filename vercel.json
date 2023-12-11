@@ -1,12 +1,8 @@
 {
     "rewrites": [
       {
-        "source": "./src/components/Login/Login.tsx",
+        "source": "/(.*)",
         "destination": "/"
-      },
-      {
-        "source": "./src/components/FrontPage/FrontPage.tsx",
-        "destination": "/frontpage"
       }
     ]
   }
