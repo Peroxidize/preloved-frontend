@@ -1,33 +1,34 @@
-import css from './frontpage.module.css';
+import css from "./frontpage.module.css";
 
-import NavBar from '../fragments/nav-bar/nav-bar';
+import NavBar from "../fragments/nav-bar/nav-bar";
 
-import beigeJacket from '../../assets/clothes/beige-jacket.jpg';
-import checkeredSweater from '../../assets/clothes/checkered-sweater.jpg';
-import greySlacks from '../../assets/clothes/grey-slacks.jpg';
-import khakiJacket from '../../assets/clothes/khaki-jacket.jpg';
-import greenSweater from '../../assets/clothes/green-sweater.jpg';
-import magentaShirt from '../../assets/clothes/magenta-shirt.png';
-import axios from 'axios';
+import beigeJacket from "../../assets/clothes/beige-jacket.jpg";
+import checkeredSweater from "../../assets/clothes/checkered-sweater.jpg";
+import greySlacks from "../../assets/clothes/grey-slacks.jpg";
+import khakiJacket from "../../assets/clothes/khaki-jacket.jpg";
+import greenSweater from "../../assets/clothes/green-sweater.jpg";
+import magentaShirt from "../../assets/clothes/magenta-shirt.png";
+// import axios from "axios";
 
-const domain = 'https://prelovedbackends.azurewebsites.net/';
-const downloadfiles = 'host/storage/q';
+// const domain = "https://prelovedbackends.azurewebsites.net/";
+// const downloadfiles = "host/storage/q";
 
-const repeatArray = (array: string[], n: number) => Array.from({ length: n }, () => array).flat();
+const repeatArray = (array: string[], n: number) =>
+  Array.from({ length: n }, () => array).flat();
 const getImageName = (image: string) => {
-  const path = image.split('/');
-  const name = path[path.length - 1].split('.');
+  const path = image.split("/");
+  const name = path[path.length - 1].split(".");
   return name[0];
 };
 
-export default function() {
+export default function FrontPage() {
   // (async () => {
   //   await axios.get(domain + downloadfiles)
   //   .then(response => {
   //     console.log(response);
   //   }).catch(error => {
   //     console.log(error);
-  //   }); 
+  //   });
   // })();
 
   const clothingItems = [
@@ -40,7 +41,7 @@ export default function() {
   ];
 
   const repeatedClothingItems = repeatArray(clothingItems, 10);
-  
+
   return (
     <div className={css.wrapper}>
       <NavBar />

@@ -77,15 +77,17 @@ function navigateFrontPage() {
 export default function DesktopNavUser() {
   useEffect(() => {
     const get_session = async () => {
-      await axios.get(LINK_IS_AUTH)
-      .then((response) => {
-        console.log(response);
-      }).catch((error) => {
-        console.log(error);
-      });
+      await axios
+        .get(LINK_IS_AUTH)
+        .then((response) => {
+          console.log(response);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     };
 
-    // get_session();
+    get_session();
   }, []);
 
   return (

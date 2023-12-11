@@ -4,14 +4,16 @@ import Button from "../fragments/FormInputs/Button";
 
 import leftArrow from "../../assets/icons/leftArrow.svg";
 import ImageInput from "../fragments/FormInputs/ImageInput";
-import { Navigate } from "react-router-dom";
-import { LINK_LOGOUT } from "../misc";
+// import { Navigate } from "react-router-dom";
+import {
+  LINK_LOGOUT,
+  // LINK_IS_AUTH,
+  LINK_SHOP_ID1,
+  LINK_SHOP_ID2,
+  LINK_SHOP_IDSELFIE,
+} from "../misc";
 import axios from "axios";
 import inProcessIcon from "../../assets/icons/verifyInProcess.svg";
-
-// const domain = "https://prelovedbackends.azurewebsites.net/";
-// let endpoint = "auth/shop_id_one";
-
 interface ShopDocsProps {
   submitted: boolean;
 }
@@ -46,12 +48,6 @@ const ShopDocumentation: React.FC<ShopDocsProps> = ({ submitted }) => {
     reader.readAsDataURL(file);
   };
 
-  async function returnFrontpage() {
-    localStorage.clear();
-    await axios.post(LINK_LOGOUT, null, { withCredentials: true });
-    window.location.replace("/frontpage");
-  }
-
   const handleSelfieChange = (files: FileList) => {
     const file = files[0];
     if (!file) return;
@@ -63,8 +59,54 @@ const ShopDocumentation: React.FC<ShopDocsProps> = ({ submitted }) => {
     reader.readAsDataURL(file);
   };
 
-  async function handlePostRequest() {
+  async function returnFrontpage() {
+    localStorage.clear();
+    await axios.post(LINK_LOGOUT, null, { withCredentials: true });
+    window.location.replace("/frontpage");
+  }
 
+  async function submitID(endpoint: string, file: File) {
+    const formData = new FormData();
+    formData.append("file", file);
+
+    await axios
+      .post(endpoint, formData, { withCredentials: true })
+      .then((response) => {
+        console.log(response);
+      })
+      .catch((response) => {
+        console.log(response);
+      });
+  }
+
+  async function handlePostRequest(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+
+    if (firstID) {
+      await submitID(LINK_SHOP_ID1, firstID);
+    }
+    if (secondID) {
+      // await axios
+      //   .get(LINK_IS_AUTH, { withCredentials: true })
+      //   .then((response) => {
+      //     console.log(response);
+      //   })
+      //   .catch((response) => {
+      //     console.log(response);
+      //   });
+      await submitID(LINK_SHOP_ID2, secondID);
+    }
+    if (selfie) {
+      // await axios
+      //   .get(LINK_IS_AUTH, { withCredentials: true })
+      //   .then((response) => {
+      //     console.log(response);
+      //   })
+      //   .catch((response) => {
+      //     console.log(response);
+      //   });
+      await submitID(LINK_SHOP_IDSELFIE, selfie);
+    }
   }
 
   return (
@@ -75,6 +117,7 @@ const ShopDocumentation: React.FC<ShopDocsProps> = ({ submitted }) => {
             src={leftArrow}
             alt="Back to login icon"
             className={classes.backIcon}
+            onClick={returnFrontpage}
           />
           <h1>Shop Documentation</h1>
         </div>
@@ -98,7 +141,12 @@ const ShopDocumentation: React.FC<ShopDocsProps> = ({ submitted }) => {
               To proceed to shop curation, we must verify your shop. Prepare two
               valid IDs and one selfie picture.
             </p>
-            <form action="" method="post" className={classes.formContainer}>
+            <form
+              action=""
+              method="post"
+              className={classes.formContainer}
+              onSubmit={handlePostRequest}
+            >
               <div className={classes.responsiveContainer}>
                 <div className={classes.flexContainer}>
                   <ImageInput
