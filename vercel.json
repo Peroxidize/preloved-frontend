@@ -2,11 +2,11 @@
     "rewrites": [
       {
         "source": ".//src//components//Login//Login.tsx",
-        "destination": "/"
+        "destination": "*/"
       },
       {
         "source": ".//src//components//FrontPage//FrontPage.tsx",
-        "destination": "/frontpage"
+        "destination": "*/frontpage"
       }
     ]
   }
