@@ -44,6 +44,14 @@ const UnverifiedSellerRoutes = () => {
   );
 };
 
+const CompletedSellerRoutes = () => {
+  return currentUser.type === UserType.CompletedSeller ? (
+    <Outlet />
+  ) : (
+    <Navigate to="/" />
+  );
+};
+
 const VerifiedSellerRoutes = () => {
   return currentUser.type === UserType.Seller ? (
     <Outlet />
@@ -94,6 +102,19 @@ const getRoutes = (user: User) => {
           <Route
             path="/shopdocs"
             element={<ShopDocumentation submitted={false} />}
+          />
+          <Route
+            path="/shopdocs/submitted"
+            element={<ShopDocumentation submitted={true} />}
+          />
+        </Route>
+      );
+    case UserType.CompletedSeller:
+      return (
+        <Route element={<CompletedSellerRoutes />}>
+          <Route
+            path="/shopdocs/submitted"
+            element={<ShopDocumentation submitted={true} />}
           />
         </Route>
       );
