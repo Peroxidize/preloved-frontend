@@ -1,11 +1,11 @@
 {
     "rewrites": [
       {
-        "source": ".//src//components//Login//Login.tsx",
+        "source": "./src/components/Login/Login.tsx",
         "destination": "https://preloved-frontend.vercel.app/"
       },
       {
-        "source": ".//src//components//FrontPage//FrontPage.tsx",
+        "source": "./src/components/FrontPage/FrontPage.tsx",
         "destination": "https://preloved-frontend.vercel.app/frontpage"
       }
     ]
