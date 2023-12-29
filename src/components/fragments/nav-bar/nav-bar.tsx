@@ -5,19 +5,29 @@ import css from "./nav-bar.module.css";
 
 import logo from "../../../assets/preloved-logo.jpg";
 import ticketIcon from "../../../assets/icons/ticket.svg";
+import ticketFilledIcon from "../../../assets/icons/ticketFilled.svg";
 import profileIcon from "../../../assets/icons/accountCircle.svg";
+import profileFilledIcon from "../../../assets/icons/accountCircleFilled.svg";
 import shopping_cart from "../../../assets/icons/shopping_cart.svg";
+import shoppingFilledIcon from "../../../assets/icons/cartFilled.svg";
 import search_icon from "../../../assets/icons/search_icon.svg";
 import axios from "axios";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 const user: User = JSON.parse(localStorage.getItem("userInfo")!);
 
-function getMenu(userType: UserType) {
+function getMenu(
+  userType: UserType,
+  setProfileFilled: React.Dispatch<React.SetStateAction<boolean>>
+) {
   switch (userType) {
     case UserType.User:
       return (
-        <div className={css.dropdown_content}>
+        <div
+          className={css.dropdown_content}
+          onMouseEnter={() => setProfileFilled(true)}
+          onMouseLeave={() => setProfileFilled(false)}
+        >
           <Link to="/collections" className={css.link}>
             Collections
           </Link>
@@ -74,7 +84,72 @@ function navigateFrontPage() {
   window.location.replace("/frontpage");
 }
 
+const MobileNavTop: React.FC = () => {
+  // Component logic goes here
+
+  return (
+    // JSX code goes here
+    <>
+      <div className={css.mob_nav_bar}>
+        <div className={css.search_bar}>
+          <img src={search_icon} alt="Search Icon" />
+          <input type="text" placeholder="Search" />
+        </div>
+      </div>
+    </>
+  );
+};
+
+const MobileNavBottom: React.FC = () => {
+  const [profileFilled, setProfileFilled] = useState(false);
+  const [ticketFilled, setTicketFilled] = useState(false);
+  const [cartFilled, setCartFilled] = useState(false);
+
+  const toggleDropdown = () => {
+    const dropdown = document.getElementById("dropdown")!;
+    dropdown.classList.toggle(css.show);
+  };
+
+  return (
+    // JSX code goes here
+    <>
+      <div className={css.mob_nav_bar_bottom}>
+        <div className={css.dropdown} id="dropdown" onClick={toggleDropdown}>
+          <img
+            src={profileFilled ? profileFilledIcon : profileIcon}
+            className={css.profile_icon}
+            alt="Profile Icon"
+            onMouseEnter={() => setProfileFilled(true)}
+            onMouseLeave={() => setProfileFilled(false)}
+          />
+          {/* remove the parameter if you want to 
+          access webpages without logging in */}
+          {getMenu(user.type, setProfileFilled)}
+        </div>
+        <img
+          src={cartFilled ? shoppingFilledIcon : shopping_cart}
+          className={css.shopping_cart}
+          alt="Shopping Cart"
+          onMouseEnter={() => setCartFilled(true)}
+          onMouseLeave={() => setCartFilled(false)}
+        />
+        <img
+          src={ticketFilled ? ticketFilledIcon : ticketIcon}
+          onClick={navigateTicketCenter}
+          className={css.ticket_icon}
+          alt="Ticket Icon"
+          onMouseEnter={() => setTicketFilled(true)}
+          onMouseLeave={() => setTicketFilled(false)}
+        />
+      </div>
+    </>
+  );
+};
+
 export default function DesktopNavUser() {
+  const [profileFilled, setProfileFilled] = useState(false);
+  const [ticketFilled, setTicketFilled] = useState(false);
+  const [cartFilled, setCartFilled] = useState(false);
   useEffect(() => {
     const get_session = async () => {
       await axios
@@ -91,7 +166,7 @@ export default function DesktopNavUser() {
   }, []);
 
   return (
-    <div>
+    <>
       <div className={css.nav_bar}>
         <img
           src={logo}
@@ -104,27 +179,35 @@ export default function DesktopNavUser() {
           <input type="text" placeholder="Search" />
         </div>
         <img
-          src={shopping_cart}
+          src={cartFilled ? shoppingFilledIcon : shopping_cart}
           className={css.shopping_cart}
           alt="Shopping Cart"
+          onMouseEnter={() => setCartFilled(true)}
+          onMouseLeave={() => setCartFilled(false)}
         />
         <img
-          src={ticketIcon}
+          src={ticketFilled ? ticketFilledIcon : ticketIcon}
           onClick={navigateTicketCenter}
           className={css.ticket_icon}
           alt="Ticket Icon"
+          onMouseEnter={() => setTicketFilled(true)}
+          onMouseLeave={() => setTicketFilled(false)}
         />
         <div className={css.dropdown}>
           <img
-            src={profileIcon}
+            src={profileFilled ? profileFilledIcon : profileIcon}
             className={css.profile_icon}
             alt="Profile Icon"
+            onMouseEnter={() => setProfileFilled(true)}
+            onMouseLeave={() => setProfileFilled(false)}
           />
           {/* remove the parameter if you want to 
           access webpages without logging in */}
-          {getMenu(user.type)}
+          {getMenu(user.type, setProfileFilled)}
         </div>
       </div>
-    </div>
+    </>
   );
 }
+
+export { MobileNavTop, MobileNavBottom };

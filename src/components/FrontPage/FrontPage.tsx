@@ -1,6 +1,8 @@
 import css from "./frontpage.module.css";
 
-import NavBar from "../fragments/nav-bar/nav-bar";
+import NavBar, { MobileNavBottom } from "../fragments/nav-bar/nav-bar";
+import { useMediaQuery } from "react-responsive";
+import { MobileNavTop } from "../fragments/nav-bar/nav-bar";
 
 import beigeJacket from "../../assets/clothes/beige-jacket.jpg";
 import checkeredSweater from "../../assets/clothes/checkered-sweater.jpg";
@@ -30,6 +32,9 @@ export default function FrontPage() {
   //     console.log(error);
   //   });
   // })();
+  const isDesktopOrLaptop = useMediaQuery({
+    query: "(min-device-width: 1224px)",
+  });
 
   const clothingItems = [
     beigeJacket,
@@ -43,13 +48,16 @@ export default function FrontPage() {
   const repeatedClothingItems = repeatArray(clothingItems, 10);
 
   return (
-    <div className={css.wrapper}>
-      <NavBar />
-      <div className={css.display_clothing}>
-        {repeatedClothingItems.map((item, index) => (
-          <img key={index} src={item} alt={`${getImageName(item)}`} />
-        ))}
+    <>
+      {isDesktopOrLaptop ? <NavBar /> : <MobileNavTop />}
+      <div className={css.wrapper}>
+        <div className={css.display_clothing}>
+          {repeatedClothingItems.map((item, index) => (
+            <img key={index} src={item} alt={`${getImageName(item)}`} />
+          ))}
+        </div>
+        {!isDesktopOrLaptop && <MobileNavBottom />}
       </div>
-    </div>
+    </>
   );
 }
