@@ -1,7 +1,8 @@
 .wrapper {
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  padding: 2rem 4rem 0;
 }
 
 .header {
@@ -10,13 +11,26 @@
   align-items: center;
 }
 
-.title {
-    margin: 0.5em;
-}
-
 .back_icon {
   background-color: rgb(255, 255, 255);
   cursor: pointer;
-  height: 3.5em;
-  margin-left: 3em;
+  height: 2rem;
+  margin-right: 1rem;
+}
+
+.pendingContainer {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.pendingList {
+  padding: 0.75rem 1rem;
+  border-radius: 10px;
+  border: 1px solid black;
+  outline: 0;
+}
+
+.btnApprove {
+  
 }

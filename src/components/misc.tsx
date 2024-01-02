@@ -33,3 +33,7 @@ export const LINK_SHOP_ID2 =
   "https://prelovedbackend.azurewebsites.net/auth/shop_id_two";
 export const LINK_SHOP_IDSELFIE =
   "https://prelovedbackend.azurewebsites.net/auth/shop_id_selfie";
+export const LINK_GET_SHOP_DETAILS =
+  "https://prelovedbackend.azurewebsites.net/auth/verification/get_shop_owner_details";
+export const LINK_GET_SHOPVERIFICATION_IMAGE =
+  "https://prelovedbackend.azurewebsites.net/auth/verification/get_image";

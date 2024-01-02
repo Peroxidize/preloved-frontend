@@ -139,6 +139,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
           <Route path="/ordering" element={<Ordering />} />
           <Route path="/invoice" element={<Invoice />} />
           <Route path="/ticketcenter" element={<TicketCenter />} />
+          <Route path="/adminpanel" element={<AdminPanel />} />
           {/* {getRoutes(currentUser)} */}
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
