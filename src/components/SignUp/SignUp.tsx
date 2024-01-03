@@ -4,7 +4,7 @@ import { useMutation } from "react-query";
 
 import logo from "../../assets/preloved-logo.jpg";
 import classes from "./SignUp.module.css";
-import { Navigate } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 
 const domain = "https://prelovedbackend.azurewebsites.net/";
 const userNavText = "Want to create a seller account?";
@@ -179,9 +179,9 @@ export default function SignUp() {
             </p>
             <p>
               Already have an account?{" "}
-              <a href="/" className={classes.link}>
+              <Link to="/" className={classes.link}>
                 Click Here
-              </a>
+              </Link>
             </p>
           </legend>
           <div className={classes.inputContainer}>

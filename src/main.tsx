@@ -6,6 +6,7 @@ import {
   Route,
   Outlet,
   Navigate,
+  BrowserRouter,
 } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { User, UserType } from "./components/misc";
@@ -23,6 +24,7 @@ import AdminPanel from "./components/AdminPanel/admin-panel";
 import "@fontsource/roboto";
 import "@fontsource/roboto/700.css";
 import "./index.css";
+import App from "./App";
 
 const queryClient = new QueryClient();
 
@@ -131,18 +133,9 @@ const getRoutes = (user: User) => {
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>
-      <Router>
-        <Routes>
-          <Route path="/" element={<Login />} />
-          <Route path="/signup" element={<SignUp />} />
-          <Route path="/frontpage" element={<FrontPage />} />
-          <Route path="/ordering" element={<Ordering />} />
-          <Route path="/invoice" element={<Invoice />} />
-          <Route path="/ticketcenter" element={<TicketCenter />} />
-          {/* {getRoutes(currentUser)} */}
-          <Route path="*" element={<Navigate to="/" />} />
-        </Routes>
-      </Router>
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
     </QueryClientProvider>
   </React.StrictMode>
 );

@@ -1,6 +1,9 @@
 export interface User {
   email: string;
   type: UserType;
+  user_id: number;
+  shop_owner_id: number;
+  verified: number;
 }
 
 export enum UserType {

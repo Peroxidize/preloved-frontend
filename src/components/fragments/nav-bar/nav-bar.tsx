@@ -150,20 +150,20 @@ export default function DesktopNavUser() {
   const [profileFilled, setProfileFilled] = useState(false);
   const [ticketFilled, setTicketFilled] = useState(false);
   const [cartFilled, setCartFilled] = useState(false);
-  useEffect(() => {
-    const get_session = async () => {
-      await axios
-        .get(LINK_IS_AUTH)
-        .then((response) => {
-          console.log(response);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    };
+  // useEffect(() => {
+  //   const get_session = async () => {
+  //     await axios
+  //       .get(LINK_IS_AUTH)
+  //       .then((response) => {
+  //         console.log(response);
+  //       })
+  //       .catch((error) => {
+  //         console.log(error);
+  //       });
+  //   };
 
-    get_session();
-  }, []);
+  //   get_session();
+  // }, []);
 
   return (
     <>

@@ -1,6 +1,7 @@
-import { useEffect, useState } from "react";
 import axios from "axios";
-import { Link, Navigate } from "react-router-dom";
+import { useContext, useEffect, useState } from "react";
+import { Link, Navigate, Route, redirect, useNavigate } from "react-router-dom";
+import { UserContext, getElement } from "../../App";
 import { LINK_GET_SELLER_STATUS, LINK_LOGIN, User, UserType } from "../misc";
 
 import logo from "../../assets/preloved-logo.jpg";
@@ -46,57 +47,83 @@ function getUserType(str: string): UserType {
   }
 }
 
-async function generateUser(response: any) {
-  let user_type: string = response.data.user_type;
-  if (response.data.shop_owner_id !== null) {
-    await axios
-      .get(LINK_GET_SELLER_STATUS, {
-        params: { id: response.data.shop_owner_id },
-      })
-      .then((response) => {
-        console.log(response);
-        user_type = evaluateSellerStatus(JSON.stringify(response), user_type);
-        console.log(user_type);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }
-  user = {
-    email: response.data.email,
-    type: getUserType(user_type),
-  };
-  localStorage.setItem("userInfo", JSON.stringify(user));
-  location.reload();
-}
-
 export default function Login() {
+  const navigate = useNavigate();
+  const { user, setUser } = useContext(UserContext);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
-    const userInfo: User | null = JSON.parse(localStorage.getItem("userInfo")!);
-
-    if (userInfo !== null) {
-      switch (userInfo.type) {
-        case UserType.User:
-          location.href = "/frontpage";
-          break;
-        case UserType.Seller:
-          location.href = "/ticketcenter";
-          break;
-        case UserType.Admin:
-          location.href = "/adminpanel";
-          break;
-        case UserType.UnverifiedSeller:
-          location.href = "/shopdocs";
-          break;
-        default:
-          location.href = "/shopdocs/submitted";
-      }
+    if (user === null) {
+      return;
     }
-  }, []);
+    navigate("/");
+  }, [user]);
+
+  const handleLogin = () => {
+    const userInfo: User | null = JSON.parse(localStorage.getItem("userInfo")!);
+    setUser({userInfo});
+    console.log("INFO");
+    console.log(userInfo);
+    switch (userInfo!.type) {
+      case UserType.User:
+        navigate("/frontpage");
+        break;
+      case UserType.Seller:
+        navigate("/ticketcenter");
+        break;
+      case UserType.Admin:
+        navigate("/adminpanel");
+        break;
+      case UserType.UnverifiedSeller:
+        navigate("/shopdocs");
+        break;
+      default:
+        navigate("/shopdocs/submitted");
+    }
+  }
+
+  const generateUser = async (response: any) => {
+    console.log("RESPONSE");
+    console.log(response);
+    let user_type: string = response.data.user_type;
+    if (response.data.shop_owner_id !== null) {
+      await axios
+        .get(LINK_GET_SELLER_STATUS, {
+          params: { id: response.data.shop_owner_id },
+        })
+        .then((response) => {
+          console.log(response);
+          user_type = evaluateSellerStatus(JSON.stringify(response), user_type);
+          console.log(user_type);
+          let USER = {
+            email: response.data.email,
+            type: getUserType(user_type),
+            user_id: response.data.id,
+            shop_owner_id: response.data.shop_owner_id,
+            verified: response.data.verified,
+          };
+          setUser({USER});
+          console.log("SETUSER");
+          console.log(user);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    } else {
+      let USER = {
+        email: response.data.email,
+        type: getUserType(user_type),
+        user_id: response.data.id,
+      };
+      console.log("SETUSER");
+      setUser(USER);
+      console.log(user);
+    }
+    // localStorage.setItem("userInfo", JSON.stringify(user));
+    // handleLogin();
+  }
 
   async function handlePostRequest(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -118,6 +145,8 @@ export default function Login() {
     await axios
       .post(LINK_LOGIN, formData, { withCredentials: true })
       .then((response) => {
+        console.log("RESPONSE");
+        console.log(response);
         authenticate = evaluatePostRequest(JSON.stringify(response));
         if (authenticate === false) {
           return;
@@ -180,7 +209,6 @@ export default function Login() {
             <div className={styles.ball2}></div>
             <div className={styles.ball3}></div>
           </div>
-          {isLoggedIn && <Navigate to="/frontpage" replace={true} />}
         </form>
       </div>
     </div>
