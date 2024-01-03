@@ -6,7 +6,6 @@ import css from "./admin-panel.module.css";
 import leftArrow from "../../assets/icons/leftArrow.svg";
 
 async function logout() {
-  console.log("TESTESTSETTS");
   localStorage.clear();
   await axios.get(LINK_LOGOUT).catch((error) => {
     console.log(error);

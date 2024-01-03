@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import { LINK_IS_AUTH, LINK_LOGOUT, User, UserType } from "../../misc";
 
 import css from "./nav-bar.module.css";
@@ -12,9 +12,11 @@ import shopping_cart from "../../../assets/icons/shopping_cart.svg";
 import shoppingFilledIcon from "../../../assets/icons/cartFilled.svg";
 import search_icon from "../../../assets/icons/search_icon.svg";
 import axios from "axios";
-import { useEffect, useState } from "react";
 
-const user: User = JSON.parse(localStorage.getItem("userInfo")!);
+import { useEffect, useState } from "react";
+import { useAtom } from "jotai";
+import { userAtom } from "../../../App";
+import { logout } from "../../../utils/auth";
 
 function getMenu(
   userType: UserType,
@@ -31,7 +33,7 @@ function getMenu(
           <Link to="/collections" className={css.link}>
             Collections
           </Link>
-          <Link to="" onClick={destroyLocalStorage} className={css.link}>
+          <Link to="" onClick={logout} className={css.link}>
             Logout
           </Link>
         </div>
@@ -51,7 +53,7 @@ function getMenu(
           <Link to="/collections" className={css.link}>
             Collections
           </Link>
-          <Link to="" onClick={destroyLocalStorage} className={css.link}>
+          <Link to="" onClick={logout} className={css.link}>
             Logout
           </Link>
         </div>
@@ -62,7 +64,7 @@ function getMenu(
           <Link to="/adminpanel" className={css.link}>
             Admin Panel
           </Link>
-          <Link to="" onClick={destroyLocalStorage} className={css.link}>
+          <Link to="" onClick={logout} className={css.link}>
             Logout
           </Link>
         </div>
@@ -70,21 +72,8 @@ function getMenu(
   }
 }
 
-async function destroyLocalStorage() {
-  localStorage.clear();
-  await axios.post(LINK_LOGOUT, null, { withCredentials: true });
-  window.location.replace("/");
-}
-
-function navigateTicketCenter() {
-  window.location.replace("/ticketcenter");
-}
-
-function navigateFrontPage() {
-  window.location.replace("/frontpage");
-}
-
 const MobileNavTop: React.FC = () => {
+  
   // Component logic goes here
 
   return (
@@ -104,6 +93,12 @@ const MobileNavBottom: React.FC = () => {
   const [profileFilled, setProfileFilled] = useState(false);
   const [ticketFilled, setTicketFilled] = useState(false);
   const [cartFilled, setCartFilled] = useState(false);
+  const [storedUser, setUser] = useAtom(userAtom);
+  const navigate = useNavigate();
+  
+  const navigateTicketCenter = () => {
+    navigate('/ticketcenter');
+  };
 
   const toggleDropdown = () => {
     const dropdown = document.getElementById("dropdown")!;
@@ -124,7 +119,7 @@ const MobileNavBottom: React.FC = () => {
           />
           {/* remove the parameter if you want to 
           access webpages without logging in */}
-          {getMenu(user.type, setProfileFilled)}
+          {getMenu(storedUser!.type, setProfileFilled)}
         </div>
         <img
           src={cartFilled ? shoppingFilledIcon : shopping_cart}
@@ -150,10 +145,21 @@ export default function DesktopNavUser() {
   const [profileFilled, setProfileFilled] = useState(false);
   const [ticketFilled, setTicketFilled] = useState(false);
   const [cartFilled, setCartFilled] = useState(false);
+  const [storedUser, setUser] = useAtom(userAtom);
+  const navigate = useNavigate();
+  
+  const navigateTicketCenter = () => {
+    navigate('/ticketcenter');
+  };
+
+  const navigateFrontPage = () => {
+    navigate("/");
+  };
+
   // useEffect(() => {
   //   const get_session = async () => {
   //     await axios
-  //       .get(LINK_IS_AUTH)
+  //       .get(LINK_IS_AUTH, { withCredentials: true })
   //       .then((response) => {
   //         console.log(response);
   //       })
@@ -203,7 +209,7 @@ export default function DesktopNavUser() {
           />
           {/* remove the parameter if you want to 
           access webpages without logging in */}
-          {getMenu(user.type, setProfileFilled)}
+          {getMenu(storedUser!.type, setProfileFilled)}
         </div>
       </div>
     </>
