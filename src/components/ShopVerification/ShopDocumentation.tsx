@@ -1,10 +1,13 @@
-import classes from "./ShopDocumentation.module.css";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-import Button from "../fragments/FormInputs/Button";
 
+import classes from "./ShopDocumentation.module.css";
+
+import Button from "../fragments/FormInputs/Button";
 import leftArrow from "../../assets/icons/leftArrow.svg";
 import ImageInput from "../fragments/FormInputs/ImageInput";
-// import { Navigate } from "react-router-dom";
+import inProcessIcon from "../../assets/icons/verifyInProcess.svg";
 import {
   LINK_LOGOUT,
   // LINK_IS_AUTH,
@@ -12,8 +15,7 @@ import {
   LINK_SHOP_ID2,
   LINK_SHOP_IDSELFIE,
 } from "../misc";
-import axios from "axios";
-import inProcessIcon from "../../assets/icons/verifyInProcess.svg";
+
 interface ShopDocsProps {
   submitted: boolean;
 }
@@ -25,6 +27,12 @@ const ShopDocumentation: React.FC<ShopDocsProps> = ({ submitted }) => {
   const [photoFirstID, setPhotoFirstID] = useState<string | null>(null);
   const [photoSecondID, setPhotoSecondID] = useState<string | null>(null);
   const [photoSelfie, setPhotoSelfie] = useState<string | null>(null);
+
+  const returnFrontpage = async () => {
+    await axios.post(LINK_LOGOUT, null, { withCredentials: true });
+    localStorage.clear();
+    location.reload();
+  };
 
   const handleFirstIDChange = (files: FileList) => {
     const file = files[0];
@@ -58,12 +66,6 @@ const ShopDocumentation: React.FC<ShopDocsProps> = ({ submitted }) => {
     };
     reader.readAsDataURL(file);
   };
-
-  async function returnFrontpage() {
-    localStorage.clear();
-    await axios.post(LINK_LOGOUT, null, { withCredentials: true });
-    window.location.replace("/frontpage");
-  }
 
   async function submitID(endpoint: string, file: File) {
     const formData = new FormData();
