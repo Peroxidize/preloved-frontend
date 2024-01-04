@@ -5,7 +5,7 @@ import {
   LINK_GET_SHOP_DETAILS,
   LINK_LOGOUT,
 } from '../misc';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios, { AxiosError } from 'axios';
 
 import reject from '../../assets/icons/close.svg';
@@ -13,14 +13,7 @@ import check from '../../assets/icons/check.svg';
 import css from './admin-panel.module.css';
 import leftArrow from '../../assets/icons/leftArrow.svg';
 import { useQuery } from 'react-query';
-
-async function logout() {
-  localStorage.clear();
-  await axios.get(LINK_LOGOUT).catch((error) => {
-    console.log(error);
-  });
-  location.href = '/';
-}
+import { get_auth, logout } from '../../utils/auth';
 
 const getPendingList = async () => {
   const response = await axios.get(LINK_GET_PENDING_LIST, {

@@ -1,5 +1,4 @@
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 
 import classes from "./ShopDocumentation.module.css";
@@ -15,6 +14,7 @@ import {
   LINK_SHOP_ID2,
   LINK_SHOP_IDSELFIE,
 } from "../misc";
+import { logout } from "../../utils/auth";
 
 interface ShopDocsProps {
   submitted: boolean;
@@ -120,7 +120,7 @@ const ShopDocumentation: React.FC<ShopDocsProps> = ({ submitted }) => {
             src={leftArrow}
             alt="Back to login icon"
             className={classes.backIcon}
-            onClick={returnFrontpage}
+            onClick={logout}
           />
           <h1>Shop Documentation</h1>
         </div>

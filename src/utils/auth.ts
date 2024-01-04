@@ -17,7 +17,11 @@ export const logout = async () => {
   await axios.post(API_URL + "logout", null, { withCredentials: true });
   localStorage.clear();
   window.location.replace("/");
-}
+};
+
+export const get_auth = async () => {
+  return await axios.get((API_URL + "is_authenticated"), { withCredentials: true });
+};
 
 const get_seller_status = async (id: any) => {
   return await axios.get(API_URL + "/verification/document_status", {
