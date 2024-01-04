@@ -46,8 +46,7 @@ export default function SignUp() {
 
   const [isLoading, setIsLoading] = useState(false);
   const mutation = useMutation(
-    (data: FormData) =>
-      axios.post(domain + endpoint, data, { withCredentials: true }),
+    (data: FormData) => axios.post(domain + endpoint, data, { withCredentials: true }),
     {
       onSuccess: (data) => {
         console.log(data);
@@ -94,7 +93,7 @@ export default function SignUp() {
     storeInput = (
       <>
         <div className={classes.inputContainer}>
-          <label htmlFor="street">Shop Address</label>
+          <label htmlFor="street">Address</label>
           <input
             type="text"
             name="street"
@@ -169,11 +168,7 @@ export default function SignUp() {
             <h1>Create your account</h1>
             <p>
               {isStore ? sellerNavText : userNavText}{" "}
-              <a
-                href="#"
-                onClick={() => setIsStore(!isStore)}
-                className={classes.link}
-              >
+              <a href="#" onClick={() => setIsStore(!isStore)} className={classes.link}>
                 Click Here
               </a>
             </p>
@@ -261,9 +256,7 @@ export default function SignUp() {
           {storeInput}
           <button
             type="submit"
-            className={`${classes.signupButton} ${
-              isLoading && classes.signupLoading
-            }`}
+            className={`${classes.signupButton} ${isLoading && classes.signupLoading}`}
           >
             Sign Up
           </button>

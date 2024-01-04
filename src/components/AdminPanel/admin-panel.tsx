@@ -2,18 +2,18 @@ import {
   LINK_APPROVE_OR_REJECT,
   LINK_GET_PENDING_LIST,
   LINK_GET_SHOPVERIFICATION_IMAGE,
-  LINK_GET_SHOP_DETAILS,
+  LINK_GET_SELLER_DETAILS,
   LINK_LOGOUT,
-} from '../misc';
-import React, { useEffect, useState } from 'react';
-import axios, { AxiosError } from 'axios';
+} from "../misc";
+import React, { useEffect, useState } from "react";
+import axios, { AxiosError } from "axios";
 
-import reject from '../../assets/icons/close.svg';
-import check from '../../assets/icons/check.svg';
-import css from './admin-panel.module.css';
-import leftArrow from '../../assets/icons/leftArrow.svg';
-import { useQuery } from 'react-query';
-import { get_auth, logout } from '../../utils/auth';
+import reject from "../../assets/icons/close.svg";
+import check from "../../assets/icons/check.svg";
+import css from "./admin-panel.module.css";
+import leftArrow from "../../assets/icons/leftArrow.svg";
+import { useQuery } from "react-query";
+import { get_auth, logout } from "../../utils/auth";
 
 const getPendingList = async () => {
   const response = await axios.get(LINK_GET_PENDING_LIST, {
@@ -34,7 +34,7 @@ interface SellerData {
 interface PendingListProps {
   changeHandler: (event: React.ChangeEvent<HTMLSelectElement>) => void;
   currValue: number;
-  status: 'idle' | 'error' | 'loading' | 'success';
+  status: "idle" | "error" | "loading" | "success";
   data?: Array<SellerData>;
   error?: AxiosError;
 }
@@ -54,9 +54,9 @@ const PendingList: React.FC<PendingListProps> = ({
       onChange={changeHandler}
       className={css.pendingList}
     >
-      {status === 'loading' && <option>Loading...</option>}
-      {status === 'error' && <option>Error: {error?.message}</option>}
-      {status === 'success' && (
+      {status === "loading" && <option>Loading...</option>}
+      {status === "error" && <option>Error: {error?.message}</option>}
+      {status === "success" && (
         <>
           <option value={-1}>Select a shop</option>
           {data?.map((shop) => (
@@ -95,43 +95,39 @@ const ShopImage: React.FC<ShopImageProps> = ({
         id: id,
         resource_type: resourceType,
       },
-      responseType: 'arraybuffer', // Set the response type to 'arraybuffer'
+      responseType: "arraybuffer", // Set the response type to 'arraybuffer'
       withCredentials: true,
     });
-    console.log(id + ' ' + resourceType);
+    console.log(id + " " + resourceType);
     console.log(response);
     return response.data;
   };
 
   const { status, data, error } = useQuery<
-    'idle' | 'error' | 'loading' | 'success',
+    "idle" | "error" | "loading" | "success",
     AxiosError,
     ArrayBuffer
-  >(['shopImage' + imageKey, id], getImage);
+  >(["shopImage" + imageKey, id], getImage);
 
   const imageBlobConverter = (data: ArrayBuffer) => {
-    const imageBlob = new Blob([data], { type: 'image/png' });
+    const imageBlob = new Blob([data], { type: "image/png" });
     const imageUrl = URL.createObjectURL(imageBlob);
     return imageUrl;
   };
 
-  if (status === 'loading') return <div className={css.imageLoading}></div>;
-  if (status === 'error')
+  if (status === "loading") return <div className={css.imageLoading}></div>;
+  if (status === "error")
     return <div className={css.imageLoading}>Error: {error.message}</div>;
   return (
     <>
-      <img
-        src={data && imageBlobConverter(data)}
-        alt={alt}
-        className={classes}
-      />
+      <img src={data && imageBlobConverter(data)} alt={alt} className={classes} />
     </>
   );
 };
 
 const ShopDetails: React.FC<{ shopID: number }> = ({ shopID }) => {
   const getShopDetails = async () => {
-    const response = await axios.get(LINK_GET_SHOP_DETAILS, {
+    const response = await axios.get(LINK_GET_SELLER_DETAILS, {
       params: {
         id: shopID,
       },
@@ -141,22 +137,22 @@ const ShopDetails: React.FC<{ shopID: number }> = ({ shopID }) => {
   };
 
   const { status, data, error } = useQuery<
-    'idle' | 'error' | 'loading' | 'success',
+    "idle" | "error" | "loading" | "success",
     AxiosError,
     { email: string; first_name: string; isVerified: number; last_name: string }
-  >(['shopDetails', shopID], getShopDetails);
+  >(["shopDetails", shopID], getShopDetails);
 
-  if (status === 'loading') {
+  if (status === "loading") {
     return (
       <div className={css.shopDetails}>
-        <div className={css.loading}>{''}</div>
-        <div className={css.loading}>{''}</div>
-        <div className={css.loading}>{''}</div>
+        <div className={css.loading}>{""}</div>
+        <div className={css.loading}>{""}</div>
+        <div className={css.loading}>{""}</div>
       </div>
     );
   }
 
-  if (status === 'error') {
+  if (status === "error") {
     return (
       <div className={css.shopDetails}>
         <div className={css.error}>
@@ -183,19 +179,19 @@ const ShopDetails: React.FC<{ shopID: number }> = ({ shopID }) => {
 export default function AdminPanel() {
   const [selectedShopID, setSelectedShopID] = useState<number>(-1);
   const { status, data, error, refetch } = useQuery<
-    'idle' | 'error' | 'loading' | 'success',
+    "idle" | "error" | "loading" | "success",
     AxiosError,
     Array<SellerData>
   >({
-    queryKey: 'pendingList',
+    queryKey: "pendingList",
     queryFn: getPendingList,
   });
 
   const submitHandler = async (newStatus: number) => {
-    document.body.style.cursor = 'wait';
+    document.body.style.cursor = "wait";
     const formData = new FormData();
-    formData.append('id', String(selectedShopID));
-    formData.append('updated_status', String(newStatus));
+    formData.append("id", String(selectedShopID));
+    formData.append("updated_status", String(newStatus));
     await axios
       .post(LINK_APPROVE_OR_REJECT, formData, { withCredentials: true })
       .then((response) => {
@@ -206,7 +202,7 @@ export default function AdminPanel() {
       .catch((error) => {
         console.log(error);
       });
-    document.body.style.cursor = 'default';
+    document.body.style.cursor = "default";
   };
 
   return (
@@ -225,9 +221,7 @@ export default function AdminPanel() {
           <h2>Pending for Approval</h2>
         </label>
         <PendingList
-          changeHandler={(event) =>
-            setSelectedShopID(Number(event.target.value))
-          }
+          changeHandler={(event) => setSelectedShopID(Number(event.target.value))}
           currValue={selectedShopID}
           status={status}
           data={data}
