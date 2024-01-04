@@ -1,12 +1,12 @@
-import { useContext, useEffect, useState } from "react";
-import { Link, Navigate, Route, redirect, useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 
 import logo from "../../assets/preloved-logo.jpg";
 import styles from "./login.module.css";
 import signUpClass from "../SignUp/SignUp.module.css";
 import { login } from "../../utils/auth";
 
-import { atom, useAtom } from "jotai";
+import { useAtom } from "jotai";
 import { userAtom } from "../../App";
 
 function errorMessage(isLoggedIn: boolean) {

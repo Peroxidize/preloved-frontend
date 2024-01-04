@@ -25,7 +25,7 @@ export const get_auth = async () => {
   return await axios.get(API_URL + "is_authenticated", { withCredentials: true });
 };
 
-const get_seller_status = async (id: any) => {
+export const get_seller_status = async (id: any) => {
   return await axios.get(API_URL + "/verification/document_status", {
     withCredentials: true,
     params: { id: id },
@@ -90,7 +90,7 @@ function getUserType(type: string): UserType {
   }
 }
 
-function evaluateSellerStatus(response: string): string {
+export function evaluateSellerStatus(response: string): string {
   if (/is missing/.test(response)) {
     return "Unverified";
   }

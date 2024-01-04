@@ -1,6 +1,5 @@
-import React from "react";
 import { UserType } from "../components/misc";
-import { Route, Routes } from "react-router-dom";
+import { Route } from "react-router-dom";
 
 import FrontPage from "../components/FrontPage/FrontPage";
 import Invoice from "../components/Ordering/Invoice";

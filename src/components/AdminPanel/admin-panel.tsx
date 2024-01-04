@@ -13,14 +13,47 @@ import check from '../../assets/icons/check.svg';
 import css from './admin-panel.module.css';
 import leftArrow from '../../assets/icons/leftArrow.svg';
 import { useQuery } from 'react-query';
-import { get_auth, logout } from '../../utils/auth';
+import {
+  evaluateSellerStatus,
+  get_auth,
+  get_seller_status,
+  logout,
+} from "../../utils/auth";
+
+async function filterList(response: any) {
+  let statusList: any = [];
+  let validIDs: any = [];
+
+  await Promise.all(
+    response.data.response.map(async (user: any) => {
+      const status_response = await get_seller_status(user.id);
+      statusList.push(
+        (user.id as string) + " " + evaluateSellerStatus(JSON.stringify(status_response))
+      );
+    })
+  );
+
+  statusList.map((data: string) => {
+    const [id, status] = data.split(" ");
+
+    if (status === "Completed") {
+      validIDs.push(id);
+    }
+  });
+
+  const filteredList: any[] = response.data.response.filter((user: any) => {
+    return validIDs.includes(user.id.toString());
+  });
+
+  return JSON.stringify(filteredList);
+}
 
 const getPendingList = async () => {
   const response = await axios.get(LINK_GET_PENDING_LIST, {
     withCredentials: true,
   });
   console.log(response.data.response);
-  return response.data.response;
+  return JSON.parse(await filterList(response));
 };
 
 interface SellerData {

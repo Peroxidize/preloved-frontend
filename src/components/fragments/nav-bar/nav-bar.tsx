@@ -1,5 +1,5 @@
-import { Link, Navigate, useNavigate } from "react-router-dom";
-import { LINK_IS_AUTH, LINK_LOGOUT, User, UserType } from "../../misc";
+import { Link, useNavigate } from "react-router-dom";
+import { UserType } from "../../misc";
 
 import css from "./nav-bar.module.css";
 
@@ -11,9 +11,8 @@ import profileFilledIcon from "../../../assets/icons/accountCircleFilled.svg";
 import shopping_cart from "../../../assets/icons/shopping_cart.svg";
 import shoppingFilledIcon from "../../../assets/icons/cartFilled.svg";
 import search_icon from "../../../assets/icons/search_icon.svg";
-import axios from "axios";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useAtom } from "jotai";
 import { userAtom } from "../../../App";
 import { logout } from "../../../utils/auth";
@@ -73,7 +72,6 @@ function getMenu(
 }
 
 const MobileNavTop: React.FC = () => {
-  
   // Component logic goes here
 
   return (
@@ -95,9 +93,9 @@ const MobileNavBottom: React.FC = () => {
   const [cartFilled, setCartFilled] = useState(false);
   const [storedUser, setUser] = useAtom(userAtom);
   const navigate = useNavigate();
-  
+
   const navigateTicketCenter = () => {
-    navigate('/ticketcenter');
+    navigate("/ticketcenter");
   };
 
   const toggleDropdown = () => {
@@ -147,9 +145,9 @@ export default function DesktopNavUser() {
   const [cartFilled, setCartFilled] = useState(false);
   const [storedUser, setUser] = useAtom(userAtom);
   const navigate = useNavigate();
-  
+
   const navigateTicketCenter = () => {
-    navigate('/ticketcenter');
+    navigate("/ticketcenter");
   };
 
   const navigateFrontPage = () => {
