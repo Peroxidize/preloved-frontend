@@ -14,8 +14,12 @@ export const login = async (formData: any) => {
 };
 
 export const logout = async () => {
-  await axios.post(API_URL + "logout", null, { withCredentials: true });
   localStorage.clear();
+  try {
+    await axios.post(API_URL + "logout", null, { withCredentials: true });
+  } catch {
+
+  }
   window.location.replace("/");
 };
 
