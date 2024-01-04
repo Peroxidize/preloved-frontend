@@ -21,28 +21,19 @@ import {
 } from "../../utils/auth";
 
 async function filterList(response: any) {
-  let statusList: any = [];
   let validIDs: any = [];
 
   await Promise.all(
     response.data.response.map(async (user: any) => {
       const status_response = await get_seller_status(user.id);
-      statusList.push(
-        (user.id as string) + " " + evaluateSellerStatus(JSON.stringify(status_response))
-      );
+      if (evaluateSellerStatus(JSON.stringify(status_response)) === "Completed") {
+        validIDs.push(user.id);
+      }
     })
   );
 
-  statusList.map((data: string) => {
-    const [id, status] = data.split(" ");
-
-    if (status === "Completed") {
-      validIDs.push(id);
-    }
-  });
-
   const filteredList: any[] = response.data.response.filter((user: any) => {
-    return validIDs.includes(user.id.toString());
+    return validIDs.includes(user.id);
   });
 
   return JSON.stringify(filteredList);
