@@ -1,5 +1,5 @@
 import axios, { AxiosResponse } from "axios";
-import { User, UserType } from "../components/misc";
+import { LINK_GET_PENDING_LIST, User, UserType } from "../components/misc";
 
 const API_URL = "https://prelovedbackend.azurewebsites.net/auth/";
 
@@ -32,13 +32,20 @@ export const get_seller_status = async (id: any) => {
   });
 };
 
+export const get_shopowner_details = async (id: any) => {
+  return await axios.get(API_URL + "/verification/get_shop_owner_details", {
+    withCredentials: true,
+    params: { id: id },
+  });
+};
+
 async function handleResponse(response: AxiosResponse | undefined) {
   if (response === undefined) {
     return undefined;
   }
 
-  // console.log("First response");
-  // console.log(response);
+  console.log("First response");
+  console.log(response);
 
   if (!evaluatePostRequest(JSON.stringify(response))) {
     return undefined;
@@ -51,7 +58,7 @@ async function handleResponse(response: AxiosResponse | undefined) {
   let shop_owner_id: number | undefined = response.data.shop_owner_id as number;
   let verified: number | undefined = response.data.verified as number;
 
-  if (response.data.shop_owner_id !== undefined) {
+  if (response.data.shop_owner_id !== undefined && response.data.verified !== 1) {
     try {
       let status_response = await get_seller_status(response.data.shop_owner_id);
       user_type = evaluateSellerStatus(JSON.stringify(status_response));
@@ -59,23 +66,21 @@ async function handleResponse(response: AxiosResponse | undefined) {
       console.log(error);
       return undefined;
     }
-    // console.log("Second response");
-    // console.log(status_response);
   }
-  // console.log("USER TYPE");
-  // console.log(user_type);
   return (user = {
     email: email,
-    type: getUserType(user_type),
+    type: getUserType(user_type, String(verified)),
     user_id: user_id,
     shop_owner_id: shop_owner_id,
     verified: verified,
   });
 }
 
-function getUserType(type: string): UserType {
-  // console.log("GETUSERTYPE");
-  // console.log(type);
+function getUserType(type: string, verified: string): UserType {
+  if (verified === "1"){
+    return UserType.Seller;
+  }
+
   switch (type) {
     case "Shop User":
       return UserType.User;

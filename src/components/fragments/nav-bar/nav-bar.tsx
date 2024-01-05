@@ -1,5 +1,5 @@
 import { Link, useNavigate } from "react-router-dom";
-import { UserType } from "../../misc";
+import { User, UserType } from "../../misc";
 
 import css from "./nav-bar.module.css";
 import logo from "../../../assets/preloved-logo.jpg";
@@ -32,11 +32,11 @@ export const UserMenu = () => {
 export const SellerMenu = () => {
   return (
     <div className={css.dropdown_content}>
-      <Link to="/topup" className={css.link}>
-        Top-up
-      </Link>
       <Link to="/ticketcenter" className={css.link}>
         My Shop
+      </Link>
+      <Link to="/topup" className={css.link}>
+        Top-up
       </Link>
       <Link to="" onClick={logout} className={css.link}>
         Logout
@@ -78,7 +78,10 @@ const MobileNavBottom: React.FC = () => {
   const navigate = useNavigate();
 
   const navigateTicketCenter = () => {
-    navigate("/ticketcenter");
+    if (storedUser!.type === UserType.User) {
+      return navigate("/ticketcenter");
+    }
+    return navigate("/");
   };
 
   const toggleDropdown = () => {
@@ -128,7 +131,10 @@ export default function DesktopNavUser() {
   const navigate = useNavigate();
 
   const navigateTicketCenter = () => {
-    navigate("/ticketcenter");
+    if (storedUser!.type === UserType.User) {
+      return navigate("/ticketcenter");
+    }
+    return navigate("/");
   };
 
   const navigateFrontPage = () => {
