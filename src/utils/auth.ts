@@ -6,9 +6,9 @@ const API_URL = "https://prelovedbackend.azurewebsites.net/auth/";
 export const login = async (formData: any) => {
   let response;
   try {
-    response = await axios.post(API_URL + "login", formData, { withCredentials: true })
+    response = await axios.post(API_URL + "login", formData, { withCredentials: true });
   } catch (error) {
-    response = undefined
+    response = undefined;
   }
   return handleResponse(response);
 };
@@ -17,22 +17,20 @@ export const logout = async () => {
   localStorage.clear();
   try {
     await axios.post(API_URL + "logout", null, { withCredentials: true });
-  } catch {
-
-  }
+  } catch {}
   window.location.replace("/");
 };
 
 export const get_auth = async () => {
-  return await axios.get((API_URL + "is_authenticated"), { withCredentials: true });
+  return await axios.get(API_URL + "is_authenticated", { withCredentials: true });
 };
 
-const get_seller_status = async (id: any) => {
+export const get_seller_status = async (id: any) => {
   return await axios.get(API_URL + "/verification/document_status", {
-      withCredentials: true,
-      params: {id: id},
+    withCredentials: true,
+    params: { id: id },
   });
-}
+};
 
 async function handleResponse(response: AxiosResponse | undefined) {
   if (response === undefined) {
@@ -54,20 +52,25 @@ async function handleResponse(response: AxiosResponse | undefined) {
   let verified: number | undefined = response.data.verified as number;
 
   if (response.data.shop_owner_id !== undefined) {
-    let status_response = await get_seller_status(response.data.shop_owner_id);
+    try {
+      let status_response = await get_seller_status(response.data.shop_owner_id);
+      user_type = evaluateSellerStatus(JSON.stringify(status_response));
+    } catch (error) {
+      console.log(error);
+      return undefined;
+    }
     // console.log("Second response");
     // console.log(status_response);
-    user_type = evaluateSellerStatus(JSON.stringify(status_response));
   }
   // console.log("USER TYPE");
   // console.log(user_type);
-  return user = {
+  return (user = {
     email: email,
     type: getUserType(user_type),
     user_id: user_id,
     shop_owner_id: shop_owner_id,
-    verified: verified
-  }
+    verified: verified,
+  });
 }
 
 function getUserType(type: string): UserType {
@@ -87,7 +90,7 @@ function getUserType(type: string): UserType {
   }
 }
 
-function evaluateSellerStatus(response: string): string {
+export function evaluateSellerStatus(response: string): string {
   if (/is missing/.test(response)) {
     return "Unverified";
   }

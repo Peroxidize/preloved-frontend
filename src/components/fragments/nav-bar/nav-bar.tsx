@@ -1,8 +1,7 @@
-import { Link, Navigate, useNavigate } from "react-router-dom";
-import { LINK_IS_AUTH, LINK_LOGOUT, User, UserType } from "../../misc";
+import { Link, useNavigate } from "react-router-dom";
+import { UserType } from "../../misc";
 
 import css from "./nav-bar.module.css";
-
 import logo from "../../../assets/preloved-logo.jpg";
 import ticketIcon from "../../../assets/icons/ticket.svg";
 import ticketFilledIcon from "../../../assets/icons/ticketFilled.svg";
@@ -11,69 +10,51 @@ import profileFilledIcon from "../../../assets/icons/accountCircleFilled.svg";
 import shopping_cart from "../../../assets/icons/shopping_cart.svg";
 import shoppingFilledIcon from "../../../assets/icons/cartFilled.svg";
 import search_icon from "../../../assets/icons/search_icon.svg";
-import axios from "axios";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useAtom } from "jotai";
 import { userAtom } from "../../../App";
 import { logout } from "../../../utils/auth";
 
-function getMenu(
-  userType: UserType,
-  setProfileFilled: React.Dispatch<React.SetStateAction<boolean>>
-) {
+export const UserMenu = () => {
+  return (
+    <div className={css.dropdown_content}>
+      <Link to="/collections" className={css.link}>
+        Collections
+      </Link>
+      <Link to="" onClick={logout} className={css.link}>
+        Logout
+      </Link>
+    </div>
+  );
+};
+
+export const SellerMenu = () => {
+  return (
+    <div className={css.dropdown_content}>
+      <Link to="/topup" className={css.link}>
+        Top-up
+      </Link>
+      <Link to="/ticketcenter" className={css.link}>
+        My Shop
+      </Link>
+      <Link to="" onClick={logout} className={css.link}>
+        Logout
+      </Link>
+    </div>
+  );
+};
+
+function getMenu(userType: UserType) {
   switch (userType) {
     case UserType.User:
-      return (
-        <div
-          className={css.dropdown_content}
-          onMouseEnter={() => setProfileFilled(true)}
-          onMouseLeave={() => setProfileFilled(false)}
-        >
-          <Link to="/collections" className={css.link}>
-            Collections
-          </Link>
-          <Link to="" onClick={logout} className={css.link}>
-            Logout
-          </Link>
-        </div>
-      );
+      return UserMenu();
     case UserType.Seller:
-      return (
-        <div className={css.dropdown_content}>
-          <Link to="/topup" className={css.link}>
-            Top-up
-          </Link>
-          <Link to="/shopdocs" className={css.link}>
-            Shop Verification
-          </Link>
-          <Link to="/ticketcenter" className={css.link}>
-            Ticket Center
-          </Link>
-          <Link to="/collections" className={css.link}>
-            Collections
-          </Link>
-          <Link to="" onClick={logout} className={css.link}>
-            Logout
-          </Link>
-        </div>
-      );
-    case UserType.Admin:
-      return (
-        <div className={css.dropdown_content}>
-          <Link to="/adminpanel" className={css.link}>
-            Admin Panel
-          </Link>
-          <Link to="" onClick={logout} className={css.link}>
-            Logout
-          </Link>
-        </div>
-      );
+      return SellerMenu();
   }
 }
 
 const MobileNavTop: React.FC = () => {
-  
   // Component logic goes here
 
   return (
@@ -95,9 +76,9 @@ const MobileNavBottom: React.FC = () => {
   const [cartFilled, setCartFilled] = useState(false);
   const [storedUser, setUser] = useAtom(userAtom);
   const navigate = useNavigate();
-  
+
   const navigateTicketCenter = () => {
-    navigate('/ticketcenter');
+    navigate("/ticketcenter");
   };
 
   const toggleDropdown = () => {
@@ -117,9 +98,7 @@ const MobileNavBottom: React.FC = () => {
             onMouseEnter={() => setProfileFilled(true)}
             onMouseLeave={() => setProfileFilled(false)}
           />
-          {/* remove the parameter if you want to 
-          access webpages without logging in */}
-          {getMenu(storedUser!.type, setProfileFilled)}
+          {getMenu(storedUser!.type)}
         </div>
         <img
           src={cartFilled ? shoppingFilledIcon : shopping_cart}
@@ -147,9 +126,9 @@ export default function DesktopNavUser() {
   const [cartFilled, setCartFilled] = useState(false);
   const [storedUser, setUser] = useAtom(userAtom);
   const navigate = useNavigate();
-  
+
   const navigateTicketCenter = () => {
-    navigate('/ticketcenter');
+    navigate("/ticketcenter");
   };
 
   const navigateFrontPage = () => {
@@ -207,9 +186,7 @@ export default function DesktopNavUser() {
             onMouseEnter={() => setProfileFilled(true)}
             onMouseLeave={() => setProfileFilled(false)}
           />
-          {/* remove the parameter if you want to 
-          access webpages without logging in */}
-          {getMenu(storedUser!.type, setProfileFilled)}
+          {getMenu(storedUser!.type)}
         </div>
       </div>
     </>
