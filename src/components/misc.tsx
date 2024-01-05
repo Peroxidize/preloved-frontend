@@ -14,6 +14,9 @@ export enum UserType {
   CompletedSeller,
 }
 
+const domain = "https://prelovedbackend.azurewebsites.net/";
+const storeApi = "host/store/";
+
 export const LINK_LOGIN = "https://prelovedbackend.azurewebsites.net/auth/login";
 export const LINK_LOGOUT = "https://prelovedbackend.azurewebsites.net/auth/logout";
 export const LINK_SIGNUP_USER =
@@ -38,3 +41,4 @@ export const LINK_GET_SHOPVERIFICATION_IMAGE =
   "https://prelovedbackend.azurewebsites.net/auth/verification/get_image";
 export const LINK_APPROVE_OR_REJECT =
   "https://prelovedbackend.azurewebsites.net/auth/verification/approve_or_reject";
+export const LINK_CREATE_SHOP = domain + storeApi + "/create_new_shop";

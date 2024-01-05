@@ -1,5 +1,5 @@
 .backgroundPhoto {
-  background: url('../../assets/sign-up-bg.png');
+  background: url("../../assets/sign-up-bg.png");
   background-size: cover;
 }
 
@@ -140,7 +140,7 @@
   .backgroundPhoto {
     padding: 2rem 0;
   }
-  
+
   .container {
     margin: auto;
     width: 60%;

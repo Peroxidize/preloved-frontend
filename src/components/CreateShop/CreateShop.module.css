@@ -1,0 +1,25 @@
+.container {
+  padding: 2rem;
+  background-color: white;
+}
+
+@media (min-width: 1200px) {
+  .backgroundPhoto {
+    background: url("../../assets/sign-up-bg.png");
+    background-size: cover;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .container {
+    width: fit-content;
+    margin: auto;
+    padding: 4rem;
+  }
+
+  .oneRowResponsive {
+    display: flex;
+    gap: 1rem;
+  }
+}

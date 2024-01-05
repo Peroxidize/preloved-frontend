@@ -1,0 +1,11 @@
+.backAndTitle {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  align-items: center;
+}
+
+.backAndTitle img {
+  cursor: pointer;
+  object-fit: cover;
+}
