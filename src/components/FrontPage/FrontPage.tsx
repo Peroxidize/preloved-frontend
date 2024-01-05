@@ -69,8 +69,8 @@ export default function FrontPage() {
             <img key={index} src={item} alt={`${getImageName(item)}`} />
           ))}
         </div>
-        {!isDesktopOrLaptop && <MobileNavBottom />}
       </div>
+      {!isDesktopOrLaptop && <MobileNavBottom />}
     </>
   );
 }

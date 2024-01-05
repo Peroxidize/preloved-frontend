@@ -50,6 +50,12 @@
   position: absolute;
 }
 
+.sellerSpace {
+  padding-left: 5rem;
+  width: 50%;
+  text-align: center;
+}
+
 .ticket_icon {
   width: 2em;
 }
@@ -120,7 +126,7 @@
     width: 100%;
     background-color: white;
     display: flex;
-    justify-content: space-between;
+    justify-content: space-around;
     padding-block: 0.5rem;
     padding-inline: 2rem;
   }

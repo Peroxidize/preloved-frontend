@@ -15,6 +15,7 @@ import { useState } from "react";
 import { useAtom } from "jotai";
 import { userAtom } from "../../../App";
 import { logout } from "../../../utils/auth";
+import { useMediaQuery } from "react-responsive";
 
 export const UserMenu = () => {
   return (
@@ -56,6 +57,8 @@ function getMenu(userType: UserType) {
 
 const MobileNavTop: React.FC = () => {
   // Component logic goes here
+  const [storedUser, setUser] = useAtom(userAtom);
+  if (storedUser?.type === UserType.Seller) return null;
 
   return (
     // JSX code goes here
@@ -103,13 +106,15 @@ const MobileNavBottom: React.FC = () => {
           />
           {getMenu(storedUser!.type)}
         </div>
-        <img
-          src={cartFilled ? shoppingFilledIcon : shopping_cart}
-          className={css.shopping_cart}
-          alt="Shopping Cart"
-          onMouseEnter={() => setCartFilled(true)}
-          onMouseLeave={() => setCartFilled(false)}
-        />
+        {storedUser?.type === UserType.User && (
+          <img
+            src={cartFilled ? shoppingFilledIcon : shopping_cart}
+            className={css.shopping_cart}
+            alt="Shopping Cart"
+            onMouseEnter={() => setCartFilled(true)}
+            onMouseLeave={() => setCartFilled(false)}
+          />
+        )}
         <img
           src={ticketFilled ? ticketFilledIcon : ticketIcon}
           onClick={navigateTicketCenter}
@@ -165,17 +170,26 @@ export default function DesktopNavUser() {
           className={css.logo}
           alt="Preloved Logo"
         />
-        <div className={css.search_bar}>
-          <img src={search_icon} alt="Search Icon" />
-          <input type="text" placeholder="Search" />
-        </div>
-        <img
-          src={cartFilled ? shoppingFilledIcon : shopping_cart}
-          className={css.shopping_cart}
-          alt="Shopping Cart"
-          onMouseEnter={() => setCartFilled(true)}
-          onMouseLeave={() => setCartFilled(false)}
-        />
+        {storedUser?.type === UserType.User ? (
+          <>
+            <div className={css.search_bar}>
+              <img src={search_icon} alt="Search Icon" />
+              <input type="text" placeholder="Search" />
+            </div>
+            <img
+              src={cartFilled ? shoppingFilledIcon : shopping_cart}
+              className={css.shopping_cart}
+              alt="Shopping Cart"
+              onMouseEnter={() => setCartFilled(true)}
+              onMouseLeave={() => setCartFilled(false)}
+            />
+          </>
+        ) : (
+          <>
+            <h1 className={css.sellerSpace}>Seller Space</h1>
+            <div>{""}</div>
+          </>
+        )}
         <img
           src={ticketFilled ? ticketFilledIcon : ticketIcon}
           onClick={navigateTicketCenter}
