@@ -1,0 +1,62 @@
+.wrapper {
+  padding: 1rem;
+}
+
+.storeCard {
+  padding: 1.5rem;
+  box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.2);
+  border-radius: 1rem;
+  margin-bottom: 1rem;
+}
+
+.productGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.clothing,
+.addProduct {
+  border-radius: 1rem;
+  height: 15rem;
+  width: 100%;
+  object-fit: cover;
+}
+
+.addProduct {
+  border: 2px dashed black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.addIcon {
+  height: 4rem;
+  object-fit: cover;
+}
+
+@media (min-width: 1200px) {
+  .wrapper {
+    padding: 1rem 3rem;
+  }
+
+  .storeCard {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 2rem;
+  }
+
+  .storeName {
+    flex: 1;
+    text-align: center;
+  }
+
+  .productGrid {
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+  }
+
+  .clothing,
+  .addProduct {
+    height: 20rem;
+  }
+}
