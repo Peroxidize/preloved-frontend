@@ -5,7 +5,8 @@
   padding-block: 1rem;
   width: 100vw;
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
+  gap: 2rem;
   align-items: center;
   font-size: 16px;
   padding-right: 3em;
@@ -51,9 +52,14 @@
 }
 
 .sellerSpace {
-  padding-left: 5rem;
-  width: 50%;
-  text-align: center;
+  text-align: left;
+}
+
+.navIcons {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  margin-left: auto;
 }
 
 .ticket_icon {

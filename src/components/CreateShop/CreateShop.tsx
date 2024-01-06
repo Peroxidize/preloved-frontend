@@ -5,6 +5,8 @@ import TextInput from "../fragments/FormInputs/TextInput";
 import { LINK_CREATE_SHOP } from "../misc";
 import Button from "../fragments/FormInputs/Button";
 import axios from "axios";
+import { useMediaQuery } from "react-responsive";
+import NavBar, { MobileNavBottom, MobileNavTop } from "../fragments/nav-bar/nav-bar";
 
 interface IFormValues {
   name: string;
@@ -15,6 +17,10 @@ interface IFormValues {
 }
 
 const CreateShop: React.FC = () => {
+  const isDesktopOrLaptop = useMediaQuery({
+    query: "(min-device-width: 1224px)",
+  });
+
   const {
     register,
     formState: { errors },
@@ -37,53 +43,53 @@ const CreateShop: React.FC = () => {
   };
   return (
     <>
-      <div className={classes.backgroundPhoto}>
-        <div className={classes.container}>
-          <BackAndTitle title="Create Shop" backTo="/" />
-          <form action={LINK_CREATE_SHOP} onSubmit={handleSubmit(onSubmit)}>
+      {isDesktopOrLaptop ? <NavBar /> : <MobileNavTop />}
+      <div className={classes.container}>
+        <h1 className={classes.title}>Create Shop</h1>
+        <form action={LINK_CREATE_SHOP} onSubmit={handleSubmit(onSubmit)}>
+          <TextInput
+            label="Name"
+            type="text"
+            required={true}
+            register={register}
+            name="name"
+          />
+          <div className={classes.oneRowResponsive}>
             <TextInput
-              label="Name"
+              label="Street"
               type="text"
               required={true}
               register={register}
-              name="name"
+              name="street"
             />
-            <div className={classes.oneRowResponsive}>
-              <TextInput
-                label="Street"
-                type="text"
-                required={true}
-                register={register}
-                name="street"
-              />
-              <TextInput
-                label="Barangay"
-                type="text"
-                required={true}
-                register={register}
-                name="barangay"
-              />
-            </div>
-            <div className={classes.oneRowResponsive}>
-              <TextInput
-                label="Municipality"
-                type="text"
-                required={true}
-                register={register}
-                name="municipality"
-              />
-              <TextInput
-                label="Province"
-                type="text"
-                required={true}
-                register={register}
-                name="province"
-              />
-            </div>
-            <Button text="CREATE SHOP" />
-          </form>
-        </div>
+            <TextInput
+              label="Barangay"
+              type="text"
+              required={true}
+              register={register}
+              name="barangay"
+            />
+          </div>
+          <div className={classes.oneRowResponsive}>
+            <TextInput
+              label="Municipality"
+              type="text"
+              required={true}
+              register={register}
+              name="municipality"
+            />
+            <TextInput
+              label="Province"
+              type="text"
+              required={true}
+              register={register}
+              name="province"
+            />
+          </div>
+          <Button text="CREATE SHOP" />
+        </form>
       </div>
+      {!isDesktopOrLaptop && <MobileNavBottom />}
     </>
   );
 };
