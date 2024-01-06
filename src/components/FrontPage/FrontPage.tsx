@@ -10,6 +10,9 @@ import greySlacks from "../../assets/clothes/grey-slacks.jpg";
 import khakiJacket from "../../assets/clothes/khaki-jacket.jpg";
 import greenSweater from "../../assets/clothes/green-sweater.jpg";
 import magentaShirt from "../../assets/clothes/magenta-shirt.png";
+import { useEffect } from "react";
+import axios from "axios";
+import { LINK_IS_AUTH } from "../misc";
 // import axios from "axios";
 
 // const domain = "https://prelovedbackends.azurewebsites.net/";
@@ -24,6 +27,16 @@ const getImageName = (image: string) => {
 };
 
 export default function FrontPage() {
+  useEffect(() => {
+    axios
+      .get(LINK_IS_AUTH, { withCredentials: true })
+      .then((response) => {
+        console.log(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  });
   // (async () => {
   //   await axios.get(domain + downloadfiles)
   //   .then(response => {
@@ -56,8 +69,8 @@ export default function FrontPage() {
             <img key={index} src={item} alt={`${getImageName(item)}`} />
           ))}
         </div>
-        {!isDesktopOrLaptop && <MobileNavBottom />}
       </div>
+      {!isDesktopOrLaptop && <MobileNavBottom />}
     </>
   );
 }

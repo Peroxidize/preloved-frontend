@@ -1,0 +1,21 @@
+.container {
+  padding: 2rem;
+  background-color: white;
+  margin-bottom: 2rem;
+}
+
+.title {
+  margin-bottom: 1rem;
+}
+
+@media (min-width: 1200px) {
+  .container {
+    width: fit-content;
+    margin: auto;
+  }
+
+  .oneRowResponsive {
+    display: flex;
+    gap: 1rem;
+  }
+}

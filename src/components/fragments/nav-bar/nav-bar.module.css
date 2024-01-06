@@ -5,7 +5,8 @@
   padding-block: 1rem;
   width: 100vw;
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
+  gap: 2rem;
   align-items: center;
   font-size: 16px;
   padding-right: 3em;
@@ -48,6 +49,17 @@
   top: 50%;
   transform: translateY(-50%);
   position: absolute;
+}
+
+.sellerSpace {
+  text-align: left;
+}
+
+.navIcons {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  margin-left: auto;
 }
 
 .ticket_icon {
@@ -120,7 +132,7 @@
     width: 100%;
     background-color: white;
     display: flex;
-    justify-content: space-between;
+    justify-content: space-around;
     padding-block: 0.5rem;
     padding-inline: 2rem;
   }

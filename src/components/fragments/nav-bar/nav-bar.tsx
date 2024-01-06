@@ -15,6 +15,7 @@ import { useState } from "react";
 import { useAtom } from "jotai";
 import { userAtom } from "../../../App";
 import { logout } from "../../../utils/auth";
+import { useMediaQuery } from "react-responsive";
 
 export const UserMenu = () => {
   return (
@@ -34,6 +35,9 @@ export const SellerMenu = () => {
     <div className={css.dropdown_content}>
       <Link to="/ticketcenter" className={css.link}>
         My Shop
+      </Link>
+      <Link to="/shop/create" className={css.link}>
+        Create Shop
       </Link>
       <Link to="/topup" className={css.link}>
         Top-up
@@ -56,6 +60,8 @@ function getMenu(userType: UserType) {
 
 const MobileNavTop: React.FC = () => {
   // Component logic goes here
+  const [storedUser, setUser] = useAtom(userAtom);
+  if (storedUser?.type === UserType.Seller) return null;
 
   return (
     // JSX code goes here
@@ -103,13 +109,15 @@ const MobileNavBottom: React.FC = () => {
           />
           {getMenu(storedUser!.type)}
         </div>
-        <img
-          src={cartFilled ? shoppingFilledIcon : shopping_cart}
-          className={css.shopping_cart}
-          alt="Shopping Cart"
-          onMouseEnter={() => setCartFilled(true)}
-          onMouseLeave={() => setCartFilled(false)}
-        />
+        {storedUser?.type === UserType.User && (
+          <img
+            src={cartFilled ? shoppingFilledIcon : shopping_cart}
+            className={css.shopping_cart}
+            alt="Shopping Cart"
+            onMouseEnter={() => setCartFilled(true)}
+            onMouseLeave={() => setCartFilled(false)}
+          />
+        )}
         <img
           src={ticketFilled ? ticketFilledIcon : ticketIcon}
           onClick={navigateTicketCenter}
@@ -165,34 +173,44 @@ export default function DesktopNavUser() {
           className={css.logo}
           alt="Preloved Logo"
         />
-        <div className={css.search_bar}>
-          <img src={search_icon} alt="Search Icon" />
-          <input type="text" placeholder="Search" />
-        </div>
-        <img
-          src={cartFilled ? shoppingFilledIcon : shopping_cart}
-          className={css.shopping_cart}
-          alt="Shopping Cart"
-          onMouseEnter={() => setCartFilled(true)}
-          onMouseLeave={() => setCartFilled(false)}
-        />
-        <img
-          src={ticketFilled ? ticketFilledIcon : ticketIcon}
-          onClick={navigateTicketCenter}
-          className={css.ticket_icon}
-          alt="Ticket Icon"
-          onMouseEnter={() => setTicketFilled(true)}
-          onMouseLeave={() => setTicketFilled(false)}
-        />
-        <div className={css.dropdown}>
+        {storedUser?.type === UserType.User ? (
+          <>
+            <div className={css.search_bar}>
+              <img src={search_icon} alt="Search Icon" />
+              <input type="text" placeholder="Search" />
+            </div>
+          </>
+        ) : (
+          <>
+            <h2 className={css.sellerSpace}>Seller Space</h2>
+          </>
+        )}
+        <div className={css.navIcons}>
           <img
-            src={profileFilled ? profileFilledIcon : profileIcon}
-            className={css.profile_icon}
-            alt="Profile Icon"
-            onMouseEnter={() => setProfileFilled(true)}
-            onMouseLeave={() => setProfileFilled(false)}
+            src={cartFilled ? shoppingFilledIcon : shopping_cart}
+            className={css.shopping_cart}
+            alt="Shopping Cart"
+            onMouseEnter={() => setCartFilled(true)}
+            onMouseLeave={() => setCartFilled(false)}
           />
-          {getMenu(storedUser!.type)}
+          <img
+            src={ticketFilled ? ticketFilledIcon : ticketIcon}
+            onClick={navigateTicketCenter}
+            className={css.ticket_icon}
+            alt="Ticket Icon"
+            onMouseEnter={() => setTicketFilled(true)}
+            onMouseLeave={() => setTicketFilled(false)}
+          />
+          <div className={css.dropdown}>
+            <img
+              src={profileFilled ? profileFilledIcon : profileIcon}
+              className={css.profile_icon}
+              alt="Profile Icon"
+              onMouseEnter={() => setProfileFilled(true)}
+              onMouseLeave={() => setProfileFilled(false)}
+            />
+            {getMenu(storedUser!.type)}
+          </div>
         </div>
       </div>
     </>
