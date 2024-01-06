@@ -8,7 +8,7 @@ import Login from "./components/Login/Login";
 import { useAtom } from "jotai";
 import { atomWithStorage } from "jotai/utils";
 import { getRoute } from "./utils/routes";
-import CreateShop from "./components/CreateShop/CreateShop";
+import Shop from "./components/ProductManagement/Shop";
 
 export const userAtom = atomWithStorage<User | null>("userInfo", null);
 
@@ -27,6 +27,7 @@ const App = () => {
         <>
           <Route path="/" element={<Login />} />
           <Route path="signup" element={<SignUp />} />
+          <Route path="shop" element={<Shop />} />
         </>
       )}
       <Route path="*" element={<h1>Error 404: Page not found</h1>} />

@@ -9,6 +9,7 @@ import AddBalance from "../components/AddBalance/AddBalance";
 import AdminPanel from "../components/AdminPanel/admin-panel";
 import ShopDocumentation from "../components/ShopVerification/ShopDocumentation";
 import CreateShop from "../components/CreateShop/CreateShop";
+import Shop from "../components/ProductManagement/Shop";
 
 export const UserRoute = () => {
   return (
@@ -25,8 +26,9 @@ export const VerifiedSellerRoute = () => {
   return (
     <>
       <Route index element={<TicketCenter />} />
-      <Route path="/topup" element={<AddBalance />} />
-      <Route path="/shop/create" element={<CreateShop />} />
+      <Route path="topup" element={<AddBalance />} />
+      <Route path="shop/create" element={<CreateShop />} />
+      <Route path="shop" element={<Shop />} />
     </>
   );
 };

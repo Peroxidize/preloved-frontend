@@ -33,7 +33,7 @@ export const UserMenu = () => {
 export const SellerMenu = () => {
   return (
     <div className={css.dropdown_content}>
-      <Link to="/ticketcenter" className={css.link}>
+      <Link to="/shop" className={css.link}>
         My Shop
       </Link>
       <Link to="/shop/create" className={css.link}>
