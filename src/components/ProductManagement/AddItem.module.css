@@ -1,0 +1,91 @@
+.wrapper {
+  padding: 2rem;
+}
+
+.title {
+  margin-bottom: 1rem;
+}
+
+.imageContainer {
+  display: flex;
+  overflow: scroll;
+  margin-inline: -2rem;
+  gap: 1rem;
+  padding-bottom: 1rem;
+}
+
+.imageInput {
+  height: 15rem;
+  width: 15rem;
+  border: 1px dashed black;
+  border-radius: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  flex: 0 0 15rem;
+  margin-left: 2rem;
+}
+
+.imageIcon {
+  height: 5rem;
+  width: 5rem;
+  object-fit: contain;
+}
+
+.image {
+  height: 15rem;
+  width: 15rem;
+  border-radius: 1rem;
+  object-fit: cover;
+}
+
+.fileInput {
+  display: none;
+}
+
+.name {
+  margin-top: 1.5rem;
+}
+
+.addTag {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background-color: black;
+  color: white;
+  width: fit-content;
+  padding: 0.75rem;
+  border-radius: 100vw;
+  transition: background-color 0.5s ease;
+}
+
+.addTag:active {
+  background-color: #3d3d3d;
+}
+
+.plusIcon,
+.whiteCircle {
+  background-color: white;
+  border-radius: 50%;
+  margin-block: -0.5rem;
+}
+
+.tagRadio {
+  display: none;
+}
+
+.whiteCircle {
+  height: 24px;
+  width: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.blackCircle {
+  height: 1.2rem;
+  width: 1.2rem;
+  background-color: black;
+  border-radius: 50%;
+}

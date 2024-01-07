@@ -7,6 +7,7 @@ interface ImageInputProps {
   label?: string;
   fileName?: string;
   photo?: string | null;
+  required?: boolean;
 }
 
 const ImageInput: React.FC<ImageInputProps> = ({
@@ -15,11 +16,10 @@ const ImageInput: React.FC<ImageInputProps> = ({
   label,
   fileName,
   photo,
+  required,
 }) => {
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (onChange) {
-      onChange(event.target.files!);
-    }
+    onChange(event.target.files!);
   };
 
   return (
@@ -43,6 +43,7 @@ const ImageInput: React.FC<ImageInputProps> = ({
         onChange={handleChange}
         accept="image/*"
         multiple={false}
+        required={required}
       />
     </div>
   );
