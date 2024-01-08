@@ -1,5 +1,4 @@
 import classes from "./CreateShop.module.css";
-import BackAndTitle from "../fragments/commonstuff/BackAndTitle";
 import { SubmitHandler, useForm } from "react-hook-form";
 import TextInput from "../fragments/FormInputs/TextInput";
 import { LINK_CREATE_SHOP } from "../misc";
@@ -8,7 +7,7 @@ import axios from "axios";
 import { useMediaQuery } from "react-responsive";
 import NavBar, { MobileNavBottom, MobileNavTop } from "../fragments/nav-bar/nav-bar";
 
-interface IFormValues {
+interface FormValues {
   name: string;
   street: string;
   barangay: string;
@@ -25,9 +24,9 @@ const CreateShop: React.FC = () => {
     register,
     formState: { errors },
     handleSubmit,
-  } = useForm<IFormValues>();
+  } = useForm<FormValues>();
 
-  const onSubmit: SubmitHandler<IFormValues> = (data) => {
+  const onSubmit: SubmitHandler<FormValues> = (data) => {
     const address = `${data.street}, ${data.barangay}, ${data.municipality}, ${data.province}`;
     const formData = new FormData();
     formData.append("name", data.name);

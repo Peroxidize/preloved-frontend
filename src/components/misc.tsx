@@ -15,7 +15,7 @@ export enum UserType {
 }
 
 const domain = "https://prelovedbackend.azurewebsites.net/";
-const storeApi = "host/store/";
+const storeApi = "store/";
 
 export const LINK_LOGIN = "https://prelovedbackend.azurewebsites.net/auth/login";
 export const LINK_LOGOUT = "https://prelovedbackend.azurewebsites.net/auth/logout";
@@ -41,4 +41,7 @@ export const LINK_GET_SHOPVERIFICATION_IMAGE =
   "https://prelovedbackend.azurewebsites.net/auth/verification/get_image";
 export const LINK_APPROVE_OR_REJECT =
   "https://prelovedbackend.azurewebsites.net/auth/verification/approve_or_reject";
-export const LINK_CREATE_SHOP = domain + storeApi + "/create_new_shop";
+export const LINK_CREATE_SHOP = domain + storeApi + "create_new_shop";
+export const LINK_GET_ALL_TAGS = domain + storeApi + "get_all_tags";
+export const LINK_ADD_ITEM = domain + storeApi + "add_item";
+export const LINK_ATTACH_PHOTO_ITEM = domain + storeApi + "add_img_item";

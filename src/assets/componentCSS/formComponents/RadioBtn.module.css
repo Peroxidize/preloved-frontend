@@ -1,0 +1,47 @@
+.radioContainer {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.radioInput {
+  display: none;
+}
+
+.radioBtn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background-color: black;
+  color: white;
+  width: fit-content;
+  padding: 0.25rem 0.75rem;
+  border-radius: 100vw;
+  transition: background-color 0.5s ease;
+  cursor: pointer;
+}
+
+.radioBtn:active {
+  background-color: #3d3d3d;
+}
+
+.whiteCircle {
+  height: 1rem;
+  width: 1rem;
+  background-color: white;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.blackCircle {
+  height: 0.6rem;
+  width: 0.6rem;
+  background-color: black;
+  border-radius: 50%;
+  display: none;
+}
+
+.radioInput:checked + .radioBtn .whiteCircle .blackCircle {
+  display: block;
+}

@@ -14,5 +14,8 @@
 
 .backAndTitle img:hover {
   background-color: rgb(235, 235, 235);
-  cursor: pointer;
+}
+
+.backAndTitle img:active {
+  background-color: rgb(230, 230, 230);
 }

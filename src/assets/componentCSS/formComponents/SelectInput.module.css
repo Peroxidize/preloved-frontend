@@ -1,0 +1,10 @@
+.container {
+  display: flex;
+}
+
+.selectInput {
+  padding: 0.75rem 1rem;
+  border-radius: 10px;
+  border: 1px solid black;
+  outline: 0;
+}
