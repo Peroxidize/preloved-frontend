@@ -197,16 +197,26 @@ const AddItem: React.FC = () => {
   };
 
   const onSubmit = async (data: FormData) => {
+    // const formData = new FormData();
+    // formData.append("name", data.name);
+    // formData.append("description", data.description);
+    // formData.append("price", data.price.toString());
+    // formData.append("size", data.size);
+    // formData.append("isFeminine", data.isFeminine.toString());
+    // formData.append("tagID", data.tag.toString());
+    console.log(data);
+    // console.log(formData);
+    const dataToSend = {
+      name: data.name,
+      description: data.description,
+      price: parseFloat(`${data.price}`), // Convert string to float
+      size: data.size,
+      isFeminine: data.isFeminine, // Convert string to boolean
+      tagID: parseInt(`${data.tag}`), // Convert string to integer
+    };
+    console.log(dataToSend);
     axios
-      .post(LINK_ADD_ITEM, {
-        params: {
-          tag: data.tag,
-          description: data.description,
-          name: data.name,
-          isFeminine: data.isFeminine,
-          price: data.price,
-          size: data.size,
-        },
+      .post(LINK_ADD_ITEM, dataToSend, {
         withCredentials: true,
       })
       .then((response) => {
@@ -290,7 +300,6 @@ const AddItem: React.FC = () => {
               </div>
               <TextInput
                 label="Price:"
-                placeholder="Price"
                 name="price"
                 type="number"
                 required

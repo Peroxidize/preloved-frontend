@@ -153,6 +153,7 @@
 
 @media (min-width: 1200px) {
   .wrapper {
+    padding-top: 1rem;
     padding-inline: 4rem;
     width: fit-content;
     margin: auto;

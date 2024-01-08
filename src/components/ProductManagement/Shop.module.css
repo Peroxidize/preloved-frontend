@@ -9,6 +9,17 @@
   margin-bottom: 1rem;
 }
 
+.loadingName {
+  height: 3rem;
+  background-color: #e0e0e0;
+}
+
+.loadingDetail {
+  height: 1rem;
+  width: 30rem;
+  background-color: #e0e0e0;
+}
+
 .productGrid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -44,9 +55,18 @@
     display: flex;
     justify-content: space-between;
     margin-bottom: 2rem;
+    gap: 1rem;
   }
 
-  .storeName {
+  .storeDetails {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 0.25rem;
+  }
+
+  .storeName,
+  .loadingName {
     flex: 1;
     text-align: center;
   }
