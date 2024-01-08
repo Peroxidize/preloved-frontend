@@ -1,5 +1,5 @@
 import { Link, useNavigate } from "react-router-dom";
-import { User, UserType } from "../../misc";
+import { LINK_GET_STORES, User, UserType } from "../../misc";
 
 import css from "./nav-bar.module.css";
 import logo from "../../../assets/preloved-logo.jpg";
@@ -11,11 +11,12 @@ import shopping_cart from "../../../assets/icons/shopping_cart.svg";
 import shoppingFilledIcon from "../../../assets/icons/cartFilled.svg";
 import search_icon from "../../../assets/icons/search_icon.svg";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useAtom } from "jotai";
 import { userAtom } from "../../../App";
 import { logout } from "../../../utils/auth";
 import { useMediaQuery } from "react-responsive";
+import axios from "axios";
 
 export const UserMenu = () => {
   return (
@@ -31,13 +32,21 @@ export const UserMenu = () => {
 };
 
 export const SellerMenu = () => {
+  const [hasStore, setHasStore] = useState(false);
+  useEffect(() => {
+    axios
+      .get(LINK_GET_STORES, { withCredentials: true })
+      .then((res) => {
+        if (res.data.stores.length > 0) setHasStore(true);
+      })
+      .catch((res) => {
+        console.log(res);
+      });
+  }, []);
   return (
     <div className={css.dropdown_content}>
-      <Link to="/shop" className={css.link}>
-        My Shop
-      </Link>
-      <Link to="/shop/create" className={css.link}>
-        Create Shop
+      <Link to={hasStore ? "/shop" : "/shop/create"} className={css.link}>
+        {hasStore ? "My Shop" : "Create Shop"}
       </Link>
       <Link to="/topup" className={css.link}>
         Top-up
@@ -186,13 +195,15 @@ export default function DesktopNavUser() {
           </>
         )}
         <div className={css.navIcons}>
-          <img
-            src={cartFilled ? shoppingFilledIcon : shopping_cart}
-            className={css.shopping_cart}
-            alt="Shopping Cart"
-            onMouseEnter={() => setCartFilled(true)}
-            onMouseLeave={() => setCartFilled(false)}
-          />
+          {storedUser?.type === UserType.User && (
+            <img
+              src={cartFilled ? shoppingFilledIcon : shopping_cart}
+              className={css.shopping_cart}
+              alt="Shopping Cart"
+              onMouseEnter={() => setCartFilled(true)}
+              onMouseLeave={() => setCartFilled(false)}
+            />
+          )}
           <img
             src={ticketFilled ? ticketFilledIcon : ticketIcon}
             onClick={navigateTicketCenter}
