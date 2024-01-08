@@ -1,5 +1,6 @@
 .wrapper {
   padding: 2rem;
+  margin-bottom: 2rem;
 }
 
 .title {
@@ -44,8 +45,16 @@
   display: none;
 }
 
+.nameAndTag {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
+}
+
 .name {
   margin-top: 1.5rem;
+  flex: 1;
 }
 
 .addTag {
@@ -81,7 +90,7 @@
   padding: 1rem;
   border: 0;
   border-radius: 1rem;
-  margin: auto;
+  margin: 5% auto 0;
   width: 80%;
 }
 
@@ -91,8 +100,14 @@
   gap: 1rem;
 }
 
+.searchAndClose {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 2rem;
+}
+
 .closeDialog {
-  align-self: flex-end;
   cursor: pointer;
   background-color: transparent;
   border: 0;
@@ -108,4 +123,45 @@
   border: 0;
   border-bottom: 2px solid black;
   outline: 0;
+  flex: 1;
+}
+
+.styleAndSize {
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.styleContainer,
+.priceContainer {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.sizeContainer {
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.priceContainer {
+  flex-direction: row;
+  width: fit-content;
+}
+
+@media (min-width: 1200px) {
+  .wrapper {
+    padding-inline: 4rem;
+    width: fit-content;
+    margin: auto;
+    margin-bottom: 0;
+  }
+
+  .formContainer {
+    display: flex;
+    gap: 5rem;
+    align-items: end;
+  }
 }

@@ -43,3 +43,5 @@ export const LINK_APPROVE_OR_REJECT =
   "https://prelovedbackend.azurewebsites.net/auth/verification/approve_or_reject";
 export const LINK_CREATE_SHOP = domain + storeApi + "create_new_shop";
 export const LINK_GET_ALL_TAGS = domain + storeApi + "get_all_tags";
+export const LINK_ADD_ITEM = domain + storeApi + "add_item";
+export const LINK_ATTACH_PHOTO_ITEM = domain + storeApi + "add_img_item";
