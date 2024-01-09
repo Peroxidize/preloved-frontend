@@ -1,12 +1,13 @@
 .container {
   padding: 3rem;
   border-radius: 1rem;
-  border: 1px solid black;
+  border: 2px solid black;
   width: 30%;
   margin: 4rem auto auto;
   display: flex;
   flex-direction: column;
   gap: 1rem;
+  box-shadow: 5px 10px;
 }
 
 .formContainer {

@@ -18,6 +18,10 @@
   margin-right: 1rem;
 }
 
+.nav_button {
+  margin-left: 1rem;
+}
+
 .pendingContainer {
   display: flex;
   gap: 1rem;
