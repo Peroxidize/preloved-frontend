@@ -208,13 +208,13 @@ const AddItem: React.FC = () => {
         console.log(response);
         const itemID = response.data.generatedID;
         files.forEach((file) => {
-          const formData = new FormData();
-          formData.append("id", itemID.toString());
-          formData.append("image", file);
+          const fileFormData = new FormData();
+          fileFormData.append("id", itemID.toString());
+          fileFormData.append("img", file);
           console.log(itemID);
           console.log(file);
           axios
-            .post(LINK_ATTACH_PHOTO_ITEM, formData, { withCredentials: true })
+            .post(LINK_ATTACH_PHOTO_ITEM, fileFormData, { withCredentials: true })
             .then((response) => {
               console.log(response);
             })
