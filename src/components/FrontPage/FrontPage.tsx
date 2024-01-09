@@ -12,7 +12,7 @@ import greenSweater from "../../assets/clothes/green-sweater.jpg";
 import magentaShirt from "../../assets/clothes/magenta-shirt.png";
 import { useEffect } from "react";
 import axios from "axios";
-import { LINK_IS_AUTH } from "../misc";
+import { LINK_GET_FRONTPAGE, LINK_IS_AUTH } from "../misc";
 // import axios from "axios";
 
 // const domain = "https://prelovedbackends.azurewebsites.net/";
@@ -29,7 +29,7 @@ const getImageName = (image: string) => {
 export default function FrontPage() {
   useEffect(() => {
     axios
-      .get(LINK_IS_AUTH, { withCredentials: true })
+      .get(LINK_GET_FRONTPAGE, { withCredentials: true })
       .then((response) => {
         console.log(response.data);
       })
