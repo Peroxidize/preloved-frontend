@@ -179,12 +179,6 @@ const AddItem: React.FC = () => {
   const [photos, setPhotos] = useState<string[]>([]);
   const [files, setFiles] = useState<File[]>([]);
 
-  useEffect(() => {
-    axios.get(LINK_IS_AUTH, { withCredentials: true }).then((res) => {
-      console.log(res);
-    });
-  });
-
   const handleAddPhoto = (newUpload: File[]) => {
     newUpload.forEach((file) => {
       const reader = new FileReader();
@@ -197,37 +191,30 @@ const AddItem: React.FC = () => {
   };
 
   const onSubmit = async (data: FormData) => {
-    // const formData = new FormData();
-    // formData.append("name", data.name);
-    // formData.append("description", data.description);
-    // formData.append("price", data.price.toString());
-    // formData.append("size", data.size);
-    // formData.append("isFeminine", data.isFeminine.toString());
-    // formData.append("tagID", data.tag.toString());
+    const formData = new FormData();
+    formData.append("name", data.name);
+    formData.append("description", data.description);
+    formData.append("price", data.price.toString());
+    formData.append("size", data.size);
+    formData.append("isFeminine", data.isFeminine.toString());
+    formData.append("tagID", data.tag.toString());
     console.log(data);
-    // console.log(formData);
-    const dataToSend = {
-      name: data.name,
-      description: data.description,
-      price: parseFloat(`${data.price}`), // Convert string to float
-      size: data.size,
-      isFeminine: data.isFeminine, // Convert string to boolean
-      tagID: parseInt(`${data.tag}`), // Convert string to integer
-    };
-    console.log(dataToSend);
+    console.log(formData);
     axios
-      .post(LINK_ADD_ITEM, dataToSend, {
+      .post(LINK_ADD_ITEM, formData, {
         withCredentials: true,
       })
       .then((response) => {
         console.log(response);
-        const itemID = response.data.generatedId;
+        const itemID = response.data.generatedID;
         files.forEach((file) => {
-          const formData = new FormData();
-          formData.append("id", itemID.toString());
-          formData.append("image", file);
+          const fileFormData = new FormData();
+          fileFormData.append("id", itemID.toString());
+          fileFormData.append("img", file);
+          console.log(itemID);
+          console.log(file);
           axios
-            .post(LINK_ATTACH_PHOTO_ITEM, formData, { withCredentials: true })
+            .post(LINK_ATTACH_PHOTO_ITEM, fileFormData, { withCredentials: true })
             .then((response) => {
               console.log(response);
             })

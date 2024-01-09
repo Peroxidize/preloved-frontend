@@ -16,6 +16,7 @@ export enum UserType {
 
 const domain = "https://prelovedbackend.azurewebsites.net/";
 const storeApi = "store/";
+const frontPageApi = "frontpage/";
 
 export const LINK_LOGIN = "https://prelovedbackend.azurewebsites.net/auth/login";
 export const LINK_LOGOUT = "https://prelovedbackend.azurewebsites.net/auth/logout";
@@ -46,3 +47,4 @@ export const LINK_GET_ALL_TAGS = domain + storeApi + "get_all_tags";
 export const LINK_ADD_ITEM = domain + storeApi + "add_item";
 export const LINK_ATTACH_PHOTO_ITEM = domain + storeApi + "add_img_item";
 export const LINK_GET_STORES = domain + storeApi + "stores";
+export const LINK_GET_FRONTPAGE = domain + frontPageApi;

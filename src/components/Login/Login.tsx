@@ -56,7 +56,7 @@ export default function Login() {
         </div>
         <form onSubmit={handlePostRequest} method="post">
           <div className={styles.form_input}>
-            <label htmlFor="username">Username</label>
+            <label htmlFor="username">Email</label>
             <input
               type="text"
               name="email"
