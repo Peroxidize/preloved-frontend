@@ -32,3 +32,23 @@ export const get_vouchers = async () => {
   }
   return response;
 };
+
+export const redeem_voucher = async (voucher_code: string) => {
+  const formData = new FormData();
+  formData.append("code", voucher_code);
+
+  let response;
+  try {
+    response = await axios.post(API_URL + "redeem_voucher", formData, {
+      withCredentials: true,
+    });
+
+    const newBalance = response.data["new balance"];
+    return `Your new balance is now ${newBalance}`;
+  } catch (error: any) {
+    if (/already been redeemed/.test(JSON.stringify(error.response.data))) {
+      return "Voucher code already redeemed";
+    }
+    return "Voucher code invalid";
+  }
+};
