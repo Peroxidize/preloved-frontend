@@ -19,6 +19,7 @@ import {
   get_seller_status,
   logout,
 } from "../../utils/auth";
+import { useNavigate } from "react-router-dom";
 
 async function filterList(response: any) {
   let validIDs: any = [];
@@ -201,6 +202,7 @@ const ShopDetails: React.FC<{ shopID: number }> = ({ shopID }) => {
 };
 
 export default function AdminPanel() {
+  const navigate = useNavigate();
   const [selectedShopID, setSelectedShopID] = useState<number>(-1);
   const { status, data, error, refetch } = useQuery<
     "idle" | "error" | "loading" | "success",
@@ -229,6 +231,10 @@ export default function AdminPanel() {
     document.body.style.cursor = "default";
   };
 
+  const navigateCodeGen = () => {
+    navigate("generate"); 
+  };
+
   return (
     <div className={css.wrapper}>
       <div className={css.header}>
@@ -239,6 +245,13 @@ export default function AdminPanel() {
           className={css.back_icon}
         />
         <h1 className={css.title}>Admin Panel</h1>
+        <button className={`${css.btnReject} ${css.nav_button}`}>Approve Sellers</button>
+        <button
+          onClick={navigateCodeGen}
+          className={`${css.btnApprove} ${css.nav_button}`}
+        >
+          Generate Vouchers
+        </button>
       </div>
       <form action="" method="post" className={css.pendingContainer}>
         <label htmlFor="pending">

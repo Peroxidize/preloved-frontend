@@ -51,6 +51,9 @@ export const SellerMenu = () => {
       <Link to="/topup" className={css.link}>
         Top-up
       </Link>
+      <Link to="/redeem" className={css.link}>
+        Redeem Voucher
+      </Link>
       <Link to="" onClick={logout} className={css.link}>
         Logout
       </Link>

@@ -11,6 +11,8 @@ import ShopDocumentation from "../components/ShopVerification/ShopDocumentation"
 import CreateShop from "../components/CreateShop/CreateShop";
 import Shop from "../components/ProductManagement/Shop";
 import AddItem from "../components/ProductManagement/AddItem";
+import CodeGen from "../components/AdminPanel/code-gen";
+import RedeemVoucher from "../components/RedeemVoucher/redeem-voucher";
 
 export const UserRoute = () => {
   return (
@@ -28,6 +30,7 @@ export const VerifiedSellerRoute = () => {
     <>
       <Route index element={<TicketCenter />} />
       <Route path="topup" element={<AddBalance />} />
+      <Route path="redeem" element={<RedeemVoucher />} />
       <Route path="shop/create" element={<CreateShop />} />
       <Route path="shop" element={<Shop />} />
       <Route path="shop/add" element={<AddItem />} />
@@ -39,6 +42,7 @@ export const AdminRoute = () => {
   return (
     <>
       <Route index element={<AdminPanel />} />
+      <Route path="generate" element={<CodeGen />} />
     </>
   );
 };
