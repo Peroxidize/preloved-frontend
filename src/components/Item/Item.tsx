@@ -10,7 +10,7 @@ import { LINK_GET_ITEM_IMAGES } from "../misc";
 import { useQuery } from "react-query";
 
 const Images: React.FC<{ id: string | undefined }> = ({ id }) => {
-  console.log(id);
+  const [selectedImg, setSelectedImg] = useState(0);
   const getImages = async () => {
     const res = await axios.get(LINK_GET_ITEM_IMAGES, {
       params: {
@@ -19,25 +19,37 @@ const Images: React.FC<{ id: string | undefined }> = ({ id }) => {
       withCredentials: true,
     });
     console.log(res);
-    return res.data;
+    return res.data.image_links;
   };
   const { status, data } = useQuery("getImages", getImages);
-  const threeClothes = clothes.slice(0, 3);
-  const [selectedImg, setSelectedImg] = useState(threeClothes[0]);
   return (
     <div className={css.imagesContainer}>
-      <img src={selectedImg} alt="" className={css.mainImage} />
-      <div className={css.images}>
-        {threeClothes.map((img, index) => (
-          <img
-            src={img}
-            alt=""
-            className={`${css.image} ${selectedImg === img && css.selectedImg}}`}
-            onClick={() => setSelectedImg(img)}
-            key={index}
-          />
-        ))}
+      <div className={css.mainImgContainer}>
+        {status === "success" && (
+          <img src={data[selectedImg]} alt="" className={css.mainImage} />
+        )}
       </div>
+      <div className={css.images}>
+        {status === "success" &&
+          data.map((img: string, index: number) => (
+            <img
+              src={img}
+              alt=""
+              className={`${css.image} ${index === selectedImg && css.selectedImg}`}
+              onClick={() => setSelectedImg(index)}
+              key={index}
+            />
+          ))}
+      </div>
+    </div>
+  );
+};
+
+const Details: React.FC<{ id: string | undefined }> = ({ id }) => {
+  return (
+    <div className={css.detailsContainer}>
+      <h1>Red Checkered Sweater</h1>
+      <div className={css.storeName}>by Jasper Keith Vallecera</div>
     </div>
   );
 };
@@ -52,9 +64,7 @@ const Item: React.FC = () => {
       {isDesktopOrLaptop ? <NavBar /> : <MobileNavTop />}
       <div className={css.wrapper}>
         <Images id={id} />
-        <div className="details">
-          <h1>Red Checkered Sweater</h1>
-        </div>
+        <Details id={id} />
       </div>
       {!isDesktopOrLaptop && <MobileNavBottom />}
     </>
