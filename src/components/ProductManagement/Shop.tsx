@@ -8,10 +8,27 @@ import css from "./Shop.module.css";
 import { Link } from "react-router-dom";
 import { useEffect } from "react";
 import axios from "axios";
-import { LINK_GET_STORES } from "../misc";
+import { LINK_GET_ITEM_DETAILS, LINK_GET_STORES } from "../misc";
 import { useQuery } from "react-query";
 
 const Shop: React.FC = () => {
+  useEffect(() => {
+    const formData = new FormData();
+    formData.append("id", "20");
+    axios
+      .get(LINK_GET_ITEM_DETAILS, {
+        params: {
+          id: "20",
+        },
+        withCredentials: true,
+      })
+      .then((response) => {
+        console.log(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
   const getShopDetails = async () => {
     const res = await axios.get(LINK_GET_STORES, { withCredentials: true });
     console.log(res.data);
