@@ -1,26 +1,23 @@
 .wrapper {
-    overflow: hidden;
+  overflow: hidden;
 }
 
 .display_clothing {
-    margin-top: 1.5vw;
-    margin-left: 1.5vw;
-    margin-right: 1.5vw;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1.5em;
-    justify-content: center;
+  margin-top: 1.5vw;
+  margin-left: 1.5vw;
+  margin-right: 1.5vw;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: center;
 }
 
-.display_clothing img {
-    border-radius: 10px;
-    max-width: 300px;
-    max-height: 300px;
-    background-color: #E9E9E9;
-}
-
-.display_clothing img:hover {
-    cursor: pointer;
+.img {
+  border-radius: 10px;
+  background-color: white;
+  height: 15rem;
+  object-fit: contain;
+  cursor: pointer;
 }
 
 /* 
@@ -29,7 +26,6 @@
 */
 
 @media (min-width: 768px) and (max-width: 1024px) and (orientation: landscape) {
-
 }
 
 /* 
@@ -38,7 +34,6 @@
 */
 
 @media (min-width: 481px) and (max-width: 767px) {
-
 }
 
 /* 
@@ -47,5 +42,4 @@
 */
 
 @media (min-width: 280px) and (max-width: 480px) {
-
 }

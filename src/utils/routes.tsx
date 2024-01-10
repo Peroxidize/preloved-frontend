@@ -13,6 +13,7 @@ import Shop from "../components/ProductManagement/Shop";
 import AddItem from "../components/ProductManagement/AddItem";
 import CodeGen from "../components/AdminPanel/code-gen";
 import RedeemVoucher from "../components/RedeemVoucher/redeem-voucher";
+import Item from "../components/Item/Item";
 
 export const UserRoute = () => {
   return (
@@ -21,6 +22,7 @@ export const UserRoute = () => {
       <Route path="ordering" element={<Ordering />} />
       <Route path="invoice" element={<Invoice />} />
       <Route path="ticketcenter" element={<TicketCenter />} />
+      <Route path="item/:id" element={<Item />} />
     </>
   );
 };
