@@ -12,9 +12,13 @@ const LoadingButton: React.FC = () => {
   return <div className={css.loadingButton}>{""}</div>;
 };
 
+const LoadingImg: React.FC = () => {
+  return <div className={css.loadingImg}>{""}</div>;
+};
+
 const LoadingText: React.FC = () => {
   return <div className={css.loadingText}>{""}</div>;
 };
 
-export { LoadingBigText, LoadingTag, LoadingButton };
+export { LoadingBigText, LoadingTag, LoadingButton, LoadingImg };
 export default LoadingText;

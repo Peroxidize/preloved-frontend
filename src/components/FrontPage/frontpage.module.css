@@ -3,9 +3,7 @@
 }
 
 .display_clothing {
-  margin-top: 1.5vw;
-  margin-left: 1.5vw;
-  margin-right: 1.5vw;
+  padding: 1rem 3rem;
   display: flex;
   flex-wrap: wrap;
   gap: 1rem;
@@ -18,6 +16,12 @@
   height: 15rem;
   object-fit: contain;
   cursor: pointer;
+}
+
+.loading {
+  height: 3rem;
+  width: 3rem;
+  object-fit: cover;
 }
 
 /* 

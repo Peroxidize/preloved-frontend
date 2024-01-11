@@ -30,3 +30,10 @@
   border-radius: 2rem;
   margin-top: 1rem;
 }
+
+.loadingImg {
+  border-radius: 10px;
+  background-color: #e0e0e0;
+  height: 15rem;
+  width: 12rem;
+}
