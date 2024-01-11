@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import css from "./Item.module.css";
 import { useMediaQuery } from "react-responsive";
 import NavBar, { MobileNavBottom, MobileNavTop } from "../fragments/nav-bar/nav-bar";
@@ -17,6 +17,9 @@ import LoadingText, {
   LoadingButton,
   LoadingTag,
 } from "../fragments/commonstuff/Loading";
+import error from "../../assets/icons/error.svg";
+import success from "../../assets/icons/success.svg";
+import LoadingDialog, { IconTextDialog } from "../fragments/commonstuff/Dialogs";
 
 const Images: React.FC<{ id: string | undefined }> = ({ id }) => {
   const [selectedImg, setSelectedImg] = useState(0);
@@ -77,13 +80,33 @@ interface ItemDetails {
 
 const Details: React.FC<{ id: string | undefined }> = ({ id }) => {
   const purchaseItem = useMutation({
-    mutationFn: () => {
+    mutationFn: async () => {
       const formData = new FormData();
       formData.append("itemID", id as string);
       const res = axios.post(LINK_PURCHASE_ITEM, formData, { withCredentials: true });
       return res;
     },
   });
+
+  useEffect(() => {
+    const loadingDialog = document.getElementById("loadingDialog") as HTMLDialogElement;
+    const sureDialog = document.getElementById("sureDialog") as HTMLDialogElement;
+    if (purchaseItem.isLoading) {
+      if (sureDialog.open) sureDialog.close();
+      loadingDialog.showModal();
+    } else if (purchaseItem.isSuccess) {
+      loadingDialog.close();
+      const successDialog = document.getElementById("successDialog") as HTMLDialogElement;
+      successDialog.showModal();
+      setTimeout(() => successDialog.close(), 5000);
+    } else if (purchaseItem.isError) {
+      loadingDialog.close();
+      const errorDialog = document.getElementById("errorDialog") as HTMLDialogElement;
+      errorDialog.showModal();
+      setTimeout(() => errorDialog.close(), 5000);
+    }
+  }, [purchaseItem.isLoading, purchaseItem.isSuccess, purchaseItem.isError]);
+
   const getItemDetails = async () => {
     const res = await axios.get(LINK_GET_ITEM_DETAILS, {
       params: {
@@ -107,6 +130,19 @@ const Details: React.FC<{ id: string | undefined }> = ({ id }) => {
       } else {
         dialog.close();
       }
+    }
+  };
+
+  const dialogClickedOutside = (e: React.MouseEvent<HTMLDialogElement>) => {
+    const dialog = document.getElementById("sureDialog") as HTMLDialogElement;
+    const dialogDimensions = dialog.getBoundingClientRect();
+    if (
+      e.clientX < dialogDimensions.left ||
+      e.clientX > dialogDimensions.right ||
+      e.clientY < dialogDimensions.top ||
+      e.clientY > dialogDimensions.bottom
+    ) {
+      dialog.close();
     }
   };
 
@@ -160,7 +196,11 @@ const Details: React.FC<{ id: string | undefined }> = ({ id }) => {
               handleClick={() => handleDialog(true)}
             />
           </div>
-          <dialog className={css.sureDialog} id="sureDialog">
+          <dialog
+            className={css.sureDialog}
+            id="sureDialog"
+            onClick={dialogClickedOutside}
+          >
             <div className={css.dialogContainer}>
               <h2 className={css.sureDialogTitle}>Are you sure you want to buy this?</h2>
               <div className={css.sureDialogButtons}>
@@ -179,6 +219,15 @@ const Details: React.FC<{ id: string | undefined }> = ({ id }) => {
               </div>
             </div>
           </dialog>
+          {(purchaseItem.isError || purchaseItem.isSuccess || purchaseItem.isLoading) && (
+            <LoadingDialog />
+          )}
+          {purchaseItem.isSuccess && (
+            <IconTextDialog text="Item purchased!" icon={success} id="successDialog" />
+          )}
+          {purchaseItem.isError && (
+            <IconTextDialog text="Something went wrong!" icon={error} id="errorDialog" />
+          )}
         </>
       ) : (
         <>

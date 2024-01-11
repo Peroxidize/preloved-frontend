@@ -1,0 +1,21 @@
+.dialog {
+  border: 0;
+  padding: 2rem;
+  border-radius: 1rem;
+  margin: auto;
+}
+
+.iconContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.icon,
+.loading {
+  height: 5rem;
+  width: 5rem;
+  object-fit: cover;
+}
