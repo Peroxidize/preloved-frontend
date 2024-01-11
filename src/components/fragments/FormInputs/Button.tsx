@@ -3,7 +3,7 @@ import classes from "../../../assets/componentCSS/formComponents/Button.module.c
 interface ButtonProps {
   text: string;
   handleClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
-  isPrimary: boolean;
+  isPrimary?: boolean;
 }
 
 const Button: React.FC<ButtonProps> = ({ text, handleClick, isPrimary }) => {
