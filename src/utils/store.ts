@@ -6,14 +6,14 @@ export const get_balance = async (shop_user_id: any) => {
   let response;
   try {
     response = await axios.get(API_URL + "get_balance", {
+      params: { shop_user_id },
       withCredentials: true,
-      params: { id: shop_user_id },
     });
     console.log(response);
-  } catch (error) {
-    console.log(error);
+  } catch (error: any) {
+    console.log(error.data);
   }
-  return response;
+  return response?.data.balance;
 };
 
 export const get_vouchers = async () => {

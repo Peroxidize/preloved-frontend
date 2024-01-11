@@ -17,6 +17,7 @@ import { userAtom } from "../../../App";
 import { logout } from "../../../utils/auth";
 import { useMediaQuery } from "react-responsive";
 import axios from "axios";
+import { get_balance } from "../../../utils/store";
 
 export const UserMenu = () => {
   return (
@@ -32,6 +33,8 @@ export const UserMenu = () => {
 };
 
 export const SellerMenu = () => {
+  const [storedUser, setUser] = useAtom(userAtom);
+  const [balance, setBalance] = useState<any>(null);
   const [hasStore, setHasStore] = useState(false);
   useEffect(() => {
     axios
@@ -42,9 +45,18 @@ export const SellerMenu = () => {
       .catch((res) => {
         console.log(res);
       });
+
+      const fetch = async () => {
+        setBalance(await get_balance(storedUser!.shop_owner_id));
+      };
+
+      fetch();
   }, []);
   return (
     <div className={css.dropdown_content}>
+      <div className={css.link}>
+        Balance: {balance === null ? ("Loading...") : (parseFloat(balance))}
+      </div>
       <Link to={hasStore ? "/shop" : "/shop/create"} className={css.link}>
         {hasStore ? "My Shop" : "Create Shop"}
       </Link>
