@@ -1,0 +1,13 @@
+.tags {
+  padding: 0.25rem 0.75rem;
+  background-color: black;
+  color: white;
+  width: fit-content;
+  border-radius: 100vw;
+}
+
+.secondary {
+  background-color: white;
+  color: black;
+  border: 1px solid black;
+}

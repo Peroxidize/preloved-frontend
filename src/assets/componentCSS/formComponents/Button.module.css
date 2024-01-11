@@ -11,6 +11,16 @@
   transition: background-color 0.5s ease;
 }
 
+.secondary {
+  background-color: white;
+  color: black;
+  border: 2px solid black;
+}
+
 .button:active {
   background-color: #5b5b5b;
+}
+
+.secondary:active {
+  background-color: #e8e8e8;
 }
