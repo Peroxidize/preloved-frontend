@@ -28,18 +28,18 @@ const Images: React.FC<{ id: string | undefined }> = ({ id }) => {
     });
     return res.data.image_links;
   };
-  const { status, data } = useQuery("getImages", getImages);
+  const { isFetchedAfterMount, data, status } = useQuery("getImages", getImages);
   return (
     <div className={css.imagesContainer}>
       <div className={css.mainImgContainer}>
-        {status === "success" ? (
+        {isFetchedAfterMount && status === "success" ? (
           <img src={data[selectedImg]} alt="" className={css.mainImage} />
         ) : (
           <div className={css.mainImage}>{""}</div>
         )}
       </div>
       <div className={css.images}>
-        {status === "success" ? (
+        {isFetchedAfterMount ? (
           data.map((img: string, index: number) => (
             <img
               src={img}
@@ -93,7 +93,10 @@ const Details: React.FC<{ id: string | undefined }> = ({ id }) => {
     console.log(res.data);
     return res.data;
   };
-  const { status, data } = useQuery<ItemDetails>("getItemDetails", getItemDetails);
+  const { status, data, isFetchedAfterMount } = useQuery<ItemDetails>(
+    "getItemDetails",
+    getItemDetails
+  );
 
   const handleDialog = (open: boolean) => {
     const dialog = document.getElementById("sureDialog") as HTMLDialogElement;
@@ -110,7 +113,7 @@ const Details: React.FC<{ id: string | undefined }> = ({ id }) => {
 
   return (
     <div className={css.detailsContainer}>
-      {status === "success" ? (
+      {status === "success" && isFetchedAfterMount ? (
         <>
           <div className={css.nameAndStore}>
             <h1 className={css.itemName}>{data.name}</h1>
