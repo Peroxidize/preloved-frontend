@@ -3,30 +3,11 @@ import css from "./frontpage.module.css";
 import NavBar, { MobileNavBottom } from "../fragments/nav-bar/nav-bar";
 import { useMediaQuery } from "react-responsive";
 import { MobileNavTop } from "../fragments/nav-bar/nav-bar";
-
-import beigeJacket from "../../assets/clothes/beige-jacket.jpg";
-import checkeredSweater from "../../assets/clothes/checkered-sweater.jpg";
-import greySlacks from "../../assets/clothes/grey-slacks.jpg";
-import khakiJacket from "../../assets/clothes/khaki-jacket.jpg";
-import greenSweater from "../../assets/clothes/green-sweater.jpg";
-import magentaShirt from "../../assets/clothes/magenta-shirt.png";
-import { useEffect } from "react";
 import axios from "axios";
-import { LINK_GET_FRONTPAGE, LINK_GET_ITEM_DETAILS, LINK_IS_AUTH } from "../misc";
+import { LINK_GET_FRONTPAGE } from "../misc";
 import { useQuery } from "react-query";
-import { Link, useNavigate } from "react-router-dom";
-// import axios from "axios";
-
-// const domain = "https://prelovedbackends.azurewebsites.net/";
-// const downloadfiles = "host/storage/q";
-
-const repeatArray = (array: string[], n: number) =>
-  Array.from({ length: n }, () => array).flat();
-const getImageName = (image: string) => {
-  const path = image.split("/");
-  const name = path[path.length - 1].split(".");
-  return name[0];
-};
+import { useNavigate } from "react-router-dom";
+import loading from "../../assets/loading.gif";
 
 interface Image {
   link: string;
@@ -70,23 +51,12 @@ export default function FrontPage() {
     query: "(min-device-width: 1224px)",
   });
 
-  const clothingItems = [
-    beigeJacket,
-    checkeredSweater,
-    greySlacks,
-    khakiJacket,
-    greenSweater,
-    magentaShirt,
-  ];
-
-  const repeatedClothingItems = repeatArray(clothingItems, 10);
-
   return (
     <>
       {isDesktopOrLaptop ? <NavBar /> : <MobileNavTop />}
       <div className={css.wrapper}>
         <div className={css.display_clothing}>
-          {status === "success" &&
+          {status === "success" ? (
             data.map((item: Item) => (
               <img
                 src={item.images[0].link}
@@ -95,7 +65,12 @@ export default function FrontPage() {
                 key={item.item_id}
                 onClick={() => navigate(`/item/${item.item_id}`)}
               />
-            ))}
+            ))
+          ) : (
+            <>
+              <img src={loading} alt="" className={css.loading} />
+            </>
+          )}
         </div>
       </div>
       {!isDesktopOrLaptop && <MobileNavBottom />}
