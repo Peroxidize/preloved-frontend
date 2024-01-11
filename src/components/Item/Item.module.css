@@ -6,6 +6,22 @@
   margin-bottom: 2rem;
 }
 
+.leftArrow {
+  align-self: center;
+  cursor: pointer;
+  object-fit: cover;
+  border-radius: 50%;
+  transition: background-color 0.3s ease;
+}
+
+.leftArrow:hover {
+  background-color: rgb(235, 235, 235);
+}
+
+.leftArrow:active {
+  background-color: rgb(230, 230, 230);
+}
+
 .imagesContainer {
   height: 15rem;
   display: flex;

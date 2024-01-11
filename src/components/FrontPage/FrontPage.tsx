@@ -7,7 +7,6 @@ import axios from "axios";
 import { LINK_GET_FRONTPAGE } from "../misc";
 import { useQuery } from "react-query";
 import { useNavigate } from "react-router-dom";
-import { LoadingImg } from "../fragments/commonstuff/Loading";
 import loading from "../../assets/loading.gif";
 
 interface Image {

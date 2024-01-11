@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import css from "./Item.module.css";
 import { useMediaQuery } from "react-responsive";
 import NavBar, { MobileNavBottom, MobileNavTop } from "../fragments/nav-bar/nav-bar";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { LINK_GET_ITEM_DETAILS, LINK_GET_ITEM_IMAGES, LINK_PURCHASE_ITEM } from "../misc";
 import { useMutation, useQuery } from "react-query";
@@ -11,6 +11,7 @@ import addCollectionsIcon from "../../assets/icons/addCollections.svg";
 import addCollectionsFilled from "../../assets/icons/addCollectionsFilled.svg";
 import Button from "../fragments/FormInputs/Button";
 import cartIcon from "../../assets/icons/shopping_cart.svg";
+import leftArrow from "../../assets/icons/leftArrow.svg";
 import LoadingText, {
   LoadingBigText,
   LoadingButton,
@@ -205,6 +206,7 @@ const Details: React.FC<{ id: string | undefined }> = ({ id }) => {
 };
 
 const Item: React.FC = () => {
+  const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
   const isDesktopOrLaptop = useMediaQuery({
     query: "(min-device-width: 1224px)",
@@ -213,6 +215,12 @@ const Item: React.FC = () => {
     <>
       {isDesktopOrLaptop ? <NavBar /> : <MobileNavTop />}
       <div className={css.wrapper}>
+        <img
+          src={leftArrow}
+          alt="Back to home icon"
+          onClick={() => navigate("/")}
+          className={css.leftArrow}
+        />
         <Images id={id} />
         <Details id={id} />
       </div>
