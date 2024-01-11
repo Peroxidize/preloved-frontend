@@ -11,6 +11,11 @@ import addCollectionsIcon from "../../assets/icons/addCollections.svg";
 import addCollectionsFilled from "../../assets/icons/addCollectionsFilled.svg";
 import Button from "../fragments/FormInputs/Button";
 import cartIcon from "../../assets/icons/shopping_cart.svg";
+import LoadingText, {
+  LoadingBigText,
+  LoadingButton,
+  LoadingTag,
+} from "../fragments/commonstuff/Loading";
 
 const Images: React.FC<{ id: string | undefined }> = ({ id }) => {
   const [selectedImg, setSelectedImg] = useState(0);
@@ -105,7 +110,7 @@ const Details: React.FC<{ id: string | undefined }> = ({ id }) => {
 
   return (
     <div className={css.detailsContainer}>
-      {status === "success" && (
+      {status === "success" ? (
         <>
           <div className={css.nameAndStore}>
             <h1 className={css.itemName}>{data.name}</h1>
@@ -170,6 +175,26 @@ const Details: React.FC<{ id: string | undefined }> = ({ id }) => {
               </div>
             </div>
           </dialog>
+        </>
+      ) : (
+        <>
+          <div className={css.nameAndStore}>
+            <LoadingBigText />
+            <LoadingText />
+            <div className={css.tagContainer}>
+              <LoadingTag />
+              <LoadingTag />
+            </div>
+          </div>
+          <div className={css.descAndSize}>
+            <LoadingText />
+            <LoadingText />
+          </div>
+          <LoadingBigText />
+          <div className={css.buttons}>
+            <LoadingButton />
+            <LoadingButton />
+          </div>
         </>
       )}
     </div>

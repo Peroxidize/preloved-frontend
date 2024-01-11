@@ -1,0 +1,32 @@
+.loadingBigText {
+  height: 2rem;
+  width: 20rem;
+  border-radius: 0.5rem;
+  background-color: #e0e0e0;
+  margin-bottom: 0.5rem;
+}
+
+.loadingText {
+  height: 1.5rem;
+  width: 10rem;
+  border-radius: 0.5rem;
+  background-color: #e0e0e0;
+  margin-bottom: 0.5rem;
+}
+
+.loadingTag {
+  height: 1.5rem;
+  width: 10rem;
+  border-radius: 100vw;
+  background-color: #e0e0e0;
+}
+
+.loadingButton {
+  width: 100%;
+  background-color: #e0e0e0;
+  border: 0;
+  padding: 1rem;
+  font-weight: bold;
+  border-radius: 2rem;
+  margin-top: 1rem;
+}
