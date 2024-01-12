@@ -1,0 +1,109 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  width: 75%;
+  margin: 0 auto;
+}
+
+.page_title {
+  display: flex;
+  justify-content: center;
+  margin: 1rem;
+}
+
+.button_container {
+  display: flex;
+  justify-content: center;
+  padding: 1rem;
+  border: 2px solid black;
+  border-radius: 10px;
+}
+
+.button_container:hover {
+  cursor: pointer;
+  background-color: #e2e8f0;
+}
+
+.modal_container {
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dialog_container {
+  padding: 2rem;
+  background-color: white;
+  border: 2px solid black;
+  box-shadow: 5px 10px;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.dialog_header {
+  display: flex;
+  justify-content: center;
+}
+
+.form_input {
+  width: 25vw;
+  padding: 0.75rem;
+  border-radius: 10px;
+  border: 1px solid black;
+  outline: 0;
+  margin-bottom: 1.5rem;
+}
+
+.buttons {
+  display: flex;
+  gap: 1rem;
+}
+
+.primary_button {
+  border: 0;
+  padding: 1rem 4rem;
+  background-color: #3b82f6;
+  color: white;
+  font-weight: bold;
+  border-radius: 2rem;
+}
+
+.primary_button:hover {
+  cursor: pointer;
+  background-color: #1d4ed8;
+}
+
+.secondary_button {
+  border: 1px solid #3b82f6;
+  padding: 1rem 4rem;
+  background-color: white;
+  color: black;
+  font-weight: bold;
+  border-radius: 2rem;
+}
+
+.secondary_button:hover {
+  cursor: pointer;
+  background-color: #dbeafe;
+}
+
+.form_error {
+  color: #ef4444;
+  text-align: center;
+}
+
+.form_success {
+  color: #22c55e;
+  text-align: center;
+}
+
+.text_center {
+  text-align: center;
+}
