@@ -4,7 +4,11 @@ import { useMutation } from "react-query";
 
 import logo from "../../assets/preloved-logo.jpg";
 import classes from "./SignUp.module.css";
-import { Link, Navigate } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
+import LoadingDialog, {
+  ErrorDialog,
+  SuccessDialog,
+} from "../fragments/commonstuff/Dialogs";
 
 const domain = "https://prelovedbackend.azurewebsites.net/";
 const userNavText = "Want to create a seller account?";
@@ -12,13 +16,7 @@ const sellerNavText = "Want to create a user account?";
 let endpoint = "auth/new_shop_user";
 
 export default function SignUp() {
-  useEffect(() => {
-    const userInfo = localStorage.getItem("userInfo");
-
-    if (userInfo !== null) {
-      window.location.replace("/frontpage");
-    }
-  }, []);
+  const navigate = useNavigate();
 
   const [isStore, setIsStore] = useState(false);
   const [formState, setFormState] = useState({
@@ -136,8 +134,8 @@ export default function SignUp() {
               type="radio"
               name="isFeminine"
               id="masculine"
-              value="Masculine"
-              checked={formState.isFeminine === 0}
+              value={0}
+              checked={formState.isFeminine == 0}
               onChange={handleChange}
             />
             <label htmlFor="masculine">Masculine</label>
@@ -147,8 +145,8 @@ export default function SignUp() {
               type="radio"
               name="isFeminine"
               id="Feminine"
-              value="Feminine"
-              checked={formState.isFeminine === 1}
+              value={1}
+              checked={formState.isFeminine == 1}
               onChange={handleChange}
             />
             <label htmlFor="Feminine">Feminine</label>
@@ -158,9 +156,33 @@ export default function SignUp() {
     );
   }
 
+  useEffect(() => {
+    const loadingDialog = document.querySelector("#loadingDialog") as HTMLDialogElement;
+    if (mutation.isLoading) {
+      loadingDialog.showModal();
+    }
+    if (mutation.isError) {
+      loadingDialog.close();
+      const errorDialog = document.querySelector("#errorDialog") as HTMLDialogElement;
+      errorDialog.showModal();
+      setTimeout(() => errorDialog.close());
+    }
+    if (mutation.isSuccess) {
+      loadingDialog.close();
+      const successDialog = document.querySelector("#successDialog") as HTMLDialogElement;
+      successDialog.showModal();
+      setTimeout(() => {
+        successDialog.close();
+        navigate("/");
+      });
+    }
+  }, [mutation.isLoading, mutation.isError, mutation.isSuccess]);
+
   return (
     <div className={classes.backgroundPhoto}>
-      {signUpSuccess && <Navigate to="/" replace={true} />}
+      <LoadingDialog />
+      <SuccessDialog text="Sign up successful!" />
+      <ErrorDialog text="Sign up failed!" />
       <div className={classes.container}>
         <img src={logo} alt="Preloved logo" className={classes.logo} />
         <form action="post" onSubmit={handleSubmit}>

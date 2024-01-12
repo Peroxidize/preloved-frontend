@@ -1,6 +1,8 @@
 import React from "react";
 import css from "../../../assets/componentCSS/commonStuff/Dialogs.module.css";
 import loading from "../../../assets/loading.gif";
+import success from "../../../assets/icons/success.svg";
+import error from "../../../assets/icons/error.svg";
 
 const handleCloseDialogOutside = (
   event: React.MouseEvent<HTMLDialogElement>,
@@ -51,5 +53,13 @@ const LoadingDialog: React.FC = () => {
   );
 };
 
-export { IconTextDialog };
+const SuccessDialog: React.FC<{ text: string }> = ({ text }) => {
+  return <IconTextDialog text={text} icon={success} id="successDialog" />;
+};
+
+const ErrorDialog: React.FC<{ text: string }> = ({ text }) => {
+  return <IconTextDialog text={text} icon={error} id="errorDialog" />;
+};
+
+export { IconTextDialog, SuccessDialog, ErrorDialog };
 export default LoadingDialog;
