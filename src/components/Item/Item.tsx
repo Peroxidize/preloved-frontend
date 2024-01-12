@@ -79,10 +79,13 @@ interface ItemDetails {
 }
 
 const Details: React.FC<{ id: string | undefined }> = ({ id }) => {
+  const [storeID, setStoreID] = useState("");
+
   const purchaseItem = useMutation({
     mutationFn: async () => {
       const formData = new FormData();
       formData.append("itemID", id as string);
+      formData.append("storeID", storeID as string);
       const res = await axios.post(LINK_PURCHASE_ITEM, formData, {
         withCredentials: true,
       });
@@ -117,6 +120,7 @@ const Details: React.FC<{ id: string | undefined }> = ({ id }) => {
       withCredentials: true,
     });
     console.log(res.data);
+    setStoreID(String(res.data.storeID));
     return res.data;
   };
   const { status, data, isFetchedAfterMount } = useQuery<ItemDetails>(

@@ -6,7 +6,7 @@ export const get_balance = async (shop_user_id: any) => {
   let response;
   try {
     response = await axios.get(API_URL + "get_balance", {
-      params: { shop_user_id },
+      params: { id: shop_user_id },
       withCredentials: true,
     });
     console.log(response);

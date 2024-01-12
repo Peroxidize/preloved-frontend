@@ -14,6 +14,7 @@ import AddItem from "../components/ProductManagement/AddItem";
 import CodeGen from "../components/AdminPanel/code-gen";
 import RedeemVoucher from "../components/RedeemVoucher/redeem-voucher";
 import Item from "../components/Item/Item";
+import Collections from "../components/Collections/collections";
 
 export const UserRoute = () => {
   return (
@@ -23,6 +24,7 @@ export const UserRoute = () => {
       <Route path="invoice" element={<Invoice />} />
       <Route path="ticketcenter" element={<TicketCenter />} />
       <Route path="item/:id" element={<Item />} />
+      <Route path="collections" element={<Collections />} />
     </>
   );
 };

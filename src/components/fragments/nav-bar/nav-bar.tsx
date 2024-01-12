@@ -46,16 +46,16 @@ export const SellerMenu = () => {
         console.log(res);
       });
 
-      const fetch = async () => {
-        setBalance(await get_balance(storedUser!.shop_owner_id));
-      };
+    const fetch = async () => {
+      setBalance(await get_balance(String(storedUser!.shop_owner_id)));
+    };
 
-      fetch();
+    fetch();
   }, []);
   return (
     <div className={css.dropdown_content}>
       <div className={css.link}>
-        Balance: {balance === null ? ("Loading...") : (parseFloat(balance))}
+        Balance: {balance === null ? "Loading..." : parseFloat(balance)}
       </div>
       <Link to={hasStore ? "/shop" : "/shop/create"} className={css.link}>
         {hasStore ? "My Shop" : "Create Shop"}
@@ -199,15 +199,17 @@ export default function DesktopNavUser() {
         />
         {storedUser?.type === UserType.User ? (
           <>
-            <div className={css.search_bar}>
-              <img src={search_icon} alt="Search Icon" />
-              <input type="text" placeholder="Search" />
+            <div className={css.center}>
+              <div className={css.search_bar}>
+                <img src={search_icon} alt="Search Icon" />
+                <input type="text" placeholder="Search" />
+              </div>
             </div>
           </>
         ) : (
-          <>
+          <div className={css.center}>
             <h2 className={css.sellerSpace}>Seller Space</h2>
-          </>
+          </div>
         )}
         <div className={css.navIcons}>
           {storedUser?.type === UserType.User && (

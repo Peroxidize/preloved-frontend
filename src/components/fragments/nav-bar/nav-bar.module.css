@@ -5,11 +5,19 @@
   padding-block: 1rem;
   width: 100vw;
   display: flex;
-  justify-content: flex-start;
+  flex-direction: row;
+  justify-content: space-between;
   gap: 2rem;
   align-items: center;
   font-size: 16px;
   padding-right: 3em;
+}
+
+.center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 
 .mob_nav_bar {
