@@ -9,7 +9,9 @@ interface ButtonProps {
 const Button: React.FC<ButtonProps> = ({ text, handleClick, isPrimary }) => {
   return (
     <button
-      className={`${classes.button} ${!isPrimary && classes.secondary}`}
+      className={`${classes.button} ${
+        isPrimary !== undefined && !isPrimary && classes.secondary
+      }`}
       onClick={handleClick}
     >
       {text}
