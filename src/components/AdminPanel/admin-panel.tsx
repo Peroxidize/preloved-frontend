@@ -12,7 +12,7 @@ import reject from "../../assets/icons/close.svg";
 import check from "../../assets/icons/check.svg";
 import css from "./admin-panel.module.css";
 import leftArrow from "../../assets/icons/leftArrow.svg";
-import { useQuery } from "react-query";
+import { useMutation, useQuery } from "react-query";
 import {
   evaluateSellerStatus,
   get_auth,
@@ -20,6 +20,10 @@ import {
   logout,
 } from "../../utils/auth";
 import { useNavigate } from "react-router-dom";
+import LoadingDialog, {
+  ErrorDialog,
+  SuccessDialog,
+} from "../fragments/commonstuff/Dialogs";
 
 async function filterList(response: any) {
   let validIDs: any = [];
@@ -202,6 +206,14 @@ const ShopDetails: React.FC<{ shopID: number }> = ({ shopID }) => {
 };
 
 export default function AdminPanel() {
+  const approveOrReject = useMutation({
+    mutationFn: async (formData: FormData) => {
+      const res = await axios.post(LINK_APPROVE_OR_REJECT, formData, {
+        withCredentials: true,
+      });
+      return res;
+    },
+  });
   const navigate = useNavigate();
   const [selectedShopID, setSelectedShopID] = useState<number>(-1);
   const { status, data, error, refetch } = useQuery<
@@ -218,29 +230,50 @@ export default function AdminPanel() {
     const formData = new FormData();
     formData.append("id", String(selectedShopID));
     formData.append("updated_status", String(newStatus));
-    await axios
-      .post(LINK_APPROVE_OR_REJECT, formData, { withCredentials: true })
-      .then((response) => {
-        console.log(response);
-        setSelectedShopID(-1);
-        refetch();
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    await approveOrReject.mutateAsync(formData);
+    // when success
+    // setSelectedShopID(-1);
+    // refetch();
     document.body.style.cursor = "default";
   };
 
+  useEffect(() => {
+    const loadingDialog = document.querySelector("#loadingDialog") as HTMLDialogElement;
+    if (approveOrReject.isLoading) {
+      loadingDialog.showModal();
+    }
+    if (approveOrReject.isError) {
+      loadingDialog.close();
+      const errorDialog = document.querySelector("#errorDialog") as HTMLDialogElement;
+      errorDialog.showModal();
+      setTimeout(() => errorDialog.close(), 3000);
+    }
+    if (approveOrReject.isSuccess) {
+      loadingDialog.close();
+      const successDialog = document.querySelector("#successDialog") as HTMLDialogElement;
+      successDialog.showModal();
+      setTimeout(() => successDialog.close(), 3000);
+      setSelectedShopID(-1);
+      refetch();
+    }
+  }, [approveOrReject.isSuccess, approveOrReject.isError, approveOrReject.isLoading]);
+
   const navigateCodeGen = () => {
-    navigate("generate"); 
+    navigate("generate");
   };
 
   return (
     <div className={css.wrapper}>
+      <LoadingDialog />
+      <SuccessDialog text="Successfully approved shop." />
+      <ErrorDialog text="Server error!" />
       <div className={css.header}>
         <img
           src={leftArrow}
-          onClick={logout}
+          onClick={() => {
+            logout();
+            navigate("/");
+          }}
           alt="Back to login icon"
           className={css.back_icon}
         />

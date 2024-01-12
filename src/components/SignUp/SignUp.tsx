@@ -174,7 +174,7 @@ export default function SignUp() {
       setTimeout(() => {
         successDialog.close();
         navigate("/");
-      });
+      }, 3000);
     }
   }, [mutation.isLoading, mutation.isError, mutation.isSuccess]);
 
