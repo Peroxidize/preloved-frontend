@@ -26,6 +26,7 @@
   flex-direction: column;
   flex: 0 0 15rem;
   margin-left: 2rem;
+  cursor: pointer;
 }
 
 .imageIcon {
@@ -149,6 +150,10 @@
 .priceContainer {
   flex-direction: row;
   width: fit-content;
+}
+
+.errors {
+  color: red;
 }
 
 @media (min-width: 1200px) {

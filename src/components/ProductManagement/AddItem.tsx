@@ -7,21 +7,19 @@ import imageIcon from "../../assets/icons/imageIcon.svg";
 import TextInput from "../fragments/FormInputs/TextInput";
 import plus from "../../assets/icons/plus.svg";
 import close from "../../assets/icons/close.svg";
-import {
-  LINK_ADD_ITEM,
-  LINK_ATTACH_PHOTO_ITEM,
-  LINK_GET_ALL_TAGS,
-  LINK_IS_AUTH,
-} from "../misc";
-import { useQuery } from "react-query";
+import success from "../../assets/icons/success.svg";
+import error from "../../assets/icons/error.svg";
+import { LINK_ADD_ITEM, LINK_ATTACH_PHOTO_ITEM, LINK_GET_ALL_TAGS } from "../misc";
+import { useMutation, useQuery } from "react-query";
 import TextArea from "../fragments/FormInputs/TextArea";
 import RadioBtn from "../fragments/FormInputs/RadioBtn";
 import SelectInput from "../fragments/FormInputs/SelectInput";
 import Button from "../fragments/FormInputs/Button";
 import { useMediaQuery } from "react-responsive";
 import NavBar, { MobileNavBottom, MobileNavTop } from "../fragments/nav-bar/nav-bar";
+import LoadingDialog, { IconTextDialog } from "../fragments/commonstuff/Dialogs";
 
-interface FormData {
+interface ItemDetails {
   tag: number;
   description: string;
   name: string;
@@ -175,9 +173,29 @@ const AddItem: React.FC = () => {
   const isDesktopOrLaptop = useMediaQuery({
     query: "(min-device-width: 1224px)",
   });
-  const { handleSubmit, register } = useForm<FormData>();
+  const { handleSubmit, register } = useForm<ItemDetails>();
   const [photos, setPhotos] = useState<string[]>([]);
   const [files, setFiles] = useState<File[]>([]);
+
+  const addDetails = useMutation({
+    mutationFn: async (formData: FormData) => {
+      const res = await axios.post(LINK_ADD_ITEM, formData, {
+        withCredentials: true,
+      });
+      console.log(res);
+      return res.data.generatedID;
+    },
+  });
+
+  const addPhotos = useMutation({
+    mutationFn: async (formData: FormData) => {
+      const res = await axios.post(LINK_ATTACH_PHOTO_ITEM, formData, {
+        withCredentials: true,
+      });
+      console.log(res);
+      return res;
+    },
+  });
 
   const handleAddPhoto = (newUpload: File[]) => {
     newUpload.forEach((file) => {
@@ -190,7 +208,7 @@ const AddItem: React.FC = () => {
     setFiles((prevFiles) => [...prevFiles, ...newUpload]);
   };
 
-  const onSubmit = async (data: FormData) => {
+  const onSubmit = async (data: ItemDetails) => {
     const formData = new FormData();
     formData.append("name", data.name);
     formData.append("description", data.description);
@@ -200,37 +218,50 @@ const AddItem: React.FC = () => {
     formData.append("tagID", data.tag.toString());
     console.log(data);
     console.log(formData);
-    axios
-      .post(LINK_ADD_ITEM, formData, {
-        withCredentials: true,
-      })
-      .then((response) => {
-        console.log(response);
-        const itemID = response.data.generatedID;
-        files.forEach((file) => {
-          const fileFormData = new FormData();
-          fileFormData.append("id", itemID.toString());
-          fileFormData.append("img", file);
-          console.log(itemID);
-          console.log(file);
-          axios
-            .post(LINK_ATTACH_PHOTO_ITEM, fileFormData, { withCredentials: true })
-            .then((response) => {
-              console.log(response);
-            })
-            .catch((response) => {
-              console.log(response);
-            });
-        });
-      })
-      .catch((response) => {
-        console.log(response);
-      });
+    const itemID = await addDetails.mutateAsync(formData);
+    for (const file of files) {
+      const fileFormData = new FormData();
+      fileFormData.append("id", itemID.toString());
+      fileFormData.append("img", file);
+      console.log(itemID);
+      console.log(file);
+      await addPhotos.mutateAsync(fileFormData);
+      if (addPhotos.isError) {
+        break; // Break out of the loop
+      }
+    }
   };
+
+  useEffect(() => {
+    const loadingDialog = document.querySelector("#loadingDialog") as HTMLDialogElement;
+    if (addDetails.isLoading || addPhotos.isLoading) {
+      loadingDialog.showModal();
+    }
+    if (addDetails.isError || addDetails.isError) {
+      loadingDialog.close();
+      const errorDialog = document.querySelector("#errorDialog") as HTMLDialogElement;
+      errorDialog.showModal();
+      setTimeout(() => errorDialog.close(), 3000);
+    }
+    if (addPhotos.isSuccess) {
+      loadingDialog.close();
+      const successDialog = document.querySelector("#successDialog") as HTMLDialogElement;
+      successDialog.showModal();
+      setTimeout(() => successDialog.close(), 3000);
+    }
+  }, [
+    addDetails.isError,
+    addDetails.isLoading,
+    addPhotos.isLoading,
+    addPhotos.isSuccess,
+  ]);
 
   return (
     <>
       {isDesktopOrLaptop ? <NavBar /> : <MobileNavTop />}
+      <LoadingDialog />
+      <IconTextDialog text="Item added!" icon={success} id="successDialog" />
+      <IconTextDialog text="Something went wrong!" icon={error} id="errorDialog" />
       <div className={css.wrapper}>
         <h1 className={css.title}>Add Item</h1>
         <form onSubmit={handleSubmit(onSubmit)}>

@@ -19,6 +19,7 @@
 }
 
 .loading {
+  margin: auto;
   height: 3rem;
   width: 3rem;
   object-fit: cover;

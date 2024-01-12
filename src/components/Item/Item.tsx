@@ -83,7 +83,9 @@ const Details: React.FC<{ id: string | undefined }> = ({ id }) => {
     mutationFn: async () => {
       const formData = new FormData();
       formData.append("itemID", id as string);
-      const res = axios.post(LINK_PURCHASE_ITEM, formData, { withCredentials: true });
+      const res = await axios.post(LINK_PURCHASE_ITEM, formData, {
+        withCredentials: true,
+      });
       return res;
     },
   });
@@ -98,12 +100,12 @@ const Details: React.FC<{ id: string | undefined }> = ({ id }) => {
       loadingDialog.close();
       const successDialog = document.getElementById("successDialog") as HTMLDialogElement;
       successDialog.showModal();
-      setTimeout(() => successDialog.close(), 5000);
+      setTimeout(() => successDialog.close(), 3000);
     } else if (purchaseItem.isError) {
       loadingDialog.close();
       const errorDialog = document.getElementById("errorDialog") as HTMLDialogElement;
       errorDialog.showModal();
-      setTimeout(() => errorDialog.close(), 5000);
+      setTimeout(() => errorDialog.close(), 3000);
     }
   }, [purchaseItem.isLoading, purchaseItem.isSuccess, purchaseItem.isError]);
 
