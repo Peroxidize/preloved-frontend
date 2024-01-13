@@ -1,27 +1,25 @@
 .container {
   display: flex;
   flex-direction: column;
-  width: 75%;
-  margin: 0 auto;
+  margin: 0 3.45rem;
 }
 
 .page_title {
-  display: flex;
-  justify-content: center;
-  margin: 1rem;
+  margin-top: 2rem;
+  margin-bottom: 0.5rem;
 }
 
 .button_container {
-  display: flex;
-  justify-content: center;
-  padding: 1rem;
-  border: 2px solid black;
-  border-radius: 10px;
+  background-color: #3b82f6;
+  width: max-content;
+  border-radius: 0.25rem;
+  padding: 0.5rem 1rem;
+  color: white;
 }
 
 .button_container:hover {
   cursor: pointer;
-  background-color: #e2e8f0;
+  background-color: #1d4ed8;
 }
 
 .modal_container {
@@ -63,6 +61,7 @@
 
 .buttons {
   display: flex;
+  justify-content: center;
   gap: 1rem;
 }
 
@@ -106,4 +105,54 @@
 
 .text_center {
   text-align: center;
+}
+
+.loading {
+  margin: auto;
+  height: 3rem;
+  width: 3rem;
+}
+
+.card_container {
+  border-radius: 0.375rem;
+  margin: 1rem 0;
+  padding: 1.5rem;
+  border: 1px solid #cbd5e1;
+  box-shadow:
+    0 1px 3px 0 rgb(0 0 0 / 0.1),
+    0 1px 2px -1px rgb(0 0 0 / 0.1);
+}
+
+.button_row {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+}
+
+.button_delete {
+  background-color: #ef4444;
+  width: max-content;
+  border-radius: 0.375rem;
+  padding: 0.5rem 1rem;
+  color: white;
+  border: 0;
+}
+
+.button_delete:hover {
+  cursor: pointer;
+  background-color: #dc2626;
+}
+
+.button_rename {
+  background-color: #6366f1;
+  width: max-content;
+  border-radius: 0.375rem;
+  padding: 0.5rem 1rem;
+  color: white;
+  border: 0;
+}
+
+.button_rename:hover {
+  cursor: pointer;
+  background-color: #4f46e5;
 }
