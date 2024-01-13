@@ -52,3 +52,6 @@ export const LINK_GET_FRONTPAGE = domain + frontPageApi;
 export const LINK_GET_ITEM_DETAILS = domain + storeApi + "get_item_details";
 export const LINK_GET_ITEM_IMAGES = domain + storeApi + "item_images";
 export const LINK_PURCHASE_ITEM = domain + ticketApi + "purchase_item";
+export const LINK_GET_TICKETS = domain + ticketApi + "ticket";
+export const LINK_GET_TICKET_STATUSES = domain + ticketApi + "statuses";
+export const LINK_GET_SHOP_DETAILS = domain + storeApi + "get_shop_details";

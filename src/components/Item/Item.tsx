@@ -66,7 +66,7 @@ interface Tags {
   tagID: number;
 }
 
-interface ItemDetails {
+export interface ItemDetails {
   description: string;
   isFeminine: boolean;
   itemID: number;
