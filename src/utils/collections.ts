@@ -50,3 +50,20 @@ export const delete_collection = async (id: string) => {
     return "failed";
   }
 };
+
+export const rename_collection = async (id: string, new_name: string) => {
+  const formData = new FormData();
+  formData.append("collectionID", id);
+  formData.append("new_name", new_name);
+
+  try {
+    const response = await axios.post(API_URL + "rename_collection", formData, {
+      withCredentials: true,
+    });
+    console.log(response.data);
+    return "success";
+  } catch (error: any) {
+    console.log(error.message);
+    return "failed";
+  }
+};

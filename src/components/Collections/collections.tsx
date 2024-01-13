@@ -3,11 +3,12 @@ import { useMediaQuery } from "react-responsive";
 import NavBar, { MobileNavTop, MobileNavBottom } from "../fragments/nav-bar/nav-bar";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { atom, useAtom, useAtomValue, useSetAtom } from "jotai";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   create_collection,
   delete_collection,
   get_collection,
+  rename_collection,
 } from "../../utils/collections";
 import loading from "../../assets/loading.gif";
 
@@ -24,23 +25,89 @@ interface Collection {
 const resultAtom = atom<string>(""); // success, failed
 const showModalAtom = atom<string>("");
 const collectionsAtom = atom<any>(null);
-const deleteDataAtom = atom<{ name: string; id: number } | null>(null);
+const collectionDataAtom = atom<{ name: string; id: number } | null>(null);
 
 const fetch_collection = async () => {
   return await get_collection();
 };
 
+const RenameCollectionModal = ({ name, id }: { name: string; id: number }) => {
+  const [fetching, setFetching] = useState<boolean>(false);
+  const [result, setResult] = useState<string>("");
+  const setShowModal = useSetAtom(showModalAtom);
+  const setCollections = useSetAtom(collectionsAtom);
+  const newName = useRef<string>("");
+  const {
+    register,
+    formState: { errors },
+    handleSubmit,
+  } = useForm<IFormInput>();
+
+  const onSubmit: SubmitHandler<IFormInput> = async (form) => {
+    setFetching(true);
+    setResult(await rename_collection(String(id), form.name));
+    newName.current = form.name;
+    setFetching(false);
+    setCollections(await fetch_collection());
+  };
+
+  return (
+    <div className={css.modal_container}>
+      <div className={css.dialog_container}>
+        <div className={css.dialog_header}>
+          <h2>Rename {result === "success" ? newName.current : name}</h2>
+        </div>
+        <div className={css.dialog_body}>
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <input
+              className={css.form_input}
+              {...register("name", { required: true })}
+              placeholder="Vintage Clothes"
+            />
+            {fetching ? (
+              <>
+                <img src={loading} className={css.loading} />
+              </>
+            ) : (
+              <>
+                <div className={css.buttons}>
+                  <input className={css.primary_button} type="submit" value="Rename" />
+                  <button
+                    onClick={() => setShowModal("")}
+                    className={css.secondary_button}
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </>
+            )}
+          </form>
+        </div>
+        <div className={css.dialog_footer}>
+          {errors.name && <p className={css.form_error}>Collection name is required</p>}
+          {result === "success" && (
+            <p className={css.form_success}>Collection renamed successfully</p>
+          )}
+          {result === "failed" && (
+            <p className={css.form_error}>Failed renaming collection</p>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+};
+
 const DeleteCollectionModal = ({ name, id }: { name: string; id: number }) => {
   const [fetching, setFetching] = useState<boolean>(false);
   const [result, setResult] = useState<string>("");
+  const setShowModal = useSetAtom(showModalAtom);
   const setCollections = useSetAtom(collectionsAtom);
-  const setDeleteData = useSetAtom(deleteDataAtom);
 
   const deleteCollection = async () => {
     setFetching(true);
     setResult(await delete_collection(String(id)));
-    setCollections(await fetch_collection());
     setFetching(false);
+    setCollections(await fetch_collection());
   };
 
   return (
@@ -57,17 +124,14 @@ const DeleteCollectionModal = ({ name, id }: { name: string; id: number }) => {
               <button onClick={deleteCollection} className={css.primary_button}>
                 Confirm
               </button>
-              <button
-                onClick={() => setDeleteData(null)}
-                className={css.secondary_button}
-              >
+              <button onClick={() => setShowModal("")} className={css.secondary_button}>
                 Cancel
               </button>
             </>
           )}
           {fetching && <img src={loading} className={css.loading} />}
           {result === "success" && (
-            <button onClick={() => setDeleteData(null)} className={css.primary_button}>
+            <button onClick={() => setShowModal("")} className={css.primary_button}>
               Close
             </button>
           )}
@@ -152,12 +216,9 @@ export const CreateCollectionModal = () => {
 };
 
 function Collections() {
-  const collections = useAtomValue(collectionsAtom);
-  const setCollections = useSetAtom(collectionsAtom);
-  const showModal = useAtomValue(showModalAtom);
-  const setShowModal = useSetAtom(showModalAtom);
-  const deleteData = useAtomValue(deleteDataAtom);
-  const setDeleteData = useSetAtom(deleteDataAtom);
+  const [collections, setCollections] = useAtom(collectionsAtom);
+  const [showModal, setShowModal] = useAtom(showModalAtom);
+  const [collectionData, setCollectionData] = useAtom(collectionDataAtom);
 
   const isDesktopOrLaptop = useMediaQuery({
     query: "(min-device-width: 1224px)",
@@ -167,8 +228,13 @@ function Collections() {
     setCollections(fetch_collection());
   }, []);
 
-  const create_modal = () => {
-    setShowModal("create");
+  const create_modal = (modal: string) => {
+    setShowModal(modal);
+  };
+
+  const set_data = (collection: Collection, modal: string) => {
+    setCollectionData({ name: collection.name, id: collection.id });
+    create_modal(modal);
   };
 
   return (
@@ -176,7 +242,7 @@ function Collections() {
       {isDesktopOrLaptop ? <NavBar /> : <MobileNavTop />}
       <div className={css.container}>
         <h1 className={css.page_title}>Collections</h1>
-        <div className={css.button_container} onClick={create_modal}>
+        <div className={css.button_container} onClick={() => create_modal("create")}>
           <h3>Create Collection</h3>
         </div>
         {collections?.map((collection: Collection) => (
@@ -184,11 +250,14 @@ function Collections() {
             <h2>{collection.name}</h2>
             <div className={css.images}></div>
             <div className={css.button_row}>
-              <button className={css.button_rename}>Rename Collection</button>
               <button
-                onClick={() =>
-                  setDeleteData({ name: collection.name, id: collection.id })
-                }
+                onClick={() => set_data(collection, "rename")}
+                className={css.button_rename}
+              >
+                Rename Collection
+              </button>
+              <button
+                onClick={() => set_data(collection, "delete")}
                 className={css.button_delete}
               >
                 Delete Collection
@@ -199,7 +268,12 @@ function Collections() {
       </div>
       {!isDesktopOrLaptop && <MobileNavBottom />}
       {showModal === "create" && <CreateCollectionModal />}
-      {deleteData && <DeleteCollectionModal name={deleteData.name} id={deleteData.id} />}
+      {showModal === "delete" && (
+        <DeleteCollectionModal name={collectionData!.name} id={collectionData!.id} />
+      )}
+      {showModal === "rename" && (
+        <RenameCollectionModal name={collectionData!.name} id={collectionData!.id} />
+      )}
     </>
   );
 }
