@@ -133,6 +133,7 @@ const MobileNavBottom: React.FC = () => {
             alt="Shopping Cart"
             onMouseEnter={() => setCartFilled(true)}
             onMouseLeave={() => setCartFilled(false)}
+            onClick={() => navigate("/cart")}
           />
         )}
         <img
@@ -205,6 +206,7 @@ export default function DesktopNavUser() {
               alt="Shopping Cart"
               onMouseEnter={() => setCartFilled(true)}
               onMouseLeave={() => setCartFilled(false)}
+              onClick={() => navigate("/cart")}
             />
           )}
           <img

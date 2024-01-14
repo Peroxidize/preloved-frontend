@@ -4,7 +4,12 @@ import { useMediaQuery } from "react-responsive";
 import NavBar, { MobileNavBottom, MobileNavTop } from "../fragments/nav-bar/nav-bar";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
-import { LINK_GET_ITEM_DETAILS, LINK_GET_ITEM_IMAGES, LINK_PURCHASE_ITEM } from "../misc";
+import {
+  LINK_ADD_TO_CART,
+  LINK_GET_ITEM_DETAILS,
+  LINK_GET_ITEM_IMAGES,
+  LINK_PURCHASE_ITEM,
+} from "../misc";
 import { useMutation, useQuery } from "react-query";
 import Tag from "../fragments/commonstuff/Tag";
 import addCollectionsIcon from "../../assets/icons/addCollections.svg";
@@ -90,6 +95,39 @@ const Details: React.FC<{ id: string | undefined }> = ({ id }) => {
         withCredentials: true,
       });
       return res;
+    },
+  });
+
+  const addToCart = useMutation({
+    mutationFn: async () => {
+      console.log(id);
+      const formData = new FormData();
+      formData.append("itemID", id as string);
+      const res = await axios.post(LINK_ADD_TO_CART, formData, {
+        withCredentials: true,
+      });
+      console.log(res);
+      return res;
+    },
+    onMutate: () => {
+      const loadingDialog = document.getElementById("loadingDialog") as HTMLDialogElement;
+      loadingDialog.showModal();
+    },
+    onSuccess: () => {
+      const loadingDialog = document.getElementById("loadingDialog") as HTMLDialogElement;
+      loadingDialog.close();
+      const successDialog = document.getElementById(
+        "cartSuccessDialog"
+      ) as HTMLDialogElement;
+      successDialog.showModal();
+      setTimeout(() => successDialog.close(), 3000);
+    },
+    onError: () => {
+      const loadingDialog = document.getElementById("loadingDialog") as HTMLDialogElement;
+      loadingDialog.close();
+      const errorDialog = document.getElementById("errorDialog") as HTMLDialogElement;
+      errorDialog.showModal();
+      setTimeout(() => errorDialog.close(), 3000);
     },
   });
 
@@ -192,7 +230,7 @@ const Details: React.FC<{ id: string | undefined }> = ({ id }) => {
           </div>
           <h2 className={css.price}>₱ {data.price}</h2>
           <div className={css.buttons}>
-            <button className={css.addToCart}>
+            <button className={css.addToCart} onClick={() => addToCart.mutate()}>
               <img src={cartIcon} alt="Cart Icon" className={css.cart} />
               Add to Cart
             </button>
@@ -225,15 +263,14 @@ const Details: React.FC<{ id: string | undefined }> = ({ id }) => {
               </div>
             </div>
           </dialog>
-          {(purchaseItem.isError || purchaseItem.isSuccess || purchaseItem.isLoading) && (
-            <LoadingDialog />
-          )}
-          {purchaseItem.isSuccess && (
-            <IconTextDialog text="Item purchased!" icon={success} id="successDialog" />
-          )}
-          {purchaseItem.isError && (
-            <IconTextDialog text="Something went wrong!" icon={error} id="errorDialog" />
-          )}
+          <LoadingDialog />
+          <IconTextDialog text="Item purchased!" icon={success} id="successDialog" />
+          <IconTextDialog
+            text="Item added to cart!"
+            icon={success}
+            id="cartSuccessDialog"
+          />
+          <IconTextDialog text="Something went wrong!" icon={error} id="errorDialog" />
         </>
       ) : (
         <>
