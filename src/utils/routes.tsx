@@ -33,7 +33,7 @@ export const UserRoute = () => {
 export const VerifiedSellerRoute = () => {
   return (
     <>
-      <Route index element={<Shop />} />
+      <Route index element={<TicketCenterSeller />} />
       <Route path="topup" element={<AddBalance />} />
       <Route path="redeem" element={<RedeemVoucher />} />
       <Route path="shop/create" element={<CreateShop />} />

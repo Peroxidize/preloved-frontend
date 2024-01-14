@@ -7,8 +7,10 @@ import classes from "./SignUp.module.css";
 import { Link, Navigate, useNavigate } from "react-router-dom";
 import LoadingDialog, {
   ErrorDialog,
+  IconTextDialog,
   SuccessDialog,
 } from "../fragments/commonstuff/Dialogs";
+import error from "../../assets/icons/error.svg"
 
 const domain = "https://prelovedbackend.azurewebsites.net/";
 const userNavText = "Want to create a seller account?";
@@ -66,6 +68,11 @@ export default function SignUp() {
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
+
+    if (formState.password !== formState.confirmPass) {
+      alert("Passwords do not match!");
+      return;
+    }
 
     const formData = new FormData();
     formData.append("email", formState.email);
@@ -183,6 +190,7 @@ export default function SignUp() {
       <LoadingDialog />
       <SuccessDialog text="Sign up successful!" />
       <ErrorDialog text="Sign up failed!" />
+      <IconTextDialog text=""
       <div className={classes.container}>
         <img src={logo} alt="Preloved logo" className={classes.logo} />
         <form action="post" onSubmit={handleSubmit}>
