@@ -42,6 +42,7 @@
   color: white;
   font-weight: bold;
   border: none;
+  transition: background-color 0.3s;
 }
 
 .button:hover {

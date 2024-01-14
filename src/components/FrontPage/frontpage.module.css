@@ -16,6 +16,12 @@
   height: 15rem;
   object-fit: contain;
   cursor: pointer;
+  opacity: 1;
+  transition: opacity 0.3s ease;
+}
+
+.img:hover {
+  opacity: 0.8;
 }
 
 .loading {

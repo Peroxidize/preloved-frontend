@@ -15,6 +15,7 @@
   border-radius: 0.25rem;
   padding: 0.5rem 1rem;
   color: white;
+  transition: background-color 0.3s;
 }
 
 .button_container:hover {
@@ -144,6 +145,7 @@
   gap: 1rem;
 }
 
+.button_rename,
 .button_delete {
   background-color: #ef4444;
   width: max-content;
@@ -151,6 +153,7 @@
   padding: 0.5rem 1rem;
   color: white;
   border: 0;
+  transition: background-color 0.3s;
 }
 
 .button_delete:hover {
@@ -160,11 +163,6 @@
 
 .button_rename {
   background-color: #6366f1;
-  width: max-content;
-  border-radius: 0.375rem;
-  padding: 0.5rem 1rem;
-  color: white;
-  border: 0;
 }
 
 .button_rename:hover {
@@ -186,7 +184,13 @@
   object-fit: contain;
   background-color: #eaebed;
   border-radius: 6px;
+  opacity: 1;
+  transition: opacity 0.3s ease;
+}
+
+.image:hover {
   cursor: pointer;
+  opacity: 0.8;
 }
 
 .image_display {
