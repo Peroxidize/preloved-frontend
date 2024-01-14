@@ -1,0 +1,61 @@
+.wrapper {
+  padding: 0 2rem 2rem;
+  margin-bottom: 2rem;
+}
+
+.itemContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.item {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.itemImage {
+  height: 8rem;
+  width: 6rem;
+  object-fit: contain;
+  background-color: #eaebed;
+  border-radius: 0.5rem;
+}
+
+.priceAndDelete {
+  margin-left: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  align-items: end;
+}
+
+.itemPrice {
+  font-weight: bold;
+  font-size: 1.1rem;
+}
+
+.deleteBtn {
+  background-color: white;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+}
+
+@media (min-width: 1200px) {
+  .wrapper {
+    padding: 1rem 3rem;
+    margin-bottom: 0;
+  }
+  .itemImage {
+    height: 10rem;
+    width: 8rem;
+  }
+  .itemName {
+    font-size: 1.25rem;
+  }
+  .itemPrice {
+    font-size: 1.5rem;
+  }
+}

@@ -16,6 +16,7 @@ import Item from "../components/Item/Item";
 import Collections from "../components/Collections/collections";
 import TicketCenter from "../components/TicketCenter/TicketCenter";
 import TicketCenterSeller from "../components/TicketCenter/TicketCenterSeller";
+import Cart from "../components/Cart/Cart";
 
 export const UserRoute = () => {
   return (
@@ -26,6 +27,7 @@ export const UserRoute = () => {
       <Route path="ticketcenter" element={<TicketCenter />} />
       <Route path="item/:id" element={<Item />} />
       <Route path="collections" element={<Collections />} />
+      <Route path="cart" element={<Cart />} />
     </>
   );
 };
