@@ -80,7 +80,7 @@ export default function FrontPage() {
                   src={item.images[0].link}
                   alt={item.item_name}
                   className={css.img}
-                  key={item.item_id}
+                  key={i}
                   onClick={() => navigate(`/item/${item.item_id}`)}
                   ref={ref}
                 />
@@ -91,7 +91,7 @@ export default function FrontPage() {
                 src={item.images[0].link}
                 alt={item.item_name}
                 className={css.img}
-                key={item.item_id}
+                key={i}
                 onClick={() => navigate(`/item/${item.item_id}`)}
               />
             );

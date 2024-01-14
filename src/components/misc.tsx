@@ -18,6 +18,7 @@ const domain = "https://prelovedbackend.azurewebsites.net/";
 const storeApi = "store/";
 const frontPageApi = "homepage/";
 const ticketApi = "tickets/";
+const cartApi = "cart/";
 
 export const LINK_LOGIN = "https://prelovedbackend.azurewebsites.net/auth/login";
 export const LINK_LOGOUT = "https://prelovedbackend.azurewebsites.net/auth/logout";
@@ -52,3 +53,9 @@ export const LINK_GET_FRONTPAGE = domain + frontPageApi;
 export const LINK_GET_ITEM_DETAILS = domain + storeApi + "get_item_details";
 export const LINK_GET_ITEM_IMAGES = domain + storeApi + "item_images";
 export const LINK_PURCHASE_ITEM = domain + ticketApi + "purchase_item";
+export const LINK_GET_TICKETS = domain + ticketApi + "ticket";
+export const LINK_GET_TICKET_STATUSES = domain + ticketApi + "statuses";
+export const LINK_GET_SHOP_DETAILS = domain + storeApi + "get_shop_details";
+export const LINK_GET_SHOP_TICKETS = domain + ticketApi + "get_shop_tickets";
+export const LINK_UPDATE_TICKET_STATUS = domain + ticketApi + "update_ticket_status";
+export const LINK_ADD_TO_CART = domain + frontPageApi + "add_to_cart";

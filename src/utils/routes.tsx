@@ -4,7 +4,6 @@ import { Route } from "react-router-dom";
 import FrontPage from "../components/FrontPage/FrontPage";
 import Invoice from "../components/Ordering/Invoice";
 import Ordering from "../components/Ordering/Ordering";
-import TicketCenter from "../components/TicketCenter/TicketCenter";
 import AddBalance from "../components/AddBalance/AddBalance";
 import AdminPanel from "../components/AdminPanel/admin-panel";
 import ShopDocumentation from "../components/ShopVerification/ShopDocumentation";
@@ -15,6 +14,9 @@ import CodeGen from "../components/AdminPanel/code-gen";
 import RedeemVoucher from "../components/RedeemVoucher/redeem-voucher";
 import Item from "../components/Item/Item";
 import Collections from "../components/Collections/collections";
+import TicketCenter from "../components/TicketCenter/TicketCenter";
+import TicketCenterSeller from "../components/TicketCenter/TicketCenterSeller";
+import Cart from "../components/Cart/Cart";
 
 export const UserRoute = () => {
   return (
@@ -25,6 +27,7 @@ export const UserRoute = () => {
       <Route path="ticketcenter" element={<TicketCenter />} />
       <Route path="item/:id" element={<Item />} />
       <Route path="collections" element={<Collections />} />
+      <Route path="cart" element={<Cart />} />
     </>
   );
 };
@@ -32,12 +35,13 @@ export const UserRoute = () => {
 export const VerifiedSellerRoute = () => {
   return (
     <>
-      <Route index element={<TicketCenter />} />
+      <Route index element={<TicketCenterSeller />} />
       <Route path="topup" element={<AddBalance />} />
       <Route path="redeem" element={<RedeemVoucher />} />
       <Route path="shop/create" element={<CreateShop />} />
       <Route path="shop" element={<Shop />} />
       <Route path="shop/add" element={<AddItem />} />
+      <Route path="ticketcenter" element={<TicketCenterSeller />} />
     </>
   );
 };

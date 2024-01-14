@@ -107,13 +107,6 @@ const MobileNavBottom: React.FC = () => {
   const [storedUser, setUser] = useAtom(userAtom);
   const navigate = useNavigate();
 
-  const navigateTicketCenter = () => {
-    if (storedUser!.type === UserType.User) {
-      return navigate("/ticketcenter");
-    }
-    return navigate("/");
-  };
-
   const toggleDropdown = () => {
     const dropdown = document.getElementById("dropdown")!;
     dropdown.classList.toggle(css.show);
@@ -140,11 +133,12 @@ const MobileNavBottom: React.FC = () => {
             alt="Shopping Cart"
             onMouseEnter={() => setCartFilled(true)}
             onMouseLeave={() => setCartFilled(false)}
+            onClick={() => navigate("/cart")}
           />
         )}
         <img
           src={ticketFilled ? ticketFilledIcon : ticketIcon}
-          onClick={navigateTicketCenter}
+          onClick={() => navigate("/ticketcenter")}
           className={css.ticket_icon}
           alt="Ticket Icon"
           onMouseEnter={() => setTicketFilled(true)}
@@ -161,13 +155,6 @@ export default function DesktopNavUser() {
   const [cartFilled, setCartFilled] = useState(false);
   const [storedUser, setUser] = useAtom(userAtom);
   const navigate = useNavigate();
-
-  const navigateTicketCenter = () => {
-    if (storedUser!.type === UserType.User) {
-      return navigate("/ticketcenter");
-    }
-    return navigate("/");
-  };
 
   const navigateFrontPage = () => {
     navigate("/");
@@ -219,11 +206,12 @@ export default function DesktopNavUser() {
               alt="Shopping Cart"
               onMouseEnter={() => setCartFilled(true)}
               onMouseLeave={() => setCartFilled(false)}
+              onClick={() => navigate("/cart")}
             />
           )}
           <img
             src={ticketFilled ? ticketFilledIcon : ticketIcon}
-            onClick={navigateTicketCenter}
+            onClick={() => navigate("/ticketcenter")}
             className={css.ticket_icon}
             alt="Ticket Icon"
             onMouseEnter={() => setTicketFilled(true)}
