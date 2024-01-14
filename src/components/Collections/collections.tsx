@@ -16,19 +16,83 @@ interface IFormInput {
   name: string;
 }
 
-interface Collection {
+export interface Collection {
   id: number;
   name: string;
   created_at: string;
 }
 
-const resultAtom = atom<string>(""); // success, failed
-const showModalAtom = atom<string>("");
-const collectionsAtom = atom<any>(null);
-const collectionDataAtom = atom<{ name: string; id: number } | null>(null);
+export const resultAtom = atom<string>(""); // success, failed
+export const showModalAtom = atom<string>("");
+export const collectionsAtom = atom<any>(null);
+export const collectionDataAtom = atom<{ name: string; id: number } | null>(null);
 
 const fetch_collection = async () => {
   return await get_collection();
+};
+
+export const AddToCollectionModal = ({ name, id }: { name: string; id: number }) => {
+  const [fetching, setFetching] = useState<boolean>(false);
+  const [result, setResult] = useState<string>("");
+  const setShowModal = useSetAtom(showModalAtom);
+  const setCollections = useSetAtom(collectionsAtom);
+  const {
+    register,
+    formState: { errors },
+    handleSubmit,
+  } = useForm<IFormInput>();
+
+  const onSubmit: SubmitHandler<IFormInput> = async (form) => {
+    setFetching(true);
+    // setResult(await rename_collection(String(id), form.name));
+    setFetching(false);
+    setCollections(await fetch_collection());
+  };
+
+  return (
+    <div className={css.modal_container}>
+      <div className={css.dialog_container}>
+        <div className={css.dialog_header}>
+          <h2>Add {name} to Collection</h2>
+        </div>
+        <div className={css.dialog_body}>
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <input
+              className={css.form_input}
+              {...register("name", { required: true })}
+              placeholder="Vintage Clothes"
+            />
+            {fetching ? (
+              <>
+                <img src={loading} className={css.loading} />
+              </>
+            ) : (
+              <>
+                <div className={css.buttons}>
+                  <input className={css.primary_button} type="submit" value="Rename" />
+                  <button
+                    onClick={() => setShowModal("")}
+                    className={css.secondary_button}
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </>
+            )}
+          </form>
+        </div>
+        <div className={css.dialog_footer}>
+          {errors.name && <p className={css.form_error}>Collection name is required</p>}
+          {result === "success" && (
+            <p className={css.form_success}>Collection renamed successfully</p>
+          )}
+          {result === "failed" && (
+            <p className={css.form_error}>Failed renaming collection</p>
+          )}
+        </div>
+      </div>
+    </div>
+  );
 };
 
 const RenameCollectionModal = ({ name, id }: { name: string; id: number }) => {
@@ -245,6 +309,7 @@ function Collections() {
         <div className={css.button_container} onClick={() => create_modal("create")}>
           <h3>Create Collection</h3>
         </div>
+        {collections === null && <img src={loading} className={css.loading} />}
         {collections?.map((collection: Collection) => (
           <div className={css.card_container} key={collection.id}>
             <h2>{collection.name}</h2>

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import modalcss from "../Collections/collections.module.css";
 import css from "./Item.module.css";
 import { useMediaQuery } from "react-responsive";
 import NavBar, { MobileNavBottom, MobileNavTop } from "../fragments/nav-bar/nav-bar";
@@ -19,7 +20,95 @@ import LoadingText, {
 } from "../fragments/commonstuff/Loading";
 import error from "../../assets/icons/error.svg";
 import success from "../../assets/icons/success.svg";
+import loading from "../../assets/loading.gif";
 import LoadingDialog, { IconTextDialog } from "../fragments/commonstuff/Dialogs";
+import { atom, useAtom, useAtomValue, useSetAtom } from "jotai";
+import { useForm, SubmitHandler } from "react-hook-form";
+import { showModalAtom, collectionsAtom, Collection } from "../Collections/collections";
+import { add_item_to_collection, get_collection } from "../../utils/collections";
+
+const itemDataAtom = atom<{ itemID: number; name: string } | null>(null);
+
+interface IFormInput {
+  collectionID: number;
+}
+
+const AddToCollectionModal = ({ name, id }: { name: string; id: number }) => {
+  const [fetching, setFetching] = useState<boolean>(false);
+  const [result, setResult] = useState<string>("");
+  const setShowModal = useSetAtom(showModalAtom);
+  const collections = useAtomValue(collectionsAtom);
+  const itemData = useAtomValue(itemDataAtom);
+  const {
+    register,
+    formState: { errors },
+    handleSubmit,
+  } = useForm<IFormInput>();
+
+  const onSubmit: SubmitHandler<IFormInput> = async (form) => {
+    setFetching(true);
+    setResult(
+      await add_item_to_collection(String(form.collectionID), String(itemData?.itemID))
+    );
+    setFetching(false);
+  };
+
+  return (
+    <div className={modalcss.modal_container}>
+      <div className={modalcss.dialog_container}>
+        <div className={modalcss.dialog_header}>
+          <h2>Add {name} to Collection</h2>
+        </div>
+        <div className={modalcss.dialog_body}>
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <select
+              className={modalcss.form_input}
+              {...register("collectionID", { required: true })}
+            >
+              <option value="">Select Collection</option>
+              {collections?.map((collection: Collection) => (
+                <option key={collection.id} value={collection.id}>
+                  {collection.name}
+                </option>
+              ))}
+            </select>
+            {fetching ? (
+              <>
+                <img src={loading} className={modalcss.loading} />
+              </>
+            ) : (
+              <>
+                <div className={modalcss.buttons}>
+                  <input
+                    className={modalcss.primary_button}
+                    type="submit"
+                    value="Add to collection"
+                  />
+                  <button
+                    onClick={() => setShowModal("")}
+                    className={modalcss.secondary_button}
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </>
+            )}
+          </form>
+        </div>
+        <div className={modalcss.dialog_footer}>
+          {errors.collectionID && (
+            <p className={modalcss.form_error}>You must select a collection</p>
+          )}
+          {result === "success" ? (
+            <p className={modalcss.form_success}>Item added to collection successfully</p>
+          ) : (
+            <p className={modalcss.form_error}>{result}</p>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+};
 
 const Images: React.FC<{ id: string | undefined }> = ({ id }) => {
   const [selectedImg, setSelectedImg] = useState(0);
@@ -80,6 +169,7 @@ interface ItemDetails {
 
 const Details: React.FC<{ id: string | undefined }> = ({ id }) => {
   const [storeID, setStoreID] = useState("");
+  const setItemData = useSetAtom(itemDataAtom);
 
   const purchaseItem = useMutation({
     mutationFn: async () => {
@@ -119,8 +209,8 @@ const Details: React.FC<{ id: string | undefined }> = ({ id }) => {
       },
       withCredentials: true,
     });
-    console.log(res.data);
     setStoreID(String(res.data.storeID));
+    setItemData({ itemID: res.data.itemID, name: res.data.name });
     return res.data;
   };
   const { status, data, isFetchedAfterMount } = useQuery<ItemDetails>(
@@ -153,11 +243,16 @@ const Details: React.FC<{ id: string | undefined }> = ({ id }) => {
   };
 
   const [isFilled, setIsFilled] = useState(false);
+  const [showModal, setShowModal] = useAtom(showModalAtom);
+  const itemData = useAtomValue(itemDataAtom);
 
   return (
     <div className={css.detailsContainer}>
       {status === "success" && isFetchedAfterMount ? (
         <>
+          {showModal === "add" && (
+            <AddToCollectionModal name={itemData!.name} id={itemData!.itemID} />
+          )}
           <div className={css.nameAndStore}>
             <h1 className={css.itemName}>{data.name}</h1>
             <div className={css.storeName}>by {data.storeName}</div>
@@ -170,14 +265,17 @@ const Details: React.FC<{ id: string | undefined }> = ({ id }) => {
               <Tag isPrimary={!data.isFeminine}>
                 {data.isFeminine ? "Feminine" : "Masculine"}
               </Tag>
-              <img
-                src={isFilled ? addCollectionsFilled : addCollectionsIcon}
-                alt=""
-                onMouseEnter={() => setIsFilled(true)}
-                onMouseLeave={() => setIsFilled(false)}
-                onClick={() => setIsFilled(!isFilled)}
-                className={css.addCollectionsIcon}
-              />
+              <div className={css.icon_tooltip}>
+                <span>Add to collection</span>
+                <img
+                  src={isFilled ? addCollectionsFilled : addCollectionsIcon}
+                  alt=""
+                  onMouseEnter={() => setIsFilled(true)}
+                  onMouseLeave={() => setIsFilled(false)}
+                  onClick={() => setShowModal("add")}
+                  className={css.addCollectionsIcon}
+                />
+              </div>
             </div>
           </div>
           <div className={css.descAndSize}>
@@ -261,11 +359,21 @@ const Details: React.FC<{ id: string | undefined }> = ({ id }) => {
 };
 
 const Item: React.FC = () => {
+  const setCollections = useSetAtom(collectionsAtom);
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
   const isDesktopOrLaptop = useMediaQuery({
     query: "(min-device-width: 1224px)",
   });
+
+  useEffect(() => {
+    const fetch_user_collection = async () => {
+      setCollections(await get_collection());
+    };
+
+    fetch_user_collection();
+  }, []);
+
   return (
     <>
       {isDesktopOrLaptop ? <NavBar /> : <MobileNavTop />}

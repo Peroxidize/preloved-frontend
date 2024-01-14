@@ -134,6 +134,32 @@
   gap: 1rem;
 }
 
+.icon_tooltip {
+  position: relative;
+  display: inline;
+}
+
+.icon_tooltip span {
+  margin-left: 0.5rem;
+  border-radius: 0.375rem;
+  padding: 0.5rem;
+  position: absolute;
+  z-index: 1;
+  top: 50%;
+  left: 100%;
+  transform: translateY(-50%);
+  width: max-content;
+  background-color: #f1f5f9;
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.icon_tooltip:hover span {
+  visibility: visible;
+  opacity: 1;
+}
+
 @media (min-width: 1200px) {
   .wrapper {
     flex-direction: row;

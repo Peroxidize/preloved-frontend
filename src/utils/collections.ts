@@ -67,3 +67,19 @@ export const rename_collection = async (id: string, new_name: string) => {
     return "failed";
   }
 };
+
+export const add_item_to_collection = async (collectionID: string, itemID: string) => {
+  const formData = new FormData();
+  formData.append("collectionID", collectionID);
+  formData.append("itemID", itemID);
+
+  try {
+    const response = await axios.post(API_URL + "add_item_to_collection", formData, {
+      withCredentials: true,
+    });
+    console.log(response.data);
+    return "success";
+  } catch (error: any) {
+    return String(error.response.data.error);
+  }
+};
