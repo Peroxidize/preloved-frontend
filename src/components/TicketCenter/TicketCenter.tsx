@@ -5,6 +5,7 @@ import axios from "axios";
 import {
   LINK_GET_ITEM_DETAILS,
   LINK_GET_SHOP_DETAILS,
+  LINK_GET_SHOP_TICKETS,
   LINK_GET_STORES,
   LINK_GET_TICKETS,
   LINK_GET_TICKET_STATUSES,
@@ -31,13 +32,13 @@ interface TicketObject {
   statusLevel: number;
 }
 
-interface TicketStatus {
+export interface TicketStatus {
   id: number;
   name: string;
   level: number;
 }
 
-interface TicketDetails {
+export interface TicketDetails {
   createdAt: string;
   expected_buyer_fulfillment: string | null;
   expected_seller_fulfillment: string | null;
@@ -208,8 +209,7 @@ const Ticket: React.FC<TicketProps> = ({
 const TicketCenter: React.FC = () => {
   const [storedUser, setUser] = useAtom<User | null>(userAtom);
 
-  const [selectedStatus, setStatus] = useState("Pending");
-  const { status, data } = useQuery<TicketObject[]>("tickets", async () => {
+  const getUserTickets = async () => {
     const res = await axios.get(LINK_GET_TICKETS, {
       params: {
         userID: storedUser?.user_id,
@@ -217,7 +217,18 @@ const TicketCenter: React.FC = () => {
       withCredentials: true,
     });
     return res.data.tickets;
-  });
+  };
+
+  const getShopTickets = async () => {
+    const res = await axios.get(LINK_GET_SHOP_TICKETS, {
+      withCredentials: true,
+    });
+    console.log(data);
+    return res;
+  };
+
+  const [selectedStatus, setStatus] = useState("Pending");
+  const { status, data } = useQuery<TicketObject[]>("tickets", getUserTickets);
 
   let filteredTickets: TicketObject[] = [];
   if (selectedStatus === "Pending" && data) {
@@ -236,9 +247,9 @@ const TicketCenter: React.FC = () => {
       return { ...ticket, statusLevel: 3 };
     });
   } else if (selectedStatus === "Cancelled" && data) {
-    filteredTickets = data.filter((ticket) => level3.includes(ticket.status));
+    filteredTickets = data.filter((ticket) => level4.includes(ticket.status));
     filteredTickets = filteredTickets.map<TicketObject>((ticket) => {
-      return { ...ticket, statusLevel: 1 };
+      return { ...ticket, statusLevel: 4 };
     });
   }
   const isDesktopOrLaptop = useMediaQuery({

@@ -55,3 +55,5 @@ export const LINK_PURCHASE_ITEM = domain + ticketApi + "purchase_item";
 export const LINK_GET_TICKETS = domain + ticketApi + "ticket";
 export const LINK_GET_TICKET_STATUSES = domain + ticketApi + "statuses";
 export const LINK_GET_SHOP_DETAILS = domain + storeApi + "get_shop_details";
+export const LINK_GET_SHOP_TICKETS = domain + ticketApi + "get_shop_tickets";
+export const LINK_UPDATE_TICKET_STATUS = domain + ticketApi + "update_ticket_status";

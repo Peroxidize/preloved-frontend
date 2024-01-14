@@ -15,6 +15,7 @@ import RedeemVoucher from "../components/RedeemVoucher/redeem-voucher";
 import Item from "../components/Item/Item";
 import Collections from "../components/Collections/collections";
 import TicketCenter from "../components/TicketCenter/TicketCenter";
+import TicketCenterSeller from "../components/TicketCenter/TicketCenterSeller";
 
 export const UserRoute = () => {
   return (
@@ -38,7 +39,7 @@ export const VerifiedSellerRoute = () => {
       <Route path="shop/create" element={<CreateShop />} />
       <Route path="shop" element={<Shop />} />
       <Route path="shop/add" element={<AddItem />} />
-      <Route path="ticketcenter" element={<TicketCenter />} />
+      <Route path="ticketcenter" element={<TicketCenterSeller />} />
     </>
   );
 };
