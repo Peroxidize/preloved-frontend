@@ -173,7 +173,7 @@ const AddItem: React.FC = () => {
   const isDesktopOrLaptop = useMediaQuery({
     query: "(min-device-width: 1224px)",
   });
-  const { handleSubmit, register } = useForm<ItemDetails>();
+  const { handleSubmit, register, reset } = useForm<ItemDetails>();
   const [photos, setPhotos] = useState<string[]>([]);
   const [files, setFiles] = useState<File[]>([]);
 
@@ -243,11 +243,14 @@ const AddItem: React.FC = () => {
       errorDialog.showModal();
       setTimeout(() => errorDialog.close(), 3000);
     }
-    if (addPhotos.isSuccess) {
+    if (addPhotos.isSuccess && !addPhotos.isLoading) {
       loadingDialog.close();
       const successDialog = document.querySelector("#successDialog") as HTMLDialogElement;
       successDialog.showModal();
       setTimeout(() => successDialog.close(), 3000);
+      setFiles([]);
+      setPhotos([]);
+      reset();
     }
   }, [
     addDetails.isError,
