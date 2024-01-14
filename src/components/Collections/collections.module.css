@@ -6,14 +6,18 @@
 
 .page_title {
   margin-top: 2rem;
+  font-weight: bold;
   margin-bottom: 0.5rem;
+  margin: auto;
+  padding-bottom: 1em;
 }
 
 .button_container {
-  background-color: #3b82f6;
+  background-color: black;
   width: max-content;
   border-radius: 0.25rem;
   padding: 0.5rem 1rem;
+  font-weight: bold;
   color: white;
 }
 
@@ -69,9 +73,19 @@
 .primary_button {
   border: 0;
   padding: 1rem 4rem;
-  background-color: #3b82f6;
+  background-color: black;
   color: white;
   font-weight: bold;
+  border-radius: 2rem;
+}
+
+.primary_button_white{
+  padding: 1rem 4rem;
+  background-color: white;
+  color: black;
+  font-weight: bold;
+  border-color: black;
+  border-width: 2px;
   border-radius: 2rem;
 }
 
@@ -87,25 +101,27 @@
 .primary_button_delete:hover {
   background-color: #dc2626;
   cursor: pointer;
+  box-shadow: 5px 5px;
 }
 
 .primary_button:hover {
   cursor: pointer;
-  background-color: #1d4ed8;
+  background-color: black;
+  box-shadow: 5px 5px;
 }
 
 .secondary_button {
-  border: 1px solid #3b82f6;
   padding: 1rem 4rem;
-  background-color: white;
-  color: black;
+  background-color: #ef4444;
+  color: white;
   font-weight: bold;
   border-radius: 2rem;
 }
 
+
 .secondary_button:hover {
   cursor: pointer;
-  background-color: #dbeafe;
+  box-shadow: 5px 5px;
 }
 
 .form_error {
@@ -128,15 +144,70 @@
   width: 3rem;
 }
 
+.collectionTitle {
+  font-size: 1em;
+  font-weight: bolder;
+  display: inline-block;
+  padding: 0.5em 1.5em 0.5em 1.5em;
+  background-color: black;
+  border-color: black;
+  border-width: 3em;
+  color: white;
+  outline-color: white;
+  border-radius: 35px;
+}
+
+.newCollection{
+  border-radius: 34px;
+  background-color: black;
+  color: white;
+  outline: none;
+  padding: 0.4em 1.4em 0.4em 1.4em;
+  margin-bottom: 2em;
+  margin-left: auto;
+  font-weight: bold;
+  box-shadow: none;
+  border-color: white;
+}
+
+.imgBig{
+  height: 6em;
+  width: 6.8em;
+}
+
+.flex {
+  display: flex;
+  justify-content: center;
+  align-content: center;
+}
+
+.cards_grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* Three columns */
+  gap: 1rem;
+  padding: 1rem;
+}
+
 .card_container {
-  border-radius: 0.375rem;
-  margin: 1rem 0;
+  border-radius: 34px;
   padding: 1.5rem;
   border: 1px solid #cbd5e1;
-  box-shadow:
-    0 1px 3px 0 rgb(0 0 0 / 0.1),
-    0 1px 2px -1px rgb(0 0 0 / 0.1);
+  background-color: #f0f0f0;
+  box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
 }
+
+@media (max-width: 1024px) {
+  .cards_grid {
+    grid-template-columns: repeat(2, 1fr); /* Two columns for medium screens */
+  }
+}
+
+@media (max-width: 768px) {
+  .cards_grid {
+    grid-template-columns: 1fr; /* One column for smaller screens */
+  }
+}
+
 
 .button_row {
   display: flex;
@@ -145,31 +216,34 @@
 }
 
 .button_delete {
-  background-color: #ef4444;
+  background-color: #000000;
   width: max-content;
-  border-radius: 0.375rem;
   padding: 0.5rem 1rem;
   color: white;
-  border: 0;
+  border: 10px;
+  border-radius: 34px;
+  font-weight: bold;
 }
 
 .button_delete:hover {
   cursor: pointer;
-  background-color: #dc2626;
+  border:white;
 }
 
 .button_rename {
-  background-color: #6366f1;
+  background-color: #ffffff;
   width: max-content;
-  border-radius: 0.375rem;
+  border-color: black;
+  border-width: 0.2em;
   padding: 0.5rem 1rem;
-  color: white;
-  border: 0;
+  color: black;
+  font-weight: bold;
+  border-radius: 34px;
 }
 
 .button_rename:hover {
   cursor: pointer;
-  background-color: #4f46e5;
+  background-color: #f0f0f0;
 }
 
 .images {
