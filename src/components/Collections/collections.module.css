@@ -23,6 +23,7 @@
 }
 
 .modal_container {
+  z-index: 10;
   position: fixed;
   left: 0;
   right: 0;
@@ -72,6 +73,20 @@
   color: white;
   font-weight: bold;
   border-radius: 2rem;
+}
+
+.primary_button_delete {
+  border: 0;
+  padding: 1rem 4rem;
+  background-color: #ef4444;
+  color: white;
+  font-weight: bold;
+  border-radius: 2rem;
+}
+
+.primary_button_delete:hover {
+  background-color: #dc2626;
+  cursor: pointer;
 }
 
 .primary_button:hover {
@@ -155,4 +170,31 @@
 .button_rename:hover {
   cursor: pointer;
   background-color: #4f46e5;
+}
+
+.images {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-items: center;
+  justify-content: space-evenly;
+  padding: 2rem;
+}
+
+.image {
+  height: 15rem;
+  object-fit: contain;
+  background-color: #eaebed;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.image_display {
+  margin: 0 auto;
+  margin-bottom: 1.5rem;
+}
+
+.header_buttons {
+  display: flex;
+  gap: 1rem;
 }

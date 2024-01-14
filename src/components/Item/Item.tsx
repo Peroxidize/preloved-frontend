@@ -35,6 +35,7 @@ interface IFormInput {
 
 const AddToCollectionModal = ({ name, id }: { name: string; id: number }) => {
   const [fetching, setFetching] = useState<boolean>(false);
+  const setCollections = useSetAtom(collectionsAtom);
   const [result, setResult] = useState<string>("");
   const setShowModal = useSetAtom(showModalAtom);
   const collections = useAtomValue(collectionsAtom);
