@@ -10,7 +10,7 @@ import LoadingDialog, {
   IconTextDialog,
   SuccessDialog,
 } from "../fragments/commonstuff/Dialogs";
-import error from "../../assets/icons/error.svg"
+import error from "../../assets/icons/error.svg";
 
 const domain = "https://prelovedbackend.azurewebsites.net/";
 const userNavText = "Want to create a seller account?";
@@ -70,7 +70,11 @@ export default function SignUp() {
     event.preventDefault();
 
     if (formState.password !== formState.confirmPass) {
-      alert("Passwords do not match!");
+      const passwordErrorDialog = document.querySelector(
+        "#passwordErrorDialog"
+      ) as HTMLDialogElement;
+      passwordErrorDialog.showModal();
+      setTimeout(() => passwordErrorDialog.close(), 3000);
       return;
     }
 
@@ -107,6 +111,7 @@ export default function SignUp() {
             onChange={handleChange}
             className={`${classes.textInput} ${classes.addressInput}`}
             placeholder="Street Name"
+            required
           />
           <div className={classes.oneRowResponsive}>
             <input
@@ -117,6 +122,7 @@ export default function SignUp() {
               onChange={handleChange}
               className={`${classes.textInput} ${classes.addressInput}`}
               placeholder="Barangay"
+              required
             />
             <input
               type="text"
@@ -126,6 +132,7 @@ export default function SignUp() {
               onChange={handleChange}
               className={`${classes.textInput} ${classes.addressInput}`}
               placeholder="City/Municipality"
+              required
             />
           </div>
         </div>
@@ -144,6 +151,7 @@ export default function SignUp() {
               value={0}
               checked={formState.isFeminine == 0}
               onChange={handleChange}
+              required
             />
             <label htmlFor="masculine">Masculine</label>
           </div>
@@ -155,6 +163,7 @@ export default function SignUp() {
               value={1}
               checked={formState.isFeminine == 1}
               onChange={handleChange}
+              required
             />
             <label htmlFor="Feminine">Feminine</label>
           </div>
@@ -190,7 +199,11 @@ export default function SignUp() {
       <LoadingDialog />
       <SuccessDialog text="Sign up successful!" />
       <ErrorDialog text="Sign up failed!" />
-      <IconTextDialog text=""
+      <IconTextDialog
+        text="Passwords do not match!"
+        icon={error}
+        id="passwordErrorDialog"
+      />
       <div className={classes.container}>
         <img src={logo} alt="Preloved logo" className={classes.logo} />
         <form action="post" onSubmit={handleSubmit}>
@@ -218,6 +231,7 @@ export default function SignUp() {
               className={classes.textInput}
               value={formState.email}
               onChange={handleChange}
+              required
             />
           </div>
           <div className={classes.oneRowResponsive}>
@@ -230,6 +244,7 @@ export default function SignUp() {
                 className={classes.textInput}
                 value={formState.password}
                 onChange={handleChange}
+                required
               />
             </div>
             <div className={classes.inputContainer}>
@@ -241,6 +256,7 @@ export default function SignUp() {
                 className={classes.textInput}
                 value={formState.confirmPass}
                 onChange={handleChange}
+                required
               />
             </div>
           </div>
@@ -254,6 +270,7 @@ export default function SignUp() {
                 className={classes.textInput}
                 value={formState.fName}
                 onChange={handleChange}
+                required
               />
             </div>
             <div className={classes.inputContainer}>
@@ -265,6 +282,7 @@ export default function SignUp() {
                 className={classes.textInput}
                 value={formState.lName}
                 onChange={handleChange}
+                required
               />
             </div>
           </div>
@@ -280,6 +298,7 @@ export default function SignUp() {
                 className={classes.textInput}
                 value={formState.phone}
                 onChange={handleChange}
+                required
               />
             </div>
           </div>
