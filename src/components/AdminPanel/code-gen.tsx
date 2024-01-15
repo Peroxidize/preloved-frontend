@@ -55,7 +55,7 @@ function CodeGen() {
 
       <div className={css.title_content}>
         <h2>List of available vouchers</h2>
-        <button onClick={refreshData} className={`${css.button} ${css.nav_button}`}>
+        <button onClick={refreshData} className={`${parentcss.btnApprove} ${css.nav_button}`}>
           Refresh List
         </button>
       </div>

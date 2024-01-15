@@ -54,6 +54,7 @@
   cursor: pointer;
   gap: 0.5rem;
   align-items: center;
+  transition: background-color 0.3s;
 }
 
 .btnApprove {
@@ -64,7 +65,7 @@
 
 .btnApprove:hover,
 .btnApprove:active {
-  background-color: #f3f3f3;
+  background-color: #e2e8f0;
 }
 
 .btnReject {
@@ -75,7 +76,7 @@
 
 .btnReject:hover,
 .btnReject:active {
-  background-color: #212121;
+  background-color: #334155;
 }
 
 .buttonIcon {

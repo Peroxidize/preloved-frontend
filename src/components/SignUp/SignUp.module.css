@@ -81,6 +81,12 @@
   border-radius: 2rem;
   margin-top: 1rem;
   cursor: pointer;
+  opacity: 1;
+  transition: opacity 0.3s ease;
+}
+
+.signupButton:hover {
+  opacity: 0.8;
 }
 
 .signupLoading {
