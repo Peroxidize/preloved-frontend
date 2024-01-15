@@ -14,20 +14,32 @@ export enum UserType {
   CompletedSeller,
 }
 
+export const showDialog = (id: string) => {
+  const dialog = document.querySelector(`#${id}`) as HTMLDialogElement;
+  dialog.showModal();
+};
+
+export const closeDialog = (id: string) => {
+  const dialog = document.querySelector(`#${id}`) as HTMLDialogElement;
+  dialog.close();
+};
+
+export const showAndCloseDialog = (id: string, time: number) => {
+  const dialog = document.querySelector(`#${id}`) as HTMLDialogElement;
+  dialog.showModal();
+  setTimeout(() => dialog.close(), time);
+};
+
 const domain = "https://prelovedbackend.azurewebsites.net/";
 const storeApi = "store/";
 const frontPageApi = "homepage/";
 const ticketApi = "tickets/";
-const cartApi = "cart/";
 
 export const LINK_LOGIN = "https://prelovedbackend.azurewebsites.net/auth/login";
 export const LINK_LOGOUT = "https://prelovedbackend.azurewebsites.net/auth/logout";
-export const LINK_SIGNUP_USER =
-  "https://prelovedbackend.azurewebsites.net/auth/new_shop_user";
-export const LINK_SIGNUP_SELLER =
-  "https://prelovedbackend.azurewebsites.net/auth/new_shop_owner";
-export const LINK_IS_AUTH =
-  "https://prelovedbackend.azurewebsites.net/auth/is_authenticated";
+export const LINK_SIGNUP_USER = "https://prelovedbackend.azurewebsites.net/auth/new_shop_user";
+export const LINK_SIGNUP_SELLER = "https://prelovedbackend.azurewebsites.net/auth/new_shop_owner";
+export const LINK_IS_AUTH = "https://prelovedbackend.azurewebsites.net/auth/is_authenticated";
 export const LINK_GET_CURRENT_USER =
   "https://prelovedbackend.azurewebsites.net/auth/get_current_user";
 export const LINK_GET_PENDING_LIST =
@@ -36,8 +48,7 @@ export const LINK_GET_SELLER_STATUS =
   "https://prelovedbackend.azurewebsites.net/auth/verification/document_status";
 export const LINK_SHOP_ID1 = "https://prelovedbackend.azurewebsites.net/auth/shop_id_one";
 export const LINK_SHOP_ID2 = "https://prelovedbackend.azurewebsites.net/auth/shop_id_two";
-export const LINK_SHOP_IDSELFIE =
-  "https://prelovedbackend.azurewebsites.net/auth/shop_id_selfie";
+export const LINK_SHOP_IDSELFIE = "https://prelovedbackend.azurewebsites.net/auth/shop_id_selfie";
 export const LINK_GET_SELLER_DETAILS =
   "https://prelovedbackend.azurewebsites.net/auth/verification/get_shop_owner_details";
 export const LINK_GET_SHOPVERIFICATION_IMAGE =
@@ -59,3 +70,5 @@ export const LINK_GET_SHOP_DETAILS = domain + storeApi + "get_shop_details";
 export const LINK_GET_SHOP_TICKETS = domain + ticketApi + "get_shop_tickets";
 export const LINK_UPDATE_TICKET_STATUS = domain + ticketApi + "update_ticket_status";
 export const LINK_ADD_TO_CART = domain + frontPageApi + "add_to_cart";
+export const LINK_GET_CART = domain + frontPageApi + "cart";
+export const LINK_REMOVE_FROM_CART = domain + frontPageApi + "remove_from_cart";

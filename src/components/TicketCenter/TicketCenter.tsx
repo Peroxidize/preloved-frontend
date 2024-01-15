@@ -1,26 +1,16 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import css from "./TicketCenter.module.css";
 import { useQuery } from "react-query";
 import axios from "axios";
-import {
-  LINK_GET_ITEM_DETAILS,
-  LINK_GET_SHOP_DETAILS,
-  LINK_GET_SHOP_TICKETS,
-  LINK_GET_STORES,
-  LINK_GET_TICKETS,
-  LINK_GET_TICKET_STATUSES,
-  User,
-} from "../misc";
+import { LINK_GET_ITEM_DETAILS, LINK_GET_SHOP_DETAILS, LINK_GET_TICKETS, User } from "../misc";
 import { useMediaQuery } from "react-responsive";
 import NavBar, { MobileNavBottom, MobileNavTop } from "../fragments/nav-bar/nav-bar";
 import BackAndTitle from "../fragments/commonstuff/BackAndTitle";
 import { userAtom } from "../../App";
 import { useAtom } from "jotai";
-import Button from "../fragments/FormInputs/Button";
 import { UserType } from "../misc";
-import dropdown from "../../assets/icons/dropdown.svg";
 import { ItemDetails } from "../Item/Item";
-import LoadingText, { LoadingBigText } from "../fragments/commonstuff/Loading";
+import LoadingText from "../fragments/commonstuff/Loading";
 import loading from "../../assets/loading.gif";
 
 interface TicketObject {
@@ -76,11 +66,7 @@ const statuses: TicketStatus[] = [
   { id: 8, name: "Buyer has not picked up past the deadline, item forfeited", level: 4 },
 ];
 
-const level1 = [
-  "Pending Shop Verification",
-  "Shop Is Checking Inventory",
-  "Pending Packaging",
-];
+const level1 = ["Pending Shop Verification", "Shop Is Checking Inventory", "Pending Packaging"];
 
 const level2 = ["Awaiting Pickup"];
 const level3 = ["Order Completed"];
@@ -169,9 +155,7 @@ const Ticket: React.FC<TicketProps> = ({
               <div className={css.loadingDate}>{""}</div>
             )}
             {ticketDetails.status === "success" ? (
-              <p className={css.date}>
-                Requested on {ticketDetails.data.createdAt.split("T")[0]}
-              </p>
+              <p className={css.date}>Requested on {ticketDetails.data.createdAt.split("T")[0]}</p>
             ) : (
               <div className={css.loadingDate}>{""}</div>
             )}
@@ -217,14 +201,6 @@ const TicketCenter: React.FC = () => {
       withCredentials: true,
     });
     return res.data.tickets;
-  };
-
-  const getShopTickets = async () => {
-    const res = await axios.get(LINK_GET_SHOP_TICKETS, {
-      withCredentials: true,
-    });
-    console.log(data);
-    return res;
   };
 
   const [selectedStatus, setStatus] = useState("Pending");
@@ -309,6 +285,8 @@ const TicketCenter: React.FC = () => {
                   statusLevel={ticket.statusLevel}
                 />
               ))
+            ) : storedUser && status === "success" && filteredTickets.length === 0 ? (
+              <p className={css.noTicketsFound}>No tickets found in this category.</p>
             ) : (
               <img src={loading} alt="loading" className={css.loadingIcon} />
             )}

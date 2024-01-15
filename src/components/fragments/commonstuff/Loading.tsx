@@ -20,5 +20,9 @@ const LoadingText: React.FC = () => {
   return <div className={css.loadingText}>{""}</div>;
 };
 
-export { LoadingBigText, LoadingTag, LoadingButton, LoadingImg };
+const LoadingSmallText: React.FC = () => {
+  return <div className={css.loadingSmallText}>{""}</div>;
+};
+
+export { LoadingBigText, LoadingTag, LoadingButton, LoadingImg, LoadingSmallText };
 export default LoadingText;

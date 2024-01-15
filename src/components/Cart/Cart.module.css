@@ -23,6 +23,10 @@
   border-radius: 0.5rem;
 }
 
+.itemName {
+  font-size: 1.1rem;
+}
+
 .priceAndDelete {
   margin-left: auto;
   display: flex;
@@ -36,11 +40,34 @@
   font-size: 1.1rem;
 }
 
+.itemStore,
+.itemSize {
+  font-size: 0.8rem;
+}
+
 .deleteBtn {
   background-color: white;
   border: 0;
   padding: 0;
   cursor: pointer;
+}
+
+.loadingPrice {
+  width: 3rem;
+  height: 1.5rem;
+  background-color: #eaebed;
+  border-radius: 0.5rem;
+}
+
+.loadingThumbnail {
+  height: 8rem;
+  width: 6rem;
+  background-color: #eaebed;
+  border-radius: 0.5rem;
+}
+
+.noItems {
+  text-align: center;
 }
 
 @media (min-width: 1200px) {
@@ -53,9 +80,13 @@
     width: 8rem;
   }
   .itemName {
-    font-size: 1.25rem;
+    font-size: 1.5rem;
   }
   .itemPrice {
     font-size: 1.5rem;
+  }
+  .itemStore,
+  .itemSize {
+    font-size: 0.9rem;
   }
 }

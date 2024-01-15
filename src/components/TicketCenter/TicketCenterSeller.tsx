@@ -17,10 +17,7 @@ import { ItemDetails } from "../Item/Item";
 import loading from "../../assets/loading.gif";
 import LoadingText from "../fragments/commonstuff/Loading";
 import Button from "../fragments/FormInputs/Button";
-import LoadingDialog, {
-  ErrorDialog,
-  SuccessDialog,
-} from "../fragments/commonstuff/Dialogs";
+import LoadingDialog, { ErrorDialog, SuccessDialog } from "../fragments/commonstuff/Dialogs";
 
 interface SellerTicketObject {
   currentStatusName: string;
@@ -150,9 +147,7 @@ const SellerTicket: React.FC<SellerTicketProps> = ({ ...props }) => {
               <div className={css.loadingDate}>{""}</div>
             )}
             {ticketDetails.status === "success" ? (
-              <p className={css.date}>
-                Requested on {ticketDetails.data.createdAt.split("T")[0]}
-              </p>
+              <p className={css.date}>Requested on {ticketDetails.data.createdAt.split("T")[0]}</p>
             ) : (
               <div className={css.loadingDate}>{""}</div>
             )}
@@ -202,13 +197,9 @@ const TicketCenterSeller: React.FC = () => {
   };
 
   const [selectedStatus, setStatus] = useState(1);
-  const { status, data, refetch } = useQuery<SellerTicketObject[]>(
-    "tickets",
-    getShopTickets,
-    {
-      staleTime: Infinity,
-    }
-  );
+  const { status, data, refetch } = useQuery<SellerTicketObject[]>("tickets", getShopTickets, {
+    staleTime: Infinity,
+  });
 
   const filteredTickets = useRef<SellerTicketObject[] | null>(null);
   if (data) {
@@ -231,33 +222,25 @@ const TicketCenterSeller: React.FC = () => {
         <div className={css.container}>
           <div className={css.statusContainer}>
             <button
-              className={`${css.statusButton} ${
-                selectedStatus === 1 && css.statusSelected
-              }`}
+              className={`${css.statusButton} ${selectedStatus === 1 && css.statusSelected}`}
               onClick={() => setStatus(1)}
             >
               Pending
             </button>
             <button
-              className={`${css.statusButton} ${
-                selectedStatus === 2 && css.statusSelected
-              }`}
+              className={`${css.statusButton} ${selectedStatus === 2 && css.statusSelected}`}
               onClick={() => setStatus(2)}
             >
               For Pickup
             </button>
             <button
-              className={`${css.statusButton} ${
-                selectedStatus === 3 && css.statusSelected
-              }`}
+              className={`${css.statusButton} ${selectedStatus === 3 && css.statusSelected}`}
               onClick={() => setStatus(3)}
             >
               Completed
             </button>
             <button
-              className={`${css.statusButton} ${
-                selectedStatus === 4 && css.statusSelected
-              }`}
+              className={`${css.statusButton} ${selectedStatus === 4 && css.statusSelected}`}
               onClick={() => setStatus(4)}
             >
               Cancelled
@@ -265,7 +248,7 @@ const TicketCenterSeller: React.FC = () => {
           </div>
           <div className={css.spacer}></div>
           <div className={css.ticketsContainer}>
-            {filteredTickets.current ? (
+            {filteredTickets.current && filteredTickets.current.length > 0 ? (
               filteredTickets.current.map((ticket) => (
                 <SellerTicket
                   currentStatusName={ticket.currentStatusName}
@@ -282,6 +265,8 @@ const TicketCenterSeller: React.FC = () => {
                   refetchFn={refetch}
                 />
               ))
+            ) : filteredTickets.current && filteredTickets.current.length === 0 ? (
+              <p className={css.noTicketsFound}>No tickets found in this category.</p>
             ) : (
               <img src={loading} alt="loading" className={css.loadingIcon} />
             )}
