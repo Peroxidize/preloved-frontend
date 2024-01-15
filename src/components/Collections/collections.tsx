@@ -1,9 +1,10 @@
 import css from "./collections.module.css";
 import { useMediaQuery } from "react-responsive";
 import NavBar, { MobileNavTop, MobileNavBottom } from "../fragments/nav-bar/nav-bar";
+import prelovedCollections from "../../assets/preloved.png"
 import { SubmitHandler, useForm } from "react-hook-form";
 import { atom, useAtom, useAtomValue, useSetAtom } from "jotai";
-import { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   create_collection,
   delete_collection,
@@ -12,6 +13,7 @@ import {
   rename_collection,
 } from "../../utils/collections";
 import loading from "../../assets/loading.gif";
+
 
 interface IFormInput {
   name: string;
@@ -67,10 +69,10 @@ const RemoveItemnModal = ({
             {fetching && <img src={loading} className={css.loading} />}
             {result !== "success" && !fetching && (
               <>
-                <button onClick={delete_item} className={css.primary_button_delete}>
+                <button onClick={delete_item} className={css.primary_button}>
                   Delete
                 </button>
-                <button onClick={() => setShowModal("")} className={css.secondary_button}>
+                <button onClick={() => setShowModal("")} className={css.primary_button_white}>
                   Cancel
                 </button>
               </>
@@ -99,6 +101,7 @@ const RenameCollectionModal = ({ name, id }: { name: string; id: number }) => {
   const setShowModal = useSetAtom(showModalAtom);
   const setCollections = useSetAtom(collectionsAtom);
   const newName = useRef<string>("");
+
   const {
     register,
     formState: { errors },
@@ -134,7 +137,7 @@ const RenameCollectionModal = ({ name, id }: { name: string; id: number }) => {
               <>
                 <div className={css.buttons}>
                   <input className={css.primary_button} type="submit" value="Rename" />
-                  <button onClick={() => setShowModal("")} className={css.secondary_button}>
+                  <button onClick={() => setShowModal("")} className={css.primary_button_white}>
                     Cancel
                   </button>
                 </div>
@@ -172,7 +175,7 @@ const DeleteCollectionModal = ({ name, id }: { name: string; id: number }) => {
       <div className={css.dialog_container}>
         {result !== "success" && (
           <div className={css.dialog_header}>
-            <h2>Are you sure you want to delete {name}</h2>
+            <h2>Are you sure you want to delete {name}?</h2>
           </div>
         )}
         <div className={css.buttons}>
@@ -181,7 +184,7 @@ const DeleteCollectionModal = ({ name, id }: { name: string; id: number }) => {
               <button onClick={deleteCollection} className={css.primary_button}>
                 Confirm
               </button>
-              <button onClick={() => setShowModal("")} className={css.secondary_button}>
+              <button onClick={() => setShowModal("")} className={css.primary_button_white}>
                 Cancel
               </button>
             </>
@@ -304,23 +307,24 @@ function Collections() {
     setShowModal(modal);
   };
 
+  const [isFilled, setIsFilled] = useState(false)
+
   return (
     <>
       {isDesktopOrLaptop ? <NavBar /> : <MobileNavTop />}
       <div className={css.container}>
-        <h1 className={css.page_title}>Collections</h1>
-        <div className={css.header_buttons}>
-          <div className={css.button_container} onClick={() => create_modal("create")}>
-            <h3>Create Collection</h3>
-          </div>
-          <div className={css.button_container} onClick={fetch_list}>
-            <h3>Refresh List</h3>
-          </div>
+        <div className={css.flex}>
+          <img className={css.imgBig} src={prelovedCollections} alt="" />
+        </div>
+
+        <h3 className={css.page_title}>COLLECTIONS</h3>
+        <div className={css.flex}>
+
         </div>
         {collections === null && <img src={loading} className={css.loading} />}
         {collections?.map((collection: Collection) => (
           <div className={css.card_container} key={collection.id}>
-            <h2>{collection.name}</h2>
+            <h3 className={css.collectionTitle}> {collection.name.toUpperCase()}</h3>
             <div className={css.images}>
               {collection.img_ids.map((imgId, imgIndex) => (
                 <img
