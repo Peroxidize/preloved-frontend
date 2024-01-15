@@ -419,7 +419,7 @@ const Item: React.FC = () => {
         <img
           src={leftArrow}
           alt="Back to home icon"
-          onClick={() => navigate("/")}
+          onClick={() => navigate(-1)}
           className={css.leftArrow}
         />
         <Images id={id} />

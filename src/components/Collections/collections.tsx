@@ -13,6 +13,7 @@ import {
   rename_collection,
 } from "../../utils/collections";
 import loading from "../../assets/loading.gif";
+import { useNavigate } from "react-router-dom";
 
 interface IFormInput {
   name: string;
@@ -44,6 +45,7 @@ const RemoveItemModal = ({
   itemID: string;
   img_link: string;
 }) => {
+  const navigate = useNavigate();
   const [fetching, setFetching] = useState<boolean>(false);
   const [result, setResult] = useState<string>("");
   const setShowModal = useSetAtom(showModalAtom);
@@ -59,8 +61,15 @@ const RemoveItemModal = ({
   return (
     <div className={css.modal_container}>
       <div className={css.dialog_container}>
+        <div className={css.dialog_header}>
+          <h2>Remove or Navigate</h2>
+        </div>
         <div className={css.dialog_body}>
-          <img src={img_link} className={`${css.image} ${css.image_display}`} />
+          <img
+            src={img_link}
+            onClick={() => navigate(`/item/${itemID}`)}
+            className={`${css.image} ${css.image_display}`}
+          />
           <div className={css.buttons}>
             {fetching && <img src={loading} className={css.loading} />}
             {result !== "success" && !fetching && (
@@ -383,7 +392,7 @@ function Collections() {
         </div>
       </div>
       {!isDesktopOrLaptop && <MobileNavBottom />}
-      {showModal === "delete_item" && (
+      {showModal === "delete_item" && itemData && (
         <RemoveItemModal
           collectionID={itemData!.collectionID}
           itemID={itemData!.itemID}
