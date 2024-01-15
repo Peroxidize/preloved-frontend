@@ -76,11 +76,7 @@ const statuses: TicketStatus[] = [
   { id: 8, name: "Buyer has not picked up past the deadline, item forfeited", level: 4 },
 ];
 
-const level1 = [
-  "Pending Shop Verification",
-  "Shop Is Checking Inventory",
-  "Pending Packaging",
-];
+const level1 = ["Pending Shop Verification", "Shop Is Checking Inventory", "Pending Packaging"];
 
 const level2 = ["Awaiting Pickup"];
 const level3 = ["Order Completed"];
@@ -169,9 +165,7 @@ const Ticket: React.FC<TicketProps> = ({
               <div className={css.loadingDate}>{""}</div>
             )}
             {ticketDetails.status === "success" ? (
-              <p className={css.date}>
-                Requested on {ticketDetails.data.createdAt.split("T")[0]}
-              </p>
+              <p className={css.date}>Requested on {ticketDetails.data.createdAt.split("T")[0]}</p>
             ) : (
               <div className={css.loadingDate}>{""}</div>
             )}
@@ -309,6 +303,8 @@ const TicketCenter: React.FC = () => {
                   statusLevel={ticket.statusLevel}
                 />
               ))
+            ) : storedUser && status === "success" && filteredTickets.length === 0 ? (
+              <p className={css.noTicketsFound}>No tickets found in this category.</p>
             ) : (
               <img src={loading} alt="loading" className={css.loadingIcon} />
             )}

@@ -122,11 +122,13 @@
   display: flex;
   gap: 1rem;
 }
+
+.noTicketsFound {
+  text-align: center;
+}
 @media (min-width: 1200px) {
   .wrapper {
     padding: 0.5rem 3rem 2rem;
-  }
-  .container {
     width: 60%;
     margin: auto;
   }
