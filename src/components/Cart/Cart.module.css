@@ -66,6 +66,10 @@
   border-radius: 0.5rem;
 }
 
+.noItems {
+  text-align: center;
+}
+
 @media (min-width: 1200px) {
   .wrapper {
     padding: 1rem 3rem;

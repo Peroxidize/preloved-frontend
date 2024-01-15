@@ -147,7 +147,7 @@ const Cart: React.FC = () => {
       <div className={css.wrapper}>
         <BackAndTitle title="Cart" backTo="/" />
         <div className={css.itemContainer}>
-          {status === "success" ? (
+          {status === "success" && data.length > 0 ? (
             <>
               {data.map((item) => (
                 <CartItem key={item.itemID} {...item} refetchFn={refetch} />
@@ -155,7 +155,7 @@ const Cart: React.FC = () => {
               <Button text="PURCHASE ALL ITEMS" />
             </>
           ) : data && data.length === 0 ? (
-            <p>No items in cart.</p>
+            <p className={css.noItems}>No items in cart.</p>
           ) : (
             <LoadingCartItem />
           )}
