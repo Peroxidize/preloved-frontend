@@ -4,10 +4,7 @@ import loading from "../../../assets/loading.gif";
 import success from "../../../assets/icons/success.svg";
 import error from "../../../assets/icons/error.svg";
 
-const handleCloseDialogOutside = (
-  event: React.MouseEvent<HTMLDialogElement>,
-  id: string
-) => {
+const handleCloseDialogOutside = (event: React.MouseEvent<HTMLDialogElement>, id: string) => {
   const dialog = document.querySelector(`#${id}`) as HTMLDialogElement;
   const dialogDimensions = dialog.getBoundingClientRect();
   if (
@@ -29,11 +26,7 @@ interface IconTextProps {
 const IconTextDialog: React.FC<IconTextProps> = ({ text, icon, id }) => {
   return (
     <>
-      <dialog
-        id={id}
-        className={css.dialog}
-        onClick={(e) => handleCloseDialogOutside(e, id)}
-      >
+      <dialog id={id} className={css.dialog} onClick={(e) => handleCloseDialogOutside(e, id)}>
         <div className={css.iconContainer}>
           <img src={icon} alt="" className={css.icon} />
           <p>{text}</p>
