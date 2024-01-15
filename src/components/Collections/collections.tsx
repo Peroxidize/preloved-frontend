@@ -1,7 +1,7 @@
 import css from "./collections.module.css";
 import { useMediaQuery } from "react-responsive";
 import NavBar, { MobileNavTop, MobileNavBottom } from "../fragments/nav-bar/nav-bar";
-import prelovedCollections from "../../assets/preloved.png"
+import prelovedCollections from "../../assets/preloved.png";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { atom, useAtom, useAtomValue, useSetAtom } from "jotai";
 import React, { useEffect, useRef, useState } from "react";
@@ -13,7 +13,6 @@ import {
   rename_collection,
 } from "../../utils/collections";
 import loading from "../../assets/loading.gif";
-
 
 interface IFormInput {
   name: string;
@@ -36,7 +35,7 @@ const fetch_collection = async () => {
   return await get_collection();
 };
 
-const RemoveItemnModal = ({
+const RemoveItemModal = ({
   collectionID,
   itemID,
   img_link,
@@ -60,20 +59,23 @@ const RemoveItemnModal = ({
   return (
     <div className={css.modal_container}>
       <div className={css.dialog_container}>
-        <div className={css.dialog_header}>
-          <h2>Remove item from collection</h2>
-        </div>
         <div className={css.dialog_body}>
           <img src={img_link} className={`${css.image} ${css.image_display}`} />
           <div className={css.buttons}>
             {fetching && <img src={loading} className={css.loading} />}
             {result !== "success" && !fetching && (
               <>
-                <button onClick={delete_item} className={css.primary_button}>
-                  Delete
+                <button
+                  onClick={delete_item}
+                  className={`${css.primary_button} ${css.modal_button}`}
+                >
+                  Remove
                 </button>
-                <button onClick={() => setShowModal("")} className={css.primary_button_white}>
-                  Cancel
+                <button
+                  onClick={() => setShowModal("")}
+                  className={`${css.secondary_button} ${css.modal_button}`}
+                >
+                  Close
                 </button>
               </>
             )}
@@ -136,9 +138,16 @@ const RenameCollectionModal = ({ name, id }: { name: string; id: number }) => {
             ) : (
               <>
                 <div className={css.buttons}>
-                  <input className={css.primary_button} type="submit" value="Rename" />
-                  <button onClick={() => setShowModal("")} className={css.primary_button_white}>
-                    Cancel
+                  <input
+                    className={`${css.primary_button} ${css.modal_button}`}
+                    type="submit"
+                    value="Rename"
+                  />
+                  <button
+                    onClick={() => setShowModal("")}
+                    className={`${css.secondary_button} ${css.modal_button}`}
+                  >
+                    Close
                   </button>
                 </div>
               </>
@@ -181,17 +190,26 @@ const DeleteCollectionModal = ({ name, id }: { name: string; id: number }) => {
         <div className={css.buttons}>
           {result !== "success" && fetching === false && (
             <>
-              <button onClick={deleteCollection} className={css.primary_button}>
+              <button
+                onClick={deleteCollection}
+                className={`${css.primary_button} ${css.modal_button}`}
+              >
                 Confirm
               </button>
-              <button onClick={() => setShowModal("")} className={css.primary_button_white}>
-                Cancel
+              <button
+                onClick={() => setShowModal("")}
+                className={`${css.secondary_button} ${css.modal_button}`}
+              >
+                Close
               </button>
             </>
           )}
           {fetching && <img src={loading} className={css.loading} />}
           {result === "success" && (
-            <button onClick={() => setShowModal("")} className={css.primary_button}>
+            <button
+              onClick={() => setShowModal("")}
+              className={`${css.primary_button} ${css.modal_button}`}
+            >
               Close
             </button>
           )}
@@ -250,9 +268,16 @@ export const CreateCollectionModal = () => {
             ) : (
               <>
                 <div className={css.buttons}>
-                  <input className={css.primary_button} type="submit" value="Submit" />
-                  <button onClick={closeModal} className={css.secondary_button}>
-                    Cancel
+                  <input
+                    className={`${css.primary_button} ${css.modal_button}`}
+                    type="submit"
+                    value="Submit"
+                  />
+                  <button
+                    onClick={closeModal}
+                    className={`${css.secondary_button} ${css.modal_button}`}
+                  >
+                    Close
                   </button>
                 </div>
               </>
@@ -289,10 +314,6 @@ function Collections() {
     setCollections(fetch_collection());
   }, []);
 
-  const fetch_list = async () => {
-    setCollections(await fetch_collection());
-  };
-
   const create_modal = (modal: string) => {
     setShowModal(modal);
   };
@@ -307,55 +328,63 @@ function Collections() {
     setShowModal(modal);
   };
 
-  const [isFilled, setIsFilled] = useState(false)
+  const [isFilled, setIsFilled] = useState(false);
 
   return (
     <>
       {isDesktopOrLaptop ? <NavBar /> : <MobileNavTop />}
       <div className={css.container}>
-        <div className={css.flex}>
-          <img className={css.imgBig} src={prelovedCollections} alt="" />
+        <h1 className={css.page_title}>Collections</h1>
+        <div
+          className={`${css.secondary_button} ${css.create_button}`}
+          onClick={() => create_modal("create")}
+        >
+          <h3>Create Collection</h3>
         </div>
 
-        <h3 className={css.page_title}>COLLECTIONS</h3>
-        <div className={css.flex}>
-
+        <div className={css.card_column}>
+          {collections === null && <img src={loading} className={`${css.loading} ${css.center}`} />}
+          {collections?.map((collection: Collection) => (
+            <div className={css.card_container} key={collection.id}>
+              <h3 className={css.collection_title}>{collection.name}</h3>
+              <div className={css.images}>
+                {collection.img_ids.map((imgId, imgIndex) => (
+                  <img
+                    onClick={() =>
+                      set_item_data(
+                        String(collection.id),
+                        imgId,
+                        collection.img_links[imgIndex],
+                        "delete_item"
+                      )
+                    }
+                    className={css.image}
+                    src={collection.img_links[imgIndex]}
+                    key={imgId}
+                  />
+                ))}
+              </div>
+              <div className={css.button_row}>
+                <button
+                  onClick={() => set_data(collection, "rename")}
+                  className={css.secondary_button}
+                >
+                  Rename Collection
+                </button>
+                <button
+                  onClick={() => set_data(collection, "delete")}
+                  className={css.secondary_button}
+                >
+                  Delete Collection
+                </button>
+              </div>
+            </div>
+          ))}
         </div>
-        {collections === null && <img src={loading} className={css.loading} />}
-        {collections?.map((collection: Collection) => (
-          <div className={css.card_container} key={collection.id}>
-            <h3 className={css.collectionTitle}> {collection.name.toUpperCase()}</h3>
-            <div className={css.images}>
-              {collection.img_ids.map((imgId, imgIndex) => (
-                <img
-                  onClick={() =>
-                    set_item_data(
-                      String(collection.id),
-                      imgId,
-                      collection.img_links[imgIndex],
-                      "delete_item"
-                    )
-                  }
-                  className={css.image}
-                  src={collection.img_links[imgIndex]}
-                  key={imgId}
-                />
-              ))}
-            </div>
-            <div className={css.button_row}>
-              <button onClick={() => set_data(collection, "rename")} className={css.button_rename}>
-                Rename Collection
-              </button>
-              <button onClick={() => set_data(collection, "delete")} className={css.button_delete}>
-                Delete Collection
-              </button>
-            </div>
-          </div>
-        ))}
       </div>
       {!isDesktopOrLaptop && <MobileNavBottom />}
       {showModal === "delete_item" && (
-        <RemoveItemnModal
+        <RemoveItemModal
           collectionID={itemData!.collectionID}
           itemID={itemData!.itemID}
           img_link={itemData!.img_link}
