@@ -8,10 +8,24 @@ import deleteFilled from "../../assets/icons/deleteFilled.svg";
 import Button from "../fragments/FormInputs/Button";
 import { useState } from "react";
 import axios from "axios";
-import { LINK_GET_CART, LINK_GET_ITEM_DETAILS } from "../misc";
-import { useQuery } from "react-query";
+import {
+  LINK_GET_CART,
+  LINK_GET_ITEM_DETAILS,
+  LINK_REMOVE_FROM_CART,
+  closeDialog,
+  showAndCloseDialog,
+  showDialog,
+} from "../misc";
+import { useMutation, useQuery } from "react-query";
 import { ItemDetails } from "../Item/Item";
 import LoadingText, { LoadingBigText, LoadingSmallText } from "../fragments/commonstuff/Loading";
+import LoadingDialog, {
+  ErrorDialog,
+  IconTextDialog,
+  SuccessDialog,
+} from "../fragments/commonstuff/Dialogs";
+import success from "../../assets/icons/success.svg";
+import error from "../../assets/icons/error.svg";
 
 interface CartDetails {
   itemID: number;
@@ -19,6 +33,7 @@ interface CartDetails {
   size: string;
   storeName: string;
   thumbnail: string;
+  refetchFn?: () => void;
 }
 
 const LoadingCartItem: React.FC = () => {
@@ -37,20 +52,47 @@ const LoadingCartItem: React.FC = () => {
   );
 };
 
-const CartItem: React.FC<CartDetails> = ({ itemID, price, size, storeName, thumbnail }) => {
+const CartItem: React.FC<CartDetails> = ({
+  itemID,
+  price,
+  size,
+  storeName,
+  thumbnail,
+  refetchFn,
+}) => {
   const [isFilled, setIsFilled] = useState(false);
-  const { status, data } = useQuery<ItemDetails>(
-    "itemDetails" + itemID,
-    async () => {
-      const res = await axios.get(LINK_GET_ITEM_DETAILS, {
-        params: { id: itemID },
-        withCredentials: true,
-      });
+  const { status, data } = useQuery<ItemDetails>("itemDetails" + itemID, async () => {
+    const res = await axios.get(LINK_GET_ITEM_DETAILS, {
+      params: { id: itemID },
+      withCredentials: true,
+    });
+    console.log(res);
+    if (refetchFn !== undefined) {
+      refetchFn();
+    }
+    return res.data;
+  });
+  const deleteItem = useMutation({
+    mutationFn: async () => {
+      console.log(itemID);
+      const formData = new FormData();
+      formData.append("itemID", itemID.toString());
+      const res = await axios.post(LINK_REMOVE_FROM_CART, formData, { withCredentials: true });
       console.log(res);
-      return res.data;
+      return res;
     },
-    { staleTime: Infinity }
-  );
+    onMutate: () => showDialog("loadingDialog"),
+    onSuccess: () => {
+      closeDialog("loadingDialog");
+      showAndCloseDialog("deleteSuccess", 3000);
+      setIsFilled(false);
+    },
+    onError: () => {
+      closeDialog("loadingDialog");
+      showAndCloseDialog("deleteError", 3000);
+      setIsFilled(false);
+    },
+  });
   return (
     <div className={css.item}>
       <img src={thumbnail} alt="Item image" className={css.itemImage} />
@@ -66,8 +108,8 @@ const CartItem: React.FC<CartDetails> = ({ itemID, price, size, storeName, thumb
         <p className={css.itemSize}>Size: {size}</p>
       </div>
       <div className={css.priceAndDelete}>
-        <p className={css.itemPrice}>₱ {price}</p>
-        <button className={css.deleteBtn}>
+        <p className={css.itemPrice}>₱{price}</p>
+        <button className={css.deleteBtn} onClick={() => deleteItem.mutate()}>
           <img
             src={isFilled ? deleteFilled : deleteIcon}
             alt="Delete Icon"
@@ -82,7 +124,7 @@ const CartItem: React.FC<CartDetails> = ({ itemID, price, size, storeName, thumb
 };
 
 const Cart: React.FC = () => {
-  const { status, data } = useQuery<CartDetails[]>(
+  const { status, data, refetch } = useQuery<CartDetails[]>(
     "cart",
     async () => {
       const res = await axios.get(LINK_GET_CART, { withCredentials: true });
@@ -97,13 +139,18 @@ const Cart: React.FC = () => {
   return (
     <>
       {isDesktopOrLaptop ? <NavBar /> : <MobileNavTop />}
+      <LoadingDialog />
+      <IconTextDialog text="Deleted item from cart!" icon={success} id="deleteSuccess" />
+      <IconTextDialog text="Error deleting item from cart!" icon={error} id="deleteError" />
+      <SuccessDialog text="Purchased all items" />
+      <ErrorDialog text="Error purchasing items" />
       <div className={css.wrapper}>
         <BackAndTitle title="Cart" backTo="/" />
         <div className={css.itemContainer}>
           {status === "success" ? (
             <>
               {data.map((item) => (
-                <CartItem key={item.itemID} {...item} />
+                <CartItem key={item.itemID} {...item} refetchFn={refetch} />
               ))}
               <Button text="PURCHASE ALL ITEMS" />
             </>
