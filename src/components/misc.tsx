@@ -72,3 +72,5 @@ export const LINK_UPDATE_TICKET_STATUS = domain + ticketApi + "update_ticket_sta
 export const LINK_ADD_TO_CART = domain + frontPageApi + "add_to_cart";
 export const LINK_GET_CART = domain + frontPageApi + "cart";
 export const LINK_REMOVE_FROM_CART = domain + frontPageApi + "remove_from_cart";
+export const LINK_SEARCH = domain + frontPageApi + "search";
+export const LINK_PURCHASE_CART = domain + frontPageApi + "purchase_cart";

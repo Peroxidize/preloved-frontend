@@ -31,11 +31,9 @@ export default function FrontPage() {
   const navigate = useNavigate();
   const getItems = async ({ pageParam = 0 }) => {
     const res = await axios.get(LINK_GET_FRONTPAGE, { withCredentials: true });
-    console.log(res.data.items);
     const itemsWithImg = res.data.items.filter((item: Item) => {
       return item.images.length > 0;
     });
-    console.log(itemsWithImg);
     return itemsWithImg;
   };
   const { status, data, fetchNextPage, isFetchingNextPage } = useInfiniteQuery({
