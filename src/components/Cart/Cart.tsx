@@ -125,15 +125,11 @@ const CartItem: React.FC<CartDetails> = ({
 };
 
 const Cart: React.FC = () => {
-  const { status, data, refetch } = useQuery<CartDetails[]>(
-    "cart",
-    async () => {
-      const res = await axios.get(LINK_GET_CART, { withCredentials: true });
-      console.log(res);
-      return res.data.cart;
-    },
-    { staleTime: Infinity }
-  );
+  const { status, data, refetch } = useQuery<CartDetails[]>("cart", async () => {
+    const res = await axios.get(LINK_GET_CART, { withCredentials: true });
+    console.log(res);
+    return res.data.cart;
+  });
 
   const purchaseCart = useMutation({
     mutationFn: async () => {
