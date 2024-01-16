@@ -3,6 +3,19 @@ import { LINK_GET_PENDING_LIST, User, UserType } from "../components/misc";
 
 const API_URL = "https://prelovedbackend.azurewebsites.net/auth/";
 
+export const attach_location = async (formData: any) => {
+  try {
+    const response = await axios.post(API_URL + "location/attach_location", formData, {
+      withCredentials: true,
+    });
+    console.log(response.data);
+    return "Coordinates updated";
+  } catch (error: any) {
+    console.log(error);
+    return null;
+  }
+};
+
 export const login = async (formData: any) => {
   let response;
   try {
@@ -77,7 +90,7 @@ async function handleResponse(response: AxiosResponse | undefined) {
 }
 
 function getUserType(type: string, verified: string): UserType {
-  if (verified === "1"){
+  if (verified === "1") {
     return UserType.Seller;
   }
 

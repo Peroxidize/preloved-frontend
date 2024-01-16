@@ -18,6 +18,7 @@ import TicketCenter from "../components/TicketCenter/TicketCenter";
 import TicketCenterSeller from "../components/TicketCenter/TicketCenterSeller";
 import Cart from "../components/Cart/Cart";
 import Search from "../components/Search/Search";
+import Maps from "../components/ProductManagement/map";
 
 export const UserRoute = () => {
   return (
@@ -43,6 +44,7 @@ export const VerifiedSellerRoute = () => {
       <Route path="shop/create" element={<CreateShop />} />
       <Route path="shop" element={<Shop />} />
       <Route path="shop/add" element={<AddItem />} />
+      <Route path="shop/map" element={<Maps />} />
       <Route path="ticketcenter" element={<TicketCenterSeller />} />
     </>
   );
