@@ -3,6 +3,7 @@
   flex-direction: column;
   gap: 0.25rem;
   margin-bottom: 1.5rem;
+  min-width: 0;
 }
 
 .textInput {
@@ -10,4 +11,9 @@
   border-radius: 10px;
   border: 1px solid black;
   outline: 0;
+}
+
+.errors {
+  color: red;
+  font-size: 0.75rem;
 }

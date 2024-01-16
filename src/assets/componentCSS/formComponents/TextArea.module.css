@@ -13,3 +13,8 @@
   resize: none;
   min-height: 10rem;
 }
+
+.errors {
+  color: red;
+  font-size: 0.75rem;
+}
