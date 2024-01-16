@@ -68,9 +68,6 @@ const CartItem: React.FC<CartDetails> = ({
       withCredentials: true,
     });
     console.log(res);
-    if (refetchFn !== undefined) {
-      refetchFn();
-    }
     return res.data;
   });
   const deleteItem = useMutation({
@@ -80,6 +77,9 @@ const CartItem: React.FC<CartDetails> = ({
       formData.append("itemID", itemID.toString());
       const res = await axios.post(LINK_REMOVE_FROM_CART, formData, { withCredentials: true });
       console.log(res);
+      if (refetchFn) {
+        refetchFn();
+      }
       return res;
     },
     onMutate: () => showDialog("loadingDialog"),
@@ -109,7 +109,7 @@ const CartItem: React.FC<CartDetails> = ({
         <p className={css.itemSize}>Size: {size}</p>
       </div>
       <div className={css.priceAndDelete}>
-        <p className={css.itemPrice}>₱{price}</p>
+        <p className={css.itemPrice}>₱ {price}</p>
         <button className={css.deleteBtn} onClick={() => deleteItem.mutate()}>
           <img
             src={isFilled ? deleteFilled : deleteIcon}
