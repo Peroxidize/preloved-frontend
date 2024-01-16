@@ -68,9 +68,6 @@ const CartItem: React.FC<CartDetails> = ({
       withCredentials: true,
     });
     console.log(res);
-    if (refetchFn !== undefined) {
-      refetchFn();
-    }
     return res.data;
   });
   const deleteItem = useMutation({
@@ -80,6 +77,9 @@ const CartItem: React.FC<CartDetails> = ({
       formData.append("itemID", itemID.toString());
       const res = await axios.post(LINK_REMOVE_FROM_CART, formData, { withCredentials: true });
       console.log(res);
+      if (refetchFn) {
+        refetchFn();
+      }
       return res;
     },
     onMutate: () => showDialog("loadingDialog"),
@@ -109,7 +109,7 @@ const CartItem: React.FC<CartDetails> = ({
         <p className={css.itemSize}>Size: {size}</p>
       </div>
       <div className={css.priceAndDelete}>
-        <p className={css.itemPrice}>₱{price}</p>
+        <p className={css.itemPrice}>₱ {price}</p>
         <button className={css.deleteBtn} onClick={() => deleteItem.mutate()}>
           <img
             src={isFilled ? deleteFilled : deleteIcon}
@@ -125,15 +125,11 @@ const CartItem: React.FC<CartDetails> = ({
 };
 
 const Cart: React.FC = () => {
-  const { status, data, refetch } = useQuery<CartDetails[]>(
-    "cart",
-    async () => {
-      const res = await axios.get(LINK_GET_CART, { withCredentials: true });
-      console.log(res);
-      return res.data.cart;
-    },
-    { staleTime: Infinity }
-  );
+  const { status, data, refetch } = useQuery<CartDetails[]>("cart", async () => {
+    const res = await axios.get(LINK_GET_CART, { withCredentials: true });
+    console.log(res);
+    return res.data.cart;
+  });
 
   const purchaseCart = useMutation({
     mutationFn: async () => {

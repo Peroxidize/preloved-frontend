@@ -39,6 +39,7 @@
 .itemPrice {
   font-weight: bold;
   font-size: 1.1rem;
+  white-space: nowrap;
 }
 
 .itemStore,

@@ -10,6 +10,9 @@ import {
   LINK_GET_ITEM_DETAILS,
   LINK_GET_ITEM_IMAGES,
   LINK_PURCHASE_ITEM,
+  closeDialog,
+  showAndCloseDialog,
+  showDialog,
 } from "../misc";
 import { useMutation, useQuery } from "react-query";
 import Tag from "../fragments/commonstuff/Tag";
@@ -53,9 +56,7 @@ const AddToCollectionModal = ({ name, id }: { name: string; id: number }) => {
 
   const onSubmit: SubmitHandler<IFormInput> = async (form) => {
     setFetching(true);
-    setResult(
-      await add_item_to_collection(String(form.collectionID), String(itemData?.itemID))
-    );
+    setResult(await add_item_to_collection(String(form.collectionID), String(itemData?.itemID)));
     setFetching(false);
   };
 
@@ -90,10 +91,7 @@ const AddToCollectionModal = ({ name, id }: { name: string; id: number }) => {
                     type="submit"
                     value="Add to collection"
                   />
-                  <button
-                    onClick={() => setShowModal("")}
-                    className={modalcss.secondary_button}
-                  >
+                  <button onClick={() => setShowModal("")} className={modalcss.secondary_button}>
                     Cancel
                   </button>
                 </div>
@@ -187,6 +185,20 @@ const Details: React.FC<{ id: string | undefined }> = ({ id }) => {
       });
       return res;
     },
+    onMutate: () => {
+      closeDialog("sureDialog");
+      showDialog("loadingDialog");
+    },
+    onSuccess: () => {
+      closeDialog("loadingDialog");
+      showAndCloseDialog("successDialog", 3000);
+      setIsFilled(false);
+    },
+    onError: () => {
+      closeDialog("loadingDialog");
+      showAndCloseDialog("buyErrorDialog", 3000);
+      setIsFilled(false);
+    },
   });
 
   const addToCart = useMutation({
@@ -200,46 +212,19 @@ const Details: React.FC<{ id: string | undefined }> = ({ id }) => {
       console.log(res);
       return res;
     },
-    onMutate: () => {
-      const loadingDialog = document.getElementById("loadingDialog") as HTMLDialogElement;
-      loadingDialog.showModal();
-    },
+    onMutate: () => showDialog("loadingDialog"),
     onSuccess: () => {
-      const loadingDialog = document.getElementById("loadingDialog") as HTMLDialogElement;
-      loadingDialog.close();
-      const successDialog = document.getElementById(
-        "cartSuccessDialog"
-      ) as HTMLDialogElement;
-      successDialog.showModal();
-      setTimeout(() => successDialog.close(), 3000);
+      closeDialog("loadingDialog");
+      showAndCloseDialog("cartSuccessDialog", 3000);
+      setIsFilled(false);
     },
-    onError: () => {
-      const loadingDialog = document.getElementById("loadingDialog") as HTMLDialogElement;
-      loadingDialog.close();
-      const errorDialog = document.getElementById("errorDialog") as HTMLDialogElement;
-      errorDialog.showModal();
-      setTimeout(() => errorDialog.close(), 3000);
+    onError: (error) => {
+      console.log(error);
+      closeDialog("loadingDialog");
+      showAndCloseDialog("cartErrorDialog", 3000);
+      setIsFilled(false);
     },
   });
-
-  useEffect(() => {
-    const loadingDialog = document.getElementById("loadingDialog") as HTMLDialogElement;
-    const sureDialog = document.getElementById("sureDialog") as HTMLDialogElement;
-    if (purchaseItem.isLoading) {
-      if (sureDialog.open) sureDialog.close();
-      loadingDialog.showModal();
-    } else if (purchaseItem.isSuccess) {
-      loadingDialog.close();
-      const successDialog = document.getElementById("successDialog") as HTMLDialogElement;
-      successDialog.showModal();
-      setTimeout(() => successDialog.close(), 3000);
-    } else if (purchaseItem.isError) {
-      loadingDialog.close();
-      const errorDialog = document.getElementById("errorDialog") as HTMLDialogElement;
-      errorDialog.showModal();
-      setTimeout(() => errorDialog.close(), 3000);
-    }
-  }, [purchaseItem.isLoading, purchaseItem.isSuccess, purchaseItem.isError]);
 
   const getItemDetails = async () => {
     const res = await axios.get(LINK_GET_ITEM_DETAILS, {
@@ -301,9 +286,7 @@ const Details: React.FC<{ id: string | undefined }> = ({ id }) => {
                   {tag.tagName}
                 </Tag>
               ))}
-              <Tag isPrimary={!data.isFeminine}>
-                {data.isFeminine ? "Feminine" : "Masculine"}
-              </Tag>
+              <Tag isPrimary={!data.isFeminine}>{data.isFeminine ? "Feminine" : "Masculine"}</Tag>
               <div className={css.icon_tooltip}>
                 <span>Add to collection</span>
                 <img
@@ -333,17 +316,9 @@ const Details: React.FC<{ id: string | undefined }> = ({ id }) => {
               <img src={cartIcon} alt="Cart Icon" className={css.cart} />
               Add to Cart
             </button>
-            <Button
-              text="Buy Now"
-              isPrimary={true}
-              handleClick={() => handleDialog(true)}
-            />
+            <Button text="Buy Now" isPrimary={true} handleClick={() => handleDialog(true)} />
           </div>
-          <dialog
-            className={css.sureDialog}
-            id="sureDialog"
-            onClick={dialogClickedOutside}
-          >
+          <dialog className={css.sureDialog} id="sureDialog" onClick={dialogClickedOutside}>
             <div className={css.dialogContainer}>
               <h2 className={css.sureDialogTitle}>Are you sure you want to buy this?</h2>
               <div className={css.sureDialogButtons}>
@@ -354,22 +329,23 @@ const Details: React.FC<{ id: string | undefined }> = ({ id }) => {
                     purchaseItem.mutate();
                   }}
                 />
-                <Button
-                  text="No"
-                  isPrimary={true}
-                  handleClick={() => handleDialog(false)}
-                />
+                <Button text="No" isPrimary={true} handleClick={() => handleDialog(false)} />
               </div>
             </div>
           </dialog>
           <LoadingDialog />
           <IconTextDialog text="Item purchased!" icon={success} id="successDialog" />
+          <IconTextDialog text="Item added to cart!" icon={success} id="cartSuccessDialog" />
           <IconTextDialog
-            text="Item added to cart!"
-            icon={success}
-            id="cartSuccessDialog"
+            text="Cannot add item to cart. Pending ticket already exists."
+            icon={error}
+            id="cartErrorDialog"
           />
-          <IconTextDialog text="Something went wrong!" icon={error} id="errorDialog" />
+          <IconTextDialog
+            text="Cannot buy item. Pending ticket already exists."
+            icon={error}
+            id="buyErrorDialog"
+          />
         </>
       ) : (
         <>
