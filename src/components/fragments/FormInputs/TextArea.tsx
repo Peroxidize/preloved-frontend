@@ -1,4 +1,5 @@
 import css from "../../../assets/componentCSS/formComponents/TextArea.module.css";
+import { capitalizeFirstLetter } from "../../misc";
 
 interface TextAreaProps {
   rows: number;
@@ -6,6 +7,8 @@ interface TextAreaProps {
   register: any;
   name: string;
   label?: string;
+  required?: boolean;
+  errors?: string;
 }
 
 const TextArea: React.FC<TextAreaProps> = ({
@@ -14,6 +17,8 @@ const TextArea: React.FC<TextAreaProps> = ({
   register,
   name,
   label,
+  required,
+  errors,
 }) => {
   return (
     <div className={css.textAreaContainer}>
@@ -22,9 +27,10 @@ const TextArea: React.FC<TextAreaProps> = ({
         id={name}
         rows={rows}
         placeholder={placeholder}
-        {...register(name, { required: true })}
+        {...register(name, { required: required && `${capitalizeFirstLetter(name)} is required` })}
         className={css.textArea}
       ></textarea>
+      <div className={css.errors}>{errors}</div>
     </div>
   );
 };

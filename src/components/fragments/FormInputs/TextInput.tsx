@@ -1,5 +1,6 @@
 import { UseFormRegister } from "react-hook-form";
 import classes from "../../../assets/componentCSS/formComponents/TextInput.module.css";
+import { capitalizeFirstLetter } from "../../misc";
 
 interface TextInputProps {
   label?: string;
@@ -9,6 +10,7 @@ interface TextInputProps {
   required: boolean;
   register: UseFormRegister<any>;
   containerClasses?: string;
+  errors?: any;
 }
 
 const TextInput: React.FC<TextInputProps> = ({ ...props }) => {
@@ -21,8 +23,11 @@ const TextInput: React.FC<TextInputProps> = ({ ...props }) => {
         className={classes.textInput}
         placeholder={props.placeholder}
         step={props.type === "number" ? "any" : undefined}
-        {...props.register(props.name, { required: props.required })}
+        {...props.register(props.name, {
+          required: props.required && `${capitalizeFirstLetter(props.name)} is required`,
+        })}
       />
+      <div className={classes.errors}>{props.errors}</div>
     </div>
   );
 };

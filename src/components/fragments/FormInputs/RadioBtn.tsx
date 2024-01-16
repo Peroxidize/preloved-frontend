@@ -7,18 +7,11 @@ interface RadioBtnProps {
   label: string;
   id: string;
 }
-const RadioBtn: React.FC<RadioBtnProps> = ({
-  register,
-  value,
-  group,
-  required,
-  label,
-  id,
-}) => {
+const RadioBtn: React.FC<RadioBtnProps> = ({ register, value, group, required, label, id }) => {
   return (
     <div className={css.radioContainer}>
       <input
-        {...register(group, { required: required })}
+        {...register(group, { required: required && "This field is required." })}
         type="radio"
         value={value}
         id={id}

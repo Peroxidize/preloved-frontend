@@ -64,7 +64,7 @@ const MultipleImageInput: React.FC<ImageInputProps> = ({ photos, onChange }) => 
   );
 };
 
-const AddTag: React.FC<{ register: any }> = ({ register }) => {
+const AddTag: React.FC<{ register: any; errors?: string }> = ({ register, errors }) => {
   const [tag, setTag] = useState<string>("");
   const [searchText, setSearchText] = useState<string>("");
 
@@ -112,6 +112,7 @@ const AddTag: React.FC<{ register: any }> = ({ register }) => {
         {tag === "" && <img src={plus} alt="Add tag" className={css.plusIcon} />}
         {tag === "" ? "Add Tag" : tag}
       </div>
+      {errors && <div className={css.errors}>{errors}</div>}
       <dialog className={css.tagDialog} id="tagDialog" onClick={handleCloseDialogOutside}>
         <div className={css.dialogContainer}>
           <div className={css.searchAndClose}>
@@ -144,7 +145,7 @@ const AddTag: React.FC<{ register: any }> = ({ register }) => {
                   return (
                     <div className={css.radioContainer} key={data[key]}>
                       <input
-                        {...register("tag", { required: true })}
+                        {...register("tag", { required: "Add one tag" })}
                         type="radio"
                         value={data[key]}
                         id={data[key]}
@@ -173,9 +174,15 @@ const AddItem: React.FC = () => {
   const isDesktopOrLaptop = useMediaQuery({
     query: "(min-device-width: 1224px)",
   });
-  const { handleSubmit, register, reset } = useForm<ItemDetails>();
+  const {
+    handleSubmit,
+    register,
+    reset,
+    formState: { errors },
+  } = useForm<ItemDetails>();
   const [photos, setPhotos] = useState<string[]>([]);
   const [files, setFiles] = useState<File[]>([]);
+  const [submittedOnce, setSubmittedOnce] = useState(false);
 
   const addDetails = useMutation({
     mutationFn: async (formData: FormData) => {
@@ -252,12 +259,7 @@ const AddItem: React.FC = () => {
       setPhotos([]);
       reset();
     }
-  }, [
-    addDetails.isError,
-    addDetails.isLoading,
-    addPhotos.isLoading,
-    addPhotos.isSuccess,
-  ]);
+  }, [addDetails.isError, addDetails.isLoading, addPhotos.isLoading, addPhotos.isSuccess]);
 
   return (
     <>
@@ -271,6 +273,9 @@ const AddItem: React.FC = () => {
           <div className={css.formContainer}>
             <div className={css.firstColumn}>
               <MultipleImageInput photos={photos} onChange={handleAddPhoto} />
+              {files.length === 0 && submittedOnce && (
+                <div className={css.errors}>Upload at least one photo</div>
+              )}
               <div className={css.nameAndTag}>
                 <TextInput
                   placeholder="Name"
@@ -279,8 +284,9 @@ const AddItem: React.FC = () => {
                   required
                   register={register}
                   containerClasses={css.name}
+                  errors={errors.name?.message}
                 />
-                <AddTag register={register} />
+                <AddTag register={register} errors={errors.tag?.message} />
               </div>
             </div>
             <div className={css.secondColumn}>
@@ -289,6 +295,8 @@ const AddItem: React.FC = () => {
                 placeholder="Description"
                 name="description"
                 register={register}
+                errors={errors.description?.message}
+                required
               />
               <div className={css.styleAndSize}>
                 <SelectInput
@@ -318,6 +326,9 @@ const AddItem: React.FC = () => {
                     id="feminine"
                   />
                 </div>
+                {errors.isFeminine?.type === "required" && (
+                  <div className={css.errors}>Style is required</div>
+                )}
               </div>
               <TextInput
                 label="Price:"
@@ -326,10 +337,11 @@ const AddItem: React.FC = () => {
                 required
                 register={register}
                 containerClasses={css.priceContainer}
+                errors={errors.price?.message}
               />
             </div>
           </div>
-          <Button text="ADD ITEM" />
+          <Button text="ADD ITEM" handleClick={() => setSubmittedOnce(true)} />
         </form>
       </div>
       {!isDesktopOrLaptop && <MobileNavBottom />}

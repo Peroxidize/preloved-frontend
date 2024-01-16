@@ -30,6 +30,10 @@ export const showAndCloseDialog = (id: string, time: number) => {
   setTimeout(() => dialog.close(), time);
 };
 
+export function capitalizeFirstLetter(string: string) {
+  return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
 const domain = "https://prelovedbackend.azurewebsites.net/";
 const storeApi = "store/";
 const frontPageApi = "homepage/";
