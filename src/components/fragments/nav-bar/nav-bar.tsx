@@ -85,15 +85,35 @@ function getMenu(userType: UserType) {
 const MobileNavTop: React.FC = () => {
   // Component logic goes here
   const [storedUser, setUser] = useAtom(userAtom);
+  const [searchText, setSearchText] = useState("");
+  const navigate = useNavigate();
   if (storedUser?.type === UserType.Seller) return null;
+
+  const handleSearchText = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchText(e.target.value);
+  };
+
+  const handleSearch = () => {
+    navigate(`/search?q=${searchText}`);
+  };
 
   return (
     // JSX code goes here
     <>
       <div className={css.mob_nav_bar}>
         <div className={css.search_bar}>
-          <img src={search_icon} alt="Search Icon" />
-          <input type="text" placeholder="Search" />
+          <img src={search_icon} alt="Search Icon" onClick={handleSearch} />
+          <input
+            type="search"
+            placeholder="Search"
+            onChange={handleSearchText}
+            value={searchText}
+            onKeyDown={(event) => {
+              if (event.key === "Enter") {
+                handleSearch();
+              }
+            }}
+          />
         </div>
       </div>
     </>
@@ -166,7 +186,7 @@ export default function DesktopNavUser() {
   };
 
   const handleSearch = () => {
-    navigate(`/search/?q=${searchText}`);
+    navigate(`/search?q=${searchText}`);
   };
 
   return (

@@ -1,0 +1,32 @@
+.wrapper {
+  overflow: hidden;
+}
+
+.display_clothing {
+  padding: 1rem 3rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: space-between;
+}
+
+.img {
+  border-radius: 10px;
+  background-color: white;
+  height: 15rem;
+  object-fit: contain;
+  cursor: pointer;
+  opacity: 1;
+  transition: opacity 0.3s ease;
+}
+
+.img:hover {
+  opacity: 0.8;
+}
+
+.loading {
+  margin: auto;
+  height: 3rem;
+  width: 3rem;
+  object-fit: cover;
+}
