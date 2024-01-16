@@ -1,9 +1,9 @@
 .wrapper {
   overflow: hidden;
+  padding: 1rem 3rem;
 }
 
 .display_clothing {
-  padding: 1rem 3rem;
   display: flex;
   flex-wrap: wrap;
   gap: 1rem;
