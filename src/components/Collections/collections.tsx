@@ -58,6 +58,11 @@ const RemoveItemModal = ({
     setCollections(fetch_collection());
   };
 
+  const nav = () => {
+    setShowModal("");
+    navigate(`/item/${itemID}`)
+  };
+
   return (
     <div className={css.modal_container}>
       <div className={css.dialog_container}>
@@ -67,7 +72,7 @@ const RemoveItemModal = ({
         <div className={css.dialog_body}>
           <img
             src={img_link}
-            onClick={() => navigate(`/item/${itemID}`)}
+            onClick={nav}
             className={`${css.image} ${css.image_display}`}
           />
           <div className={css.buttons}>
@@ -323,6 +328,10 @@ function Collections() {
     setCollections(fetch_collection());
   }, []);
 
+  useEffect(() => {
+    document.body.style.overflow = showModal !== "" ? "hidden" : "unset";
+  }, [showModal]);
+
   const create_modal = (modal: string) => {
     setShowModal(modal);
   };
@@ -336,8 +345,6 @@ function Collections() {
     setItemData({ collectionID, itemID, img_link });
     setShowModal(modal);
   };
-
-  const [isFilled, setIsFilled] = useState(false);
 
   return (
     <>

@@ -28,7 +28,7 @@
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  z-index: 999;
+  z-index: 5;
 }
 
 .logo {
