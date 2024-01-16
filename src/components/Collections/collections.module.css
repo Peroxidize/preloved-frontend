@@ -1,8 +1,3 @@
-body.modal_container {
-  overflow: hidden;
-  position: fixed;
-}
-
 .container {
   display: flex;
   flex-direction: column;
@@ -58,7 +53,7 @@ body.modal_container {
 
 .modal_container {
   z-index: 20;
-  position: absolute;
+  position: fixed;
   left: 0;
   right: 0;
   top: 0;
