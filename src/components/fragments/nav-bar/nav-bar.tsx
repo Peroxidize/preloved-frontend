@@ -1,5 +1,5 @@
 import { Link, useNavigate } from "react-router-dom";
-import { LINK_GET_STORES, User, UserType } from "../../misc";
+import { LINK_GET_STORES, LINK_SEARCH, User, UserType } from "../../misc";
 
 import css from "./nav-bar.module.css";
 import logo from "../../../assets/preloved-logo.jpg";
@@ -11,7 +11,7 @@ import shopping_cart from "../../../assets/icons/shopping_cart.svg";
 import shoppingFilledIcon from "../../../assets/icons/cartFilled.svg";
 import search_icon from "../../../assets/icons/search_icon.svg";
 
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useAtom } from "jotai";
 import { userAtom } from "../../../App";
 import { logout } from "../../../utils/auth";
@@ -154,42 +154,41 @@ export default function DesktopNavUser() {
   const [ticketFilled, setTicketFilled] = useState(false);
   const [cartFilled, setCartFilled] = useState(false);
   const [storedUser, setUser] = useAtom(userAtom);
+  const [searchText, setSearchText] = useState("");
   const navigate = useNavigate();
 
   const navigateFrontPage = () => {
     navigate("/");
   };
 
-  // useEffect(() => {
-  //   const get_session = async () => {
-  //     await axios
-  //       .get(LINK_IS_AUTH, { withCredentials: true })
-  //       .then((response) => {
-  //         console.log(response);
-  //       })
-  //       .catch((error) => {
-  //         console.log(error);
-  //       });
-  //   };
+  const handleSearchText = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchText(e.target.value);
+  };
 
-  //   get_session();
-  // }, []);
+  const handleSearch = () => {
+    navigate(`/search/?q=${searchText}`);
+  };
 
   return (
     <>
       <div className={css.nav_bar}>
-        <img
-          src={logo}
-          onClick={navigateFrontPage}
-          className={css.logo}
-          alt="Preloved Logo"
-        />
+        <img src={logo} onClick={navigateFrontPage} className={css.logo} alt="Preloved Logo" />
         {storedUser?.type === UserType.User ? (
           <>
             <div className={css.center}>
               <div className={css.search_bar}>
-                <img src={search_icon} alt="Search Icon" />
-                <input type="text" placeholder="Search" />
+                <img src={search_icon} alt="Search Icon" onClick={handleSearch} />
+                <input
+                  type="text"
+                  placeholder="Search"
+                  onChange={handleSearchText}
+                  value={searchText}
+                  onKeyDown={(event) => {
+                    if (event.key === "Enter") {
+                      handleSearch();
+                    }
+                  }}
+                />
               </div>
             </div>
           </>
