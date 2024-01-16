@@ -17,6 +17,7 @@ import Collections from "../components/Collections/collections";
 import TicketCenter from "../components/TicketCenter/TicketCenter";
 import TicketCenterSeller from "../components/TicketCenter/TicketCenterSeller";
 import Cart from "../components/Cart/Cart";
+import Search from "../components/Search/Search";
 
 export const UserRoute = () => {
   return (
@@ -28,6 +29,7 @@ export const UserRoute = () => {
       <Route path="item/:id" element={<Item />} />
       <Route path="collections" element={<Collections />} />
       <Route path="cart" element={<Cart />} />
+      <Route path="search" element={<Search />} />
     </>
   );
 };
@@ -59,10 +61,7 @@ export const UnsubmittedSellerRoute = () => {
   return (
     <>
       <Route index element={<ShopDocumentation submitted={false} />} />
-      <Route
-        path="/shopdocs/submitted"
-        element={<ShopDocumentation submitted={true} />}
-      />
+      <Route path="/shopdocs/submitted" element={<ShopDocumentation submitted={true} />} />
     </>
   );
 };
