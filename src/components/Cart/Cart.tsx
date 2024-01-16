@@ -11,6 +11,7 @@ import axios from "axios";
 import {
   LINK_GET_CART,
   LINK_GET_ITEM_DETAILS,
+  LINK_PURCHASE_CART,
   LINK_REMOVE_FROM_CART,
   closeDialog,
   showAndCloseDialog,
@@ -133,6 +134,23 @@ const Cart: React.FC = () => {
     },
     { staleTime: Infinity }
   );
+
+  const purchaseCart = useMutation({
+    mutationFn: async () => {
+      const res = await axios.post(LINK_PURCHASE_CART, { withCredentials: true });
+      console.log(res);
+      return res;
+    },
+    onMutate: () => showDialog("loadingDialog"),
+    onSuccess: () => {
+      closeDialog("loadingDialog");
+      showAndCloseDialog("successDialog", 3000);
+    },
+    onError: () => {
+      closeDialog("loadingDialog");
+      showAndCloseDialog("errorDialog", 3000);
+    },
+  });
   const isDesktopOrLaptop = useMediaQuery({
     query: "(min-device-width: 1224px)",
   });
@@ -152,7 +170,7 @@ const Cart: React.FC = () => {
               {data.map((item) => (
                 <CartItem key={item.itemID} {...item} refetchFn={refetch} />
               ))}
-              <Button text="PURCHASE ALL ITEMS" />
+              <Button text="PURCHASE ALL ITEMS" handleClick={() => purchaseCart.mutate()} />
             </>
           ) : data && data.length === 0 ? (
             <p className={css.noItems}>No items in cart.</p>

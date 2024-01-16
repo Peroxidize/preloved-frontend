@@ -7,6 +7,7 @@ import axios from "axios";
 import { LINK_GET_ITEM_IMAGES, LINK_SEARCH } from "../misc";
 import loading from "../../assets/loading.gif";
 import { LoadingImg } from "../fragments/commonstuff/Loading";
+import BackAndTitle from "../fragments/commonstuff/BackAndTitle";
 
 interface SearchResults {
   itemID: number;
@@ -55,6 +56,7 @@ const Search: React.FC = () => {
     <>
       {isDesktopOrLaptop ? <NavBar /> : <MobileNavTop />}
       <div className={css.wrapper}>
+        <BackAndTitle title="Results" backTo="/" />
         <div className={css.display_clothing}>
           {data &&
             data.map((item) => (
