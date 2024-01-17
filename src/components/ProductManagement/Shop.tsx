@@ -89,7 +89,7 @@ const Shop: React.FC = () => {
               <ShopItems itemID={item.itemID} itemName={item.itemName} key={item.itemID} />
             ))
           ) : (
-            <div className={`${css.loadingImg} ${utilcss.skeleton}`}>{""}</div>
+            <LoadingImg />
           )}
         </div>
       </div>

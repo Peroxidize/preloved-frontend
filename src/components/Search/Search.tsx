@@ -30,7 +30,7 @@ const SearchItem: React.FC<SearchResults> = ({ itemID, name }) => {
   const navigate = useNavigate();
 
   if (status === "loading") {
-    return <div className={`${loadingcss.loadingImg} ${utilcss.skeleton}`}>{""}</div>;
+    return <LoadingImg />;
   }
   return (
     <img src={data[0]} alt={name} className={css.img} onClick={() => navigate(`/item/${itemID}`)} />
