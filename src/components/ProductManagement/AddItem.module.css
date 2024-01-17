@@ -148,6 +148,12 @@
   border: 0;
 }
 
+.selectedTagsContainer {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
 .tagContainer {
   display: flex;
   flex-wrap: wrap;

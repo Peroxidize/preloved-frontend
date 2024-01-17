@@ -70,7 +70,7 @@ const MultipleImageInput: React.FC<ImageInputProps> = ({ photos, onChange, handl
 };
 
 const AddTag: React.FC<{ register: any; errors?: string }> = ({ register, errors }) => {
-  const [tag, setTag] = useState<string>("");
+  const [tag, setTag] = useState<string[]>([]);
   const [searchText, setSearchText] = useState<string>("");
 
   const getTags = async () => {
@@ -114,8 +114,8 @@ const AddTag: React.FC<{ register: any; errors?: string }> = ({ register, errors
   return (
     <>
       <div className={css.addTag} onClick={handleOpenDialog}>
-        {tag === "" && <img src={plus} alt="Add tag" className={css.plusIcon} />}
-        {tag === "" ? "Add Tag" : tag}
+        <img src={plus} alt="Add tag" className={css.plusIcon} />
+        Add Tags
       </div>
       {errors && <div className={css.errors}>{errors}</div>}
       <dialog className={css.tagDialog} id="tagDialog" onClick={handleCloseDialogOutside}>
@@ -134,6 +134,16 @@ const AddTag: React.FC<{ register: any; errors?: string }> = ({ register, errors
               <img src={close} alt="Close Dialog" />
             </button>
           </div>
+          {tag.length > 0 && (
+            <div className={css.selectedTagsContainer}>
+              <p>Selected tags: </p>
+              {tag.map((tag, index) => (
+                <div className={css.addTag} key={index}>
+                  {tag}
+                </div>
+              ))}
+            </div>
+          )}
           <div className={css.tagContainer}>
             {status === "loading" ? (
               <>
@@ -146,17 +156,17 @@ const AddTag: React.FC<{ register: any; errors?: string }> = ({ register, errors
               data &&
               Object.keys(data)
                 .filter((key) => key.toLowerCase().includes(searchText.toLowerCase()))
+                .filter((key) => !tag.includes(key))
                 .map((key) => {
                   return (
                     <div className={css.radioContainer} key={data[key]}>
                       <input
                         {...register("tag", { required: "Add one tag" })}
-                        type="radio"
+                        type="checkbox"
                         value={data[key]}
                         id={data[key]}
                         onClick={() => {
-                          setTag(key);
-                          handleCloseDialog();
+                          setTag((prevTag) => [...prevTag, key]);
                         }}
                         className={css.tagRadio}
                       />
@@ -226,27 +236,28 @@ const AddItem: React.FC = () => {
   };
 
   const onSubmit = async (data: ItemDetails) => {
-    const formData = new FormData();
-    formData.append("name", data.name);
-    formData.append("description", data.description);
-    formData.append("price", data.price.toString());
-    formData.append("size", data.size);
-    formData.append("isFeminine", data.isFeminine.toString());
-    formData.append("tagID", data.tag.toString());
-    console.log(data);
-    console.log(formData);
-    const itemID = await addDetails.mutateAsync(formData);
-    for (const file of files) {
-      const fileFormData = new FormData();
-      fileFormData.append("id", itemID.toString());
-      fileFormData.append("img", file);
-      console.log(itemID);
-      console.log(file);
-      await addPhotos.mutateAsync(fileFormData);
-      if (addPhotos.isError) {
-        break; // Break out of the loop
-      }
-    }
+    console.log(data.tag);
+    // const formData = new FormData();
+    // formData.append("name", data.name);
+    // formData.append("description", data.description);
+    // formData.append("price", data.price.toString());
+    // formData.append("size", data.size);
+    // formData.append("isFeminine", data.isFeminine.toString());
+    // formData.append("tagID", data.tag.toString());
+    // console.log(data);
+    // console.log(formData);
+    // const itemID = await addDetails.mutateAsync(formData);
+    // for (const file of files) {
+    //   const fileFormData = new FormData();
+    //   fileFormData.append("id", itemID.toString());
+    //   fileFormData.append("img", file);
+    //   console.log(itemID);
+    //   console.log(file);
+    //   await addPhotos.mutateAsync(fileFormData);
+    //   if (addPhotos.isError) {
+    //     break; // Break out of the loop
+    //   }
+    // }
   };
 
   useEffect(() => {
