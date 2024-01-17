@@ -66,8 +66,8 @@
   width: 4rem;
 }
 
-.imageWrapper:hover,
-.imageWrapper:active {
+.imageWrapper:hover .image,
+.imageWrapper:active .image {
   filter: brightness(90%);
 }
 

@@ -50,13 +50,8 @@ const MultipleImageInput: React.FC<ImageInputProps> = ({ photos, onChange, handl
         <p>Add image</p>
       </label>
       {photos.map((photo, index) => (
-        <div className={css.imageWrapper} key={index}>
-          <img
-            src={photo}
-            alt="Item"
-            className={css.image}
-            onClick={() => handleDeleteImg(index)}
-          />
+        <div className={css.imageWrapper} key={index} onClick={() => handleDeleteImg(index)}>
+          <img src={photo} alt="Item" className={css.image} />
           <img src={deleteIcon} alt="" className={css.deleteIcon} />
         </div>
       ))}
@@ -272,6 +267,7 @@ const AddItem: React.FC = () => {
       setTimeout(() => successDialog.close(), 3000);
       setFiles([]);
       setPhotos([]);
+      setSubmittedOnce(false);
       reset();
     }
   }, [addDetails.isError, addDetails.isLoading, addPhotos.isLoading, addPhotos.isSuccess]);
