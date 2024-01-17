@@ -5,13 +5,13 @@ const API_URL = "https://prelovedbackend.azurewebsites.net/auth/";
 
 export const get_current_user = async () => {
   try {
-    const response = await axios.post(API_URL + "get_current_user", {
+    const response = await axios.get(API_URL + "get_current_user", {
       withCredentials: true,
     });
-    console.log(response.data.response);
+    console.log(response);
     return;
   } catch (error: any) {
-    console.log(error.data);
+    console.log(error.data.response);
     return;
   }
 };
@@ -22,10 +22,10 @@ export const attach_location = async (formData: any) => {
       withCredentials: true,
     });
     console.log(response.data);
-    return "Coordinates updated";
+    return "success";
   } catch (error: any) {
     console.log(error);
-    return null;
+    return "error";
   }
 };
 

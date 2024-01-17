@@ -1,10 +1,10 @@
+import utilcss from "../../utils/utils.module.css";
 import css from "./collections.module.css";
 import { useMediaQuery } from "react-responsive";
 import NavBar, { MobileNavTop, MobileNavBottom } from "../fragments/nav-bar/nav-bar";
-import prelovedCollections from "../../assets/preloved.png";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { atom, useAtom, useAtomValue, useSetAtom } from "jotai";
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   create_collection,
   delete_collection,
@@ -60,7 +60,7 @@ const RemoveItemModal = ({
 
   const nav = () => {
     setShowModal("");
-    navigate(`/item/${itemID}`)
+    navigate(`/item/${itemID}`);
   };
 
   return (
@@ -70,11 +70,7 @@ const RemoveItemModal = ({
           <h2>Remove or Navigate</h2>
         </div>
         <div className={css.dialog_body}>
-          <img
-            src={img_link}
-            onClick={nav}
-            className={`${css.image} ${css.image_display}`}
-          />
+          <img src={img_link} onClick={nav} className={`${css.image} ${css.image_display}`} />
           <div className={css.buttons}>
             {fetching && <img src={loading} className={css.loading} />}
             {result !== "success" && !fetching && (
@@ -359,7 +355,8 @@ function Collections() {
         </div>
 
         <div className={css.card_column}>
-          {collections === null && <img src={loading} className={`${css.loading} ${css.center}`} />}
+          {/* {collections === null && <img src={loading} className={`${css.loading} ${css.center}`} />} */}
+          {collections === null && <div className={`${css.placeholder} ${utilcss.skeleton}`}></div>}
           {collections?.map((collection: Collection) => (
             <div className={css.card_container} key={collection.id}>
               <h3 className={css.collection_title}>{collection.name}</h3>

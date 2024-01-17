@@ -74,7 +74,8 @@ function Map() {
           </form>
           <div className={css.errors}>
             {fetching && <p className={css.neutral}>Submitting...</p>}
-            {response && <p className={css.success}>{response}</p>}
+            {response === "success" && <p className={css.success}>Coordinates updated</p>}
+            {response === "error" && <p>An error occured</p>}
             {errors.long?.type === "required" && <p>Longitude required</p>}
             {errors.lat?.type === "required" && <p>Latitude required</p>}
           </div>

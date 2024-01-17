@@ -11,6 +11,7 @@ import axios, { AxiosError } from "axios";
 import reject from "../../assets/icons/close.svg";
 import check from "../../assets/icons/check.svg";
 import css from "./admin-panel.module.css";
+import utilcss from "../../utils/utils.module.css";
 import leftArrow from "../../assets/icons/leftArrow.svg";
 import { useMutation, useQuery } from "react-query";
 import {
@@ -144,7 +145,7 @@ const ShopImage: React.FC<ShopImageProps> = ({
     return imageUrl;
   };
 
-  if (status === "loading") return <div className={css.imageLoading}></div>;
+  if (status === "loading") return <div className={`${css.imageLoading} ${utilcss.skeleton}`}></div>;
   if (status === "error")
     return <div className={css.imageLoading}>Error: {error.message}</div>;
   return (
@@ -174,9 +175,9 @@ const ShopDetails: React.FC<{ shopID: number }> = ({ shopID }) => {
   if (status === "loading") {
     return (
       <div className={css.shopDetails}>
-        <div className={css.loading}>{""}</div>
-        <div className={css.loading}>{""}</div>
-        <div className={css.loading}>{""}</div>
+        <div className={`${css.loading} ${utilcss.skeleton}`}>{""}</div>
+        <div className={`${css.loading} ${utilcss.skeleton}`}>{""}</div>
+        <div className={`${css.loading} ${utilcss.skeleton}`}>{""}</div>
       </div>
     );
   }

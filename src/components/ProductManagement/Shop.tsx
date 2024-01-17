@@ -4,6 +4,7 @@ import { MobileNavTop } from "../fragments/nav-bar/nav-bar";
 
 import plus from "../../assets/icons/plus.svg";
 import css from "./Shop.module.css";
+import utilcss from "../../utils/utils.module.css";
 import { Link, useNavigate } from "react-router-dom";
 import React from "react";
 import axios from "axios";
@@ -71,10 +72,10 @@ const Shop: React.FC = () => {
             </>
           ) : (
             <>
-              <h1 className={css.loadingName}>{""}</h1>
-              <div className={css.storeDetails}>
-                <div className={css.loadingDetail}>{""}</div>
-                <div className={css.loadingDetail}>{""}</div>
+              <h1 className={`${css.loadingName} ${utilcss.skeleton}`}>{""}</h1>
+              <div className={`${css.storeDetails} ${utilcss.skeleton}`}>
+                <div className={`${css.loadingDetail} ${utilcss.skeleton}`}>{""}</div>
+                <div className={`${css.loadingDetail} ${utilcss.skeleton}`}>{""}</div>
               </div>
             </>
           )}
@@ -88,7 +89,7 @@ const Shop: React.FC = () => {
               <ShopItems itemID={item.itemID} itemName={item.itemName} key={item.itemID} />
             ))
           ) : (
-            <LoadingImg />
+            <div className={`${css.loadingImg} ${utilcss.skeleton}`}>{""}</div>
           )}
         </div>
       </div>

@@ -1,6 +1,8 @@
 import { useMediaQuery } from "react-responsive";
 import NavBar, { MobileNavTop, MobileNavBottom } from "../fragments/nav-bar/nav-bar";
 import css from "./Search.module.css";
+import utilcss from "../../utils/utils.module.css";
+import loadingcss from "../../assets/componentCSS/commonStuff/Loading.module.css";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useQuery } from "react-query";
 import axios from "axios";
@@ -28,7 +30,7 @@ const SearchItem: React.FC<SearchResults> = ({ itemID, name }) => {
   const navigate = useNavigate();
 
   if (status === "loading") {
-    return <LoadingImg />;
+    return <div className={`${loadingcss.loadingImg} ${utilcss.skeleton}`}>{""}</div>;
   }
   return (
     <img src={data[0]} alt={name} className={css.img} onClick={() => navigate(`/item/${itemID}`)} />

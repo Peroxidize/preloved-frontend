@@ -189,14 +189,6 @@ export default function DesktopNavUser() {
     navigate(`/search?q=${searchText}`);
   };
 
-  useEffect(() => {
-    const fetch = async () => {
-      console.log(await get_current_user());
-    };
-
-    fetch();
-  }, []);
-
   return (
     <>
       <div className={css.nav_bar}>

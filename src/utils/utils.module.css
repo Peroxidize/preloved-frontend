@@ -11,3 +11,17 @@
     background-color: hsl(200, 20%, 95%);
   }
 }
+
+.placeholder {
+  height: 15rem;
+  width: 12.5rem;
+  background-color: #D9D9D9;
+  border-radius: 10px;
+}
+
+.dummy_display {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: space-between;
+}
