@@ -5,32 +5,59 @@ import clothes from "../../assets/clothes/clothes";
 
 import plus from "../../assets/icons/plus.svg";
 import css from "./Shop.module.css";
-import { Link } from "react-router-dom";
-import { useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import React, { useEffect } from "react";
 import axios from "axios";
-import { LINK_GET_ITEM_DETAILS, LINK_GET_SHOP_TICKETS, LINK_GET_STORES } from "../misc";
+import {
+  LINK_GET_ITEM_DETAILS,
+  LINK_GET_ITEM_IMAGES,
+  LINK_GET_SHOP_ITEMS,
+  LINK_GET_SHOP_TICKETS,
+  LINK_GET_STORES,
+} from "../misc";
 import { useQuery } from "react-query";
+import { LoadingImg } from "../fragments/commonstuff/Loading";
+
+interface ShopItemDetails {
+  itemID: number;
+  itemName: string;
+}
+
+const ShopItems: React.FC<ShopItemDetails> = ({ itemID, itemName }) => {
+  const { status, data } = useQuery("itemImages" + itemID, async () => {
+    const res = await axios.get(LINK_GET_ITEM_IMAGES, {
+      params: {
+        id: itemID,
+      },
+      withCredentials: true,
+    });
+    return res.data.image_links;
+  });
+  const navigate = useNavigate();
+
+  if (status === "loading") return <LoadingImg />;
+  if (data.length === 0) return null;
+  return (
+    <img
+      src={data[0]}
+      alt={itemName}
+      className={css.clothing}
+      onClick={() => navigate(`/item/${itemID}`)}
+    />
+  );
+};
 
 const Shop: React.FC = () => {
-  useEffect(() => {
-    axios
-      .get(LINK_GET_SHOP_TICKETS, {
-        withCredentials: true,
-      })
-      .then((response) => {
-        console.log(response);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }, []);
   const getShopDetails = async () => {
     const res = await axios.get(LINK_GET_STORES, { withCredentials: true });
-    console.log(res.data);
     return res.data;
   };
 
   const { status, data } = useQuery("shopDetails", getShopDetails);
+  const getShopItems = useQuery<ShopItemDetails[]>("shopItems", async () => {
+    const res = await axios.get(LINK_GET_SHOP_ITEMS, { withCredentials: true });
+    return res.data["items:"];
+  });
 
   const isDesktopOrLaptop = useMediaQuery({
     query: "(min-device-width: 1224px)",
@@ -60,12 +87,16 @@ const Shop: React.FC = () => {
           )}
         </div>
         <div className={css.productGrid}>
-          {/* {clothes.map((clothing) => (
-            <img src={clothing} alt="A product" className={css.clothing} />
-          ))} */}
           <Link to="/shop/add" className={css.addProduct}>
             <img src={plus} alt="Add product icon" className={css.addIcon} />
           </Link>
+          {getShopItems.status === "success" ? (
+            getShopItems.data.map((item) => (
+              <ShopItems itemID={item.itemID} itemName={item.itemName} key={item.itemID} />
+            ))
+          ) : (
+            <LoadingImg />
+          )}
         </div>
       </div>
       {!isDesktopOrLaptop && <MobileNavBottom />}

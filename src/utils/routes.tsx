@@ -44,6 +44,7 @@ export const VerifiedSellerRoute = () => {
       <Route path="shop" element={<Shop />} />
       <Route path="shop/add" element={<AddItem />} />
       <Route path="ticketcenter" element={<TicketCenterSeller />} />
+      <Route path="item/:id" element={<Item />} />
     </>
   );
 };
