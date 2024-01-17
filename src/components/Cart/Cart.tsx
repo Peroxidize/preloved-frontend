@@ -12,6 +12,7 @@ import {
   LINK_GET_CART,
   LINK_GET_ITEM_DETAILS,
   LINK_PURCHASE_CART,
+  LINK_PURCHASE_ITEM,
   LINK_REMOVE_FROM_CART,
   closeDialog,
   showAndCloseDialog,
@@ -27,6 +28,7 @@ import LoadingDialog, {
 } from "../fragments/commonstuff/Dialogs";
 import success from "../../assets/icons/success.svg";
 import error from "../../assets/icons/error.svg";
+import { useNavigate } from "react-router-dom";
 
 interface CartDetails {
   itemID: number;
@@ -35,6 +37,7 @@ interface CartDetails {
   storeName: string;
   thumbnail: string;
   refetchFn?: () => void;
+  storeID: number;
 }
 
 const LoadingCartItem: React.FC = () => {
@@ -130,23 +133,56 @@ const Cart: React.FC = () => {
     console.log(res);
     return res.data.cart;
   });
+  const navigate = useNavigate();
 
-  const purchaseCart = useMutation({
-    mutationFn: async () => {
-      const res = await axios.post(LINK_PURCHASE_CART, { withCredentials: true });
+  const deleteItem = useMutation({
+    mutationFn: async (formData: FormData) => {
+      const res = await axios.post(LINK_REMOVE_FROM_CART, formData, { withCredentials: true });
       console.log(res);
       return res;
-    },
-    onMutate: () => showDialog("loadingDialog"),
-    onSuccess: () => {
-      closeDialog("loadingDialog");
-      showAndCloseDialog("successDialog", 3000);
     },
     onError: () => {
       closeDialog("loadingDialog");
       showAndCloseDialog("errorDialog", 3000);
     },
   });
+
+  const purchaseItem = useMutation({
+    mutationFn: async (formData: FormData) => {
+      const res = await axios.post(LINK_PURCHASE_ITEM, formData, {
+        withCredentials: true,
+      });
+      console.log(res);
+      return res;
+    },
+    onError: () => {
+      closeDialog("loadingDialog");
+      showAndCloseDialog("errorDialog", 3000);
+    },
+  });
+
+  const handlePurchase = async () => {
+    if (!data) return;
+    showDialog("loadingDialog");
+    for (const item of data) {
+      const formData = new FormData();
+      formData.append("itemID", item.itemID.toString());
+      formData.append("storeID", item.storeID.toString());
+      await purchaseItem.mutateAsync(formData);
+      if (purchaseItem.isError) {
+        return;
+      }
+      const deleteFormData = new FormData();
+      await deleteItem.mutateAsync(deleteFormData);
+      if (deleteItem.isError) {
+        return;
+      }
+    }
+    closeDialog("loadingDialog");
+    showAndCloseDialog("successDialog", 3000);
+    setTimeout(() => navigate("/ticketcenter"), 3000);
+  };
+
   const isDesktopOrLaptop = useMediaQuery({
     query: "(min-device-width: 1224px)",
   });
@@ -166,7 +202,7 @@ const Cart: React.FC = () => {
               {data.map((item) => (
                 <CartItem key={item.itemID} {...item} refetchFn={refetch} />
               ))}
-              <Button text="PURCHASE ALL ITEMS" handleClick={() => purchaseCart.mutate()} />
+              <Button text="PURCHASE ALL ITEMS" handleClick={() => handlePurchase()} />
             </>
           ) : data && data.length === 0 ? (
             <p className={css.noItems}>No items in cart.</p>
