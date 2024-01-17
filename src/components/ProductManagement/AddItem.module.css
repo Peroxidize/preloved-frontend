@@ -40,11 +40,40 @@
   object-fit: contain;
 }
 
-.image {
+.imageWrapper {
+  position: relative;
+  cursor: pointer;
   height: 15rem;
-  width: 15rem;
+  min-width: 15rem;
+}
+
+.image {
+  height: 100%;
+  width: 100%;
   border-radius: 1rem;
-  object-fit: cover;
+  object-fit: contain;
+  background-color: #eaebed;
+}
+
+.deleteIcon {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  visibility: hidden;
+  filter: invert(100%) sepia(100%) saturate(1%) hue-rotate(333deg) brightness(105%) contrast(102%);
+  height: 4rem;
+  width: 4rem;
+}
+
+.imageWrapper:hover,
+.imageWrapper:active {
+  filter: brightness(90%);
+}
+
+.imageWrapper:hover .deleteIcon,
+.imageWrapper:active .deleteIcon {
+  visibility: visible;
 }
 
 .fileInput {

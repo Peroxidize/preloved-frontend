@@ -18,6 +18,7 @@ import Button from "../fragments/FormInputs/Button";
 import { useMediaQuery } from "react-responsive";
 import NavBar, { MobileNavBottom, MobileNavTop } from "../fragments/nav-bar/nav-bar";
 import LoadingDialog, { IconTextDialog } from "../fragments/commonstuff/Dialogs";
+import deleteIcon from "../../assets/icons/delete.svg";
 
 interface ItemDetails {
   tag: number;
@@ -30,12 +31,13 @@ interface ItemDetails {
 interface ImageInputProps {
   photos: string[];
   onChange: (files: File[]) => void;
+  handleDeleteImg: (index: number) => void;
 }
 interface TagData {
   [key: string]: string;
 }
 
-const MultipleImageInput: React.FC<ImageInputProps> = ({ photos, onChange }) => {
+const MultipleImageInput: React.FC<ImageInputProps> = ({ photos, onChange, handleDeleteImg }) => {
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files) {
       onChange(Array.from(event.target.files)); // Convert FileList to array
@@ -48,7 +50,15 @@ const MultipleImageInput: React.FC<ImageInputProps> = ({ photos, onChange }) => 
         <p>Add image</p>
       </label>
       {photos.map((photo, index) => (
-        <img src={photo} alt="Item" className={css.image} key={index} />
+        <div className={css.imageWrapper} key={index}>
+          <img
+            src={photo}
+            alt="Item"
+            className={css.image}
+            onClick={() => handleDeleteImg(index)}
+          />
+          <img src={deleteIcon} alt="" className={css.deleteIcon} />
+        </div>
       ))}
       <input
         type="file"
@@ -215,6 +225,11 @@ const AddItem: React.FC = () => {
     setFiles((prevFiles) => [...prevFiles, ...newUpload]);
   };
 
+  const handleDeleteImg = (index: number) => {
+    setPhotos((prevPhotos) => prevPhotos.filter((_, i) => i !== index));
+    setFiles((prevFiles) => prevFiles.filter((_, i) => i !== index));
+  };
+
   const onSubmit = async (data: ItemDetails) => {
     const formData = new FormData();
     formData.append("name", data.name);
@@ -272,7 +287,11 @@ const AddItem: React.FC = () => {
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className={css.formContainer}>
             <div className={css.firstColumn}>
-              <MultipleImageInput photos={photos} onChange={handleAddPhoto} />
+              <MultipleImageInput
+                photos={photos}
+                onChange={handleAddPhoto}
+                handleDeleteImg={handleDeleteImg}
+              />
               {files.length === 0 && submittedOnce && (
                 <div className={css.errors}>Upload at least one photo</div>
               )}
