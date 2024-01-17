@@ -47,10 +47,16 @@
   color: white;
   font-weight: bold;
   border-radius: 2rem;
+  background-color: black;
+  border: 2px solid black;
+  transition:
+    background-color 0.3s ease,
+    color 0.7s ease;
 }
 
 .submit_button:hover {
-  background-color: #1d4ed8;
+  background-color: white;
+  color: black;
   cursor: pointer;
 }
 

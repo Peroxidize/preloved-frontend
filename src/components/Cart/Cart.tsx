@@ -1,6 +1,7 @@
 import { useMediaQuery } from "react-responsive";
 import BackAndTitle from "../fragments/commonstuff/BackAndTitle";
 import css from "./Cart.module.css";
+import utilcss from "../../utils/utils.module.css";
 import NavBar, { MobileNavTop, MobileNavBottom } from "../fragments/nav-bar/nav-bar";
 import deleteIcon from "../../assets/icons/delete.svg";
 import sweater from "../../assets/clothes/checkered-sweater.jpg";
@@ -43,7 +44,7 @@ interface CartDetails {
 const LoadingCartItem: React.FC = () => {
   return (
     <div className={css.item}>
-      <div className={css.loadingThumbnail}>{""}</div>
+      <div className={`${css.loadingThumbnail} ${utilcss.skeleton}`}>{""}</div>
       <div className={css.nameAndSize}>
         <LoadingText />
         <LoadingSmallText />

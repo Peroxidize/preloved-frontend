@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import modalcss from "../Collections/collections.module.css";
 import css from "./Item.module.css";
+import utilcss from "../../utils/utils.module.css";
 import { useMediaQuery } from "react-responsive";
 import NavBar, { MobileNavBottom, MobileNavTop } from "../fragments/nav-bar/nav-bar";
 import { useNavigate, useParams } from "react-router-dom";
@@ -132,7 +133,7 @@ const Images: React.FC<{ id: string | undefined }> = ({ id }) => {
         {isFetchedAfterMount && status === "success" ? (
           <img src={data[selectedImg]} alt="" className={css.mainImage} />
         ) : (
-          <div className={css.mainImage}>{""}</div>
+          <div className={`${css.mainImage} ${utilcss.skeleton}`}>{""}</div>
         )}
       </div>
       <div className={css.images}>
@@ -147,7 +148,7 @@ const Images: React.FC<{ id: string | undefined }> = ({ id }) => {
             />
           ))
         ) : (
-          <div className={css.image}>{""}</div>
+          <div className={`${css.image} ${utilcss.skeleton}`}>{""}</div>
         )}
       </div>
     </div>
@@ -352,7 +353,7 @@ const Details: React.FC<{ id: string | undefined }> = ({ id }) => {
           <div className={css.nameAndStore}>
             <LoadingBigText />
             <LoadingText />
-            <div className={css.tagContainer}>
+          <div className={css.tagContainer}>
               <LoadingTag />
               <LoadingTag />
             </div>
