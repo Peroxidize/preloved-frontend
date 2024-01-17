@@ -1,5 +1,5 @@
 import { useForm } from "react-hook-form";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import axios, { AxiosError } from "axios";
 
 import css from "./AddItem.module.css";
@@ -9,7 +9,15 @@ import plus from "../../assets/icons/plus.svg";
 import close from "../../assets/icons/close.svg";
 import success from "../../assets/icons/success.svg";
 import error from "../../assets/icons/error.svg";
-import { LINK_ADD_ITEM, LINK_ATTACH_PHOTO_ITEM, LINK_GET_ALL_TAGS } from "../misc";
+import {
+  LINK_ADD_ITEM,
+  LINK_ADD_TAGS,
+  LINK_ATTACH_PHOTO_ITEM,
+  LINK_GET_ALL_TAGS,
+  closeDialog,
+  showAndCloseDialog,
+  showDialog,
+} from "../misc";
 import { useMutation, useQuery } from "react-query";
 import TextArea from "../fragments/FormInputs/TextArea";
 import RadioBtn from "../fragments/FormInputs/RadioBtn";
@@ -21,7 +29,6 @@ import LoadingDialog, { IconTextDialog } from "../fragments/commonstuff/Dialogs"
 import deleteIcon from "../../assets/icons/delete.svg";
 
 interface ItemDetails {
-  tag: number;
   description: string;
   name: string;
   isFeminine: number;
@@ -33,8 +40,15 @@ interface ImageInputProps {
   onChange: (files: File[]) => void;
   handleDeleteImg: (index: number) => void;
 }
+
+interface AddTagProps {
+  tag: number[];
+  setTag: React.Dispatch<React.SetStateAction<number[]>>;
+  submittedOnce: boolean;
+}
+
 interface TagData {
-  [key: string]: string;
+  [key: string]: number;
 }
 
 const MultipleImageInput: React.FC<ImageInputProps> = ({ photos, onChange, handleDeleteImg }) => {
@@ -69,8 +83,7 @@ const MultipleImageInput: React.FC<ImageInputProps> = ({ photos, onChange, handl
   );
 };
 
-const AddTag: React.FC<{ register: any; errors?: string }> = ({ register, errors }) => {
-  const [tag, setTag] = useState<string[]>([]);
+const AddTag: React.FC<AddTagProps> = ({ tag, setTag, submittedOnce }) => {
   const [searchText, setSearchText] = useState<string>("");
 
   const getTags = async () => {
@@ -79,11 +92,10 @@ const AddTag: React.FC<{ register: any; errors?: string }> = ({ register, errors
     return response.data;
   };
 
-  const { status, data, error } = useQuery<
-    "idle" | "error" | "loading" | "success",
-    AxiosError,
-    TagData
-  >("tags", getTags);
+  const { status, data } = useQuery<"idle" | "error" | "loading" | "success", AxiosError, TagData>(
+    "tags",
+    getTags
+  );
 
   const handleOpenDialog = () => {
     const tagDialog = document.querySelector("#tagDialog") as HTMLDialogElement;
@@ -103,7 +115,8 @@ const AddTag: React.FC<{ register: any; errors?: string }> = ({ register, errors
     }
   };
 
-  const handleCloseDialog = () => {
+  const handleCloseDialog = (event: React.MouseEvent) => {
+    event.preventDefault();
     const tagDialog = document.querySelector("#tagDialog") as HTMLDialogElement;
     tagDialog.close();
   };
@@ -111,13 +124,18 @@ const AddTag: React.FC<{ register: any; errors?: string }> = ({ register, errors
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchText(e.target.value);
   };
+
+  const handleRemoveTag = (index: number) => {
+    setTag((prevTag) => prevTag.filter((_, i) => i !== index));
+  };
+
   return (
     <>
       <div className={css.addTag} onClick={handleOpenDialog}>
         <img src={plus} alt="Add tag" className={css.plusIcon} />
         Add Tags
       </div>
-      {errors && <div className={css.errors}>{errors}</div>}
+      {tag.length === 0 && submittedOnce && <div className={css.errors}>Add a tag</div>}
       <dialog className={css.tagDialog} id="tagDialog" onClick={handleCloseDialogOutside}>
         <div className={css.dialogContainer}>
           <div className={css.searchAndClose}>
@@ -134,14 +152,24 @@ const AddTag: React.FC<{ register: any; errors?: string }> = ({ register, errors
               <img src={close} alt="Close Dialog" />
             </button>
           </div>
-          {tag.length > 0 && (
+          {data && tag.length > 0 && (
             <div className={css.selectedTagsContainer}>
               <p>Selected tags: </p>
-              {tag.map((tag, index) => (
-                <div className={css.addTag} key={index}>
-                  {tag}
-                </div>
-              ))}
+              {tag.map((tag, index) => {
+                return (
+                  <label
+                    className={css.addTag}
+                    onClick={() => {
+                      handleRemoveTag(index);
+                    }}
+                    key={index}
+                    htmlFor={tag.toString()}
+                  >
+                    {Object.keys(data).find((key) => data[key] === tag)}
+                    <img src={close} alt="" className={css.deleteTagIcon} />
+                  </label>
+                );
+              })}
             </div>
           )}
           <div className={css.tagContainer}>
@@ -156,24 +184,25 @@ const AddTag: React.FC<{ register: any; errors?: string }> = ({ register, errors
               data &&
               Object.keys(data)
                 .filter((key) => key.toLowerCase().includes(searchText.toLowerCase()))
-                .filter((key) => !tag.includes(key))
                 .map((key) => {
                   return (
                     <div className={css.radioContainer} key={data[key]}>
                       <input
-                        {...register("tag", { required: "Add one tag" })}
                         type="checkbox"
                         value={data[key]}
-                        id={data[key]}
-                        onClick={() => {
-                          setTag((prevTag) => [...prevTag, key]);
-                        }}
+                        id={data[key].toString()}
                         className={css.tagRadio}
+                        checked={tag.includes(data[key])}
+                        onChange={() => {
+                          setTag((prevTag) => [...prevTag, data[key]]);
+                        }}
                       />
-                      <label htmlFor={data[key]} className={css.addTag}>
-                        <img src={plus} alt="Add tags" className={css.plusIcon} />
-                        {key}
-                      </label>
+                      {!tag.includes(data[key]) && (
+                        <label htmlFor={data[key].toString()} className={css.addTag}>
+                          <img src={plus} alt="Add tags" className={css.plusIcon} />
+                          {key}
+                        </label>
+                      )}
                     </div>
                   );
                 })
@@ -198,6 +227,7 @@ const AddItem: React.FC = () => {
   const [photos, setPhotos] = useState<string[]>([]);
   const [files, setFiles] = useState<File[]>([]);
   const [submittedOnce, setSubmittedOnce] = useState(false);
+  const [tag, setTag] = useState<number[]>([]);
 
   const addDetails = useMutation({
     mutationFn: async (formData: FormData) => {
@@ -206,6 +236,11 @@ const AddItem: React.FC = () => {
       });
       console.log(res);
       return res.data.generatedID;
+    },
+    onMutate: () => showDialog("loadingDialog"),
+    onError: () => {
+      closeDialog("loadingDialog");
+      showAndCloseDialog("errorDialog", 3000);
     },
   });
 
@@ -216,6 +251,10 @@ const AddItem: React.FC = () => {
       });
       console.log(res);
       return res;
+    },
+    onError: () => {
+      closeDialog("loadingDialog");
+      showAndCloseDialog("errorDialog", 3000);
     },
   });
 
@@ -235,60 +274,93 @@ const AddItem: React.FC = () => {
     setFiles((prevFiles) => prevFiles.filter((_, i) => i !== index));
   };
 
+  const addTags = useMutation({
+    mutationFn: async (formData: FormData) => {
+      const res = await axios.post(LINK_ADD_TAGS, formData, { withCredentials: true });
+      console.log(res);
+      return res;
+    },
+    onError: () => {
+      closeDialog("loadingDialog");
+      showAndCloseDialog("errorDialog", 3000);
+    },
+  });
+
   const onSubmit = async (data: ItemDetails) => {
-    console.log(data.tag);
-    // const formData = new FormData();
-    // formData.append("name", data.name);
-    // formData.append("description", data.description);
-    // formData.append("price", data.price.toString());
-    // formData.append("size", data.size);
-    // formData.append("isFeminine", data.isFeminine.toString());
-    // formData.append("tagID", data.tag.toString());
-    // console.log(data);
-    // console.log(formData);
-    // const itemID = await addDetails.mutateAsync(formData);
-    // for (const file of files) {
-    //   const fileFormData = new FormData();
-    //   fileFormData.append("id", itemID.toString());
-    //   fileFormData.append("img", file);
-    //   console.log(itemID);
-    //   console.log(file);
-    //   await addPhotos.mutateAsync(fileFormData);
-    //   if (addPhotos.isError) {
-    //     break; // Break out of the loop
-    //   }
-    // }
+    const formData = new FormData();
+    formData.append("name", data.name);
+    formData.append("description", data.description);
+    formData.append("price", data.price.toString());
+    formData.append("size", data.size);
+    formData.append("isFeminine", data.isFeminine.toString());
+    formData.append("tagID", tag[0].toString());
+    console.log(data);
+    console.log(formData);
+    const itemID = await addDetails.mutateAsync(formData);
+    if (addDetails.isError) {
+      return;
+    }
+    for (const file of files) {
+      const fileFormData = new FormData();
+      fileFormData.append("id", itemID.toString());
+      fileFormData.append("img", file);
+      console.log(itemID);
+      console.log(file);
+      await addPhotos.mutateAsync(fileFormData);
+      if (addPhotos.isError) {
+        return;
+      }
+    }
+    for (let i = 1; i < tag.length; i++) {
+      const tagFormData = new FormData();
+      tagFormData.append("itemID", itemID.toString());
+      tagFormData.append("tagID", tag[i].toString());
+      await addTags.mutateAsync(tagFormData);
+    }
+    if (addTags.isError) {
+      return;
+    }
+    setFiles([]);
+    setPhotos([]);
+    setSubmittedOnce(false);
+    reset();
+    closeDialog("loadingDialog");
+    showAndCloseDialog("successDialog", 3000);
   };
 
-  useEffect(() => {
-    const loadingDialog = document.querySelector("#loadingDialog") as HTMLDialogElement;
-    if (addDetails.isLoading || addPhotos.isLoading) {
-      loadingDialog.showModal();
-    }
-    if (addDetails.isError || addDetails.isError) {
-      loadingDialog.close();
-      const errorDialog = document.querySelector("#errorDialog") as HTMLDialogElement;
-      errorDialog.showModal();
-      setTimeout(() => errorDialog.close(), 3000);
-    }
-    if (addPhotos.isSuccess && !addPhotos.isLoading) {
-      loadingDialog.close();
-      const successDialog = document.querySelector("#successDialog") as HTMLDialogElement;
-      successDialog.showModal();
-      setTimeout(() => successDialog.close(), 3000);
-      setFiles([]);
-      setPhotos([]);
-      setSubmittedOnce(false);
-      reset();
-    }
-  }, [addDetails.isError, addDetails.isLoading, addPhotos.isLoading, addPhotos.isSuccess]);
+  // useEffect(() => {
+  //   const loadingDialog = document.querySelector("#loadingDialog") as HTMLDialogElement;
+  //   if (addDetails.isLoading || addPhotos.isLoading) {
+  //     loadingDialog.showModal();
+  //   }
+  //   if (addDetails.isError || addDetails.isError) {
+  //     loadingDialog.close();
+  //     const errorDialog = document.querySelector("#errorDialog") as HTMLDialogElement;
+  //     errorDialog.showModal();
+  //     setTimeout(() => errorDialog.close(), 3000);
+  //   }
+  //   if (addPhotos.isSuccess && !addPhotos.isLoading) {
+  //     loadingDialog.close();
+  //     const successDialog = document.querySelector("#successDialog") as HTMLDialogElement;
+  //     successDialog.showModal();
+  //     setTimeout(() => successDialog.close(), 3000);
+  //     setFiles([]);
+  //     setPhotos([]);
+  //     setSubmittedOnce(false);
+  //     reset();
+  //   }
+  // }, [addDetails.isError, addDetails.isLoading, addPhotos.isLoading, addPhotos.isSuccess]);
 
   return (
     <>
       {isDesktopOrLaptop ? <NavBar /> : <MobileNavTop />}
       <LoadingDialog />
       <IconTextDialog text="Item added!" icon={success} id="successDialog" />
-      <IconTextDialog text="Something went wrong!" icon={error} id="errorDialog" />
+      <IconTextDialog
+        text="Failed to add item. Please try again after a few minutes"
+        icon={error}
+        id="errorDialog"
+      />
       <div className={css.wrapper}>
         <h1 className={css.title}>Add Item</h1>
         <form onSubmit={handleSubmit(onSubmit)}>
@@ -312,7 +384,7 @@ const AddItem: React.FC = () => {
                   containerClasses={css.name}
                   errors={errors.name?.message}
                 />
-                <AddTag register={register} errors={errors.tag?.message} />
+                <AddTag tag={tag} setTag={setTag} submittedOnce={submittedOnce} />
               </div>
             </div>
             <div className={css.secondColumn}>
