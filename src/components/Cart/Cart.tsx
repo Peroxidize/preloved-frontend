@@ -181,6 +181,7 @@ const Cart: React.FC = () => {
     }
     closeDialog("loadingDialog");
     showAndCloseDialog("successDialog", 3000);
+    await refetch();
     setTimeout(() => navigate("/ticketcenter"), 3000);
   };
 
