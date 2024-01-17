@@ -173,6 +173,7 @@ const Cart: React.FC = () => {
         return;
       }
       const deleteFormData = new FormData();
+      deleteFormData.append("itemID", item.itemID.toString());
       await deleteItem.mutateAsync(deleteFormData);
       if (deleteItem.isError) {
         return;
