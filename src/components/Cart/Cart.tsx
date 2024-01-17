@@ -96,7 +96,7 @@ const CartItem: React.FC<CartDetails> = ({
   });
   return (
     <div className={css.item}>
-      <img src={thumbnail} alt="Item image" className={css.itemImage} />
+      <img src={thumbnail} alt="" className={css.itemImage} />
       <div className={css.nameAndSize}>
         {status === "success" ? (
           <p className={css.itemName}>
