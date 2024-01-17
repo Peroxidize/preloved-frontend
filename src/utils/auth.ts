@@ -3,16 +3,17 @@ import { LINK_GET_PENDING_LIST, User, UserType } from "../components/misc";
 
 const API_URL = "https://prelovedbackend.azurewebsites.net/auth/";
 
-export const get_current_user = async () => {
+export const get_location_link = async (shopID: string) => {
   try {
-    const response = await axios.get(API_URL + "get_current_user", {
+    const response = await axios.get(API_URL + "location/get_route", {
       withCredentials: true,
+      params: { shopID: shopID },
     });
-    console.log(response);
-    return;
+    console.log(response.data);
+    return response.data;
   } catch (error: any) {
-    console.log(error.data.response);
-    return;
+    console.log(error.data);
+    return null;
   }
 };
 
@@ -26,6 +27,19 @@ export const attach_location = async (formData: any) => {
   } catch (error: any) {
     console.log(error);
     return "error";
+  }
+};
+
+export const get_current_user = async () => {
+  try {
+    const response = await axios.get(API_URL + "get_current_user", {
+      withCredentials: true,
+    });
+    console.log(response);
+    return;
+  } catch (error: any) {
+    console.log(error.data.response);
+    return;
   }
 };
 

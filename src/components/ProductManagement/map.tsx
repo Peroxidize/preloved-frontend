@@ -54,7 +54,7 @@ function Map() {
           <a target="_blank" className={css.link} href="https://maps.google.com">
             here
           </a>{" "}
-          by right-click onto <br /> your location and click the coordinates
+          by right-click onto <br /> your shop location and click the coordinates
         </p>
         <div>
           <form onSubmit={handleSubmit(onSubmit)}>

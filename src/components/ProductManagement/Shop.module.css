@@ -39,6 +39,11 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  cursor: pointer;
+}
+
+.gmaps {
+  border: 2px solid black;
 }
 
 .clothing {

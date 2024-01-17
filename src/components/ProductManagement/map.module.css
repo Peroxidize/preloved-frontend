@@ -102,6 +102,16 @@
   color: gray;
 }
 
-.success {  
+.success {
   color: #22c55e;
+}
+
+@media (min-width: 320px) and (max-width: 480px) {
+  .arrow {
+    display: none;
+  }
+  
+  .center {
+    position: relative;
+  }
 }
