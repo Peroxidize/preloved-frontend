@@ -79,3 +79,4 @@ export const LINK_REMOVE_FROM_CART = domain + frontPageApi + "remove_from_cart";
 export const LINK_SEARCH = domain + frontPageApi + "search";
 export const LINK_PURCHASE_CART = domain + frontPageApi + "purchase_cart";
 export const LINK_GET_SHOP_ITEMS = domain + storeApi + "get_shop_items";
+export const LINK_ADD_TAGS = domain + storeApi + "attach_tag_to_item";
