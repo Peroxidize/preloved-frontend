@@ -14,7 +14,7 @@ import search_icon from "../../../assets/icons/search_icon.svg";
 import React, { useEffect, useState } from "react";
 import { useAtom } from "jotai";
 import { userAtom } from "../../../App";
-import { logout } from "../../../utils/auth";
+import { get_current_user, logout } from "../../../utils/auth";
 import { useMediaQuery } from "react-responsive";
 import axios from "axios";
 import { get_balance } from "../../../utils/store";
@@ -188,6 +188,14 @@ export default function DesktopNavUser() {
   const handleSearch = () => {
     navigate(`/search?q=${searchText}`);
   };
+
+  useEffect(() => {
+    const fetch = async () => {
+      console.log(await get_current_user());
+    };
+
+    fetch();
+  }, []);
 
   return (
     <>

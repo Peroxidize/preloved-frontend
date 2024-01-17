@@ -70,7 +70,7 @@ function Map() {
                 {...register("long", { required: true })}
               />
             </div>
-            <input type="submit" className={css.button} />
+            <input value="Submit" type="submit" className={css.button} />
           </form>
           <div className={css.errors}>
             {fetching && <p className={css.neutral}>Submitting...</p>}

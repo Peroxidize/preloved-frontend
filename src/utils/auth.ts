@@ -3,6 +3,19 @@ import { LINK_GET_PENDING_LIST, User, UserType } from "../components/misc";
 
 const API_URL = "https://prelovedbackend.azurewebsites.net/auth/";
 
+export const get_current_user = async () => {
+  try {
+    const response = await axios.post(API_URL + "get_current_user", {
+      withCredentials: true,
+    });
+    console.log(response.data.response);
+    return;
+  } catch (error: any) {
+    console.log(error.data);
+    return;
+  }
+};
+
 export const attach_location = async (formData: any) => {
   try {
     const response = await axios.post(API_URL + "location/attach_location", formData, {
