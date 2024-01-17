@@ -1,20 +1,13 @@
 import NavBar, { MobileNavBottom } from "../fragments/nav-bar/nav-bar";
 import { useMediaQuery } from "react-responsive";
 import { MobileNavTop } from "../fragments/nav-bar/nav-bar";
-import clothes from "../../assets/clothes/clothes";
 
 import plus from "../../assets/icons/plus.svg";
 import css from "./Shop.module.css";
 import { Link, useNavigate } from "react-router-dom";
-import React, { useEffect } from "react";
+import React from "react";
 import axios from "axios";
-import {
-  LINK_GET_ITEM_DETAILS,
-  LINK_GET_ITEM_IMAGES,
-  LINK_GET_SHOP_ITEMS,
-  LINK_GET_SHOP_TICKETS,
-  LINK_GET_STORES,
-} from "../misc";
+import { LINK_GET_ITEM_IMAGES, LINK_GET_SHOP_ITEMS, LINK_GET_STORES } from "../misc";
 import { useQuery } from "react-query";
 import { LoadingImg } from "../fragments/commonstuff/Loading";
 
