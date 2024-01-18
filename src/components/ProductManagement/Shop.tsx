@@ -16,8 +16,8 @@ import { LoadingImg } from "../fragments/commonstuff/Loading";
 import { attach_location } from "../../utils/auth";
 import { atom, useAtom, useAtomValue, useSetAtom } from "jotai";
 
-export const showModalAtom = atom<string>("");
-export const resultInfoAtom = atom<{
+const showModalAtom = atom<string>("");
+const resultInfoAtom = atom<{
   long: string | null;
   lat: string | null;
   error: string | null;

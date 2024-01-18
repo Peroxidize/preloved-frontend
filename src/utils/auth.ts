@@ -3,14 +3,14 @@ import { LINK_GET_PENDING_LIST, User, UserType } from "../components/misc";
 
 const API_URL = "https://prelovedbackend.azurewebsites.net/auth/";
 
-export const get_location_link = async (shopID: string) => {
+export const get_location_link = async (long: string, lat: string, shopID: string) => {
   try {
     const response = await axios.get(API_URL + "location/get_route", {
       withCredentials: true,
-      params: { shopID: shopID },
+      params: { shopID: shopID, long: long, lat: lat },
     });
-    console.log(response.data);
-    return response.data;
+    console.log(response.data.path);
+    return response.data.path;
   } catch (error: any) {
     console.log(error.data);
     return null;

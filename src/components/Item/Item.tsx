@@ -22,6 +22,7 @@ import addCollectionsFilled from "../../assets/icons/addCollectionsFilled.svg";
 import Button from "../fragments/FormInputs/Button";
 import cartIcon from "../../assets/icons/shopping_cart.svg";
 import leftArrow from "../../assets/icons/leftArrow.svg";
+import mapsIcon from "../../assets/icons/maps.svg";
 import LoadingText, {
   LoadingBigText,
   LoadingButton,
@@ -35,12 +36,40 @@ import { atom, useAtom, useAtomValue, useSetAtom } from "jotai";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { showModalAtom, collectionsAtom, Collection } from "../Collections/collections";
 import { add_item_to_collection, get_collection } from "../../utils/collections";
+import { get_location_link } from "../../utils/auth";
 
 const itemDataAtom = atom<{ itemID: number; name: string } | null>(null);
+const storeIDAtom = atom<string | null>(null);
+const linkAtom = atom<string | null>(null);
 
 interface IFormInput {
   collectionID: number;
 }
+
+const ResultModal = () => {
+  const setShowModal = useSetAtom(showModalAtom);
+
+  return (
+    <div className={modalcss.modal_container}>
+      <div className={modalcss.shop_modal}>
+        <div className={modalcss.dialog_header}>
+          <h1>Unable to get your coordinates</h1>
+        </div>
+        <div className={modalcss.dialog_body}>
+          <p>Allow location request next time</p>
+        </div>
+        <div>
+          <button
+            onClick={() => setShowModal("")}
+            className={`${modalcss.secondary_button} ${modalcss.modal_button}`}
+          >
+            Close
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
 
 const AddToCollectionModal = ({ name, id }: { name: string; id: number }) => {
   const [fetching, setFetching] = useState<boolean>(false);
@@ -173,6 +202,8 @@ export interface ItemDetails {
 }
 
 const Details: React.FC<{ id: string | undefined }> = ({ id }) => {
+  const mapsLink = useAtomValue(linkAtom);
+  const setStore = useSetAtom(storeIDAtom);
   const [storeID, setStoreID] = useState("");
   const setItemData = useSetAtom(itemDataAtom);
 
@@ -235,6 +266,7 @@ const Details: React.FC<{ id: string | undefined }> = ({ id }) => {
       withCredentials: true,
     });
     setStoreID(String(res.data.storeID));
+    setStore(String(res.data.storeID));
     setItemData({ itemID: res.data.itemID, name: res.data.name });
     return res.data;
   };
@@ -299,6 +331,20 @@ const Details: React.FC<{ id: string | undefined }> = ({ id }) => {
                   className={css.addCollectionsIcon}
                 />
               </div>
+              {mapsLink && (
+                <>
+                  <div className={css.icon_tooltip}>
+                    <span>Google Maps Location</span>
+                    <a href={mapsLink!} target="_blank" rel="noopener noreferrer">
+                      <img
+                        src={mapsIcon}
+                        alt="Description of the image"
+                        className={css.mapsIcon}
+                      />
+                    </a>
+                  </div>
+                </>
+              )}
             </div>
           </div>
           <div className={css.descAndSize}>
@@ -353,7 +399,7 @@ const Details: React.FC<{ id: string | undefined }> = ({ id }) => {
           <div className={css.nameAndStore}>
             <LoadingBigText />
             <LoadingText />
-          <div className={css.tagContainer}>
+            <div className={css.tagContainer}>
               <LoadingTag />
               <LoadingTag />
             </div>
@@ -374,6 +420,10 @@ const Details: React.FC<{ id: string | undefined }> = ({ id }) => {
 };
 
 const Item: React.FC = () => {
+  const [accepted, setAccepted] = useState<{ long: string; lat: string } | null>(null);
+  const storeID = useAtomValue(storeIDAtom);
+  const [show, setShow] = useAtom(showModalAtom);
+  const [link, setLink] = useAtom(linkAtom);
   const setCollections = useSetAtom(collectionsAtom);
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
@@ -381,13 +431,35 @@ const Item: React.FC = () => {
     query: "(min-device-width: 1224px)",
   });
 
+  const successCallback = (position: any) => {
+    console.log(position);
+    const long = String(position.coords.longitude);
+    const lat = String(position.coords.latitude);
+    setAccepted({ long: long, lat: lat });
+  };
+
+  const errorCallback = (error: any) => {
+    setShow("denied");
+  };
+
   useEffect(() => {
     const fetch_user_collection = async () => {
       setCollections(await get_collection());
     };
 
     fetch_user_collection();
+    navigator.geolocation.getCurrentPosition(successCallback, errorCallback);
   }, []);
+
+  useEffect(() => {
+    const fetch_map = async () => {
+      if (accepted && storeID) {
+        setLink(await get_location_link(accepted.long, accepted.lat, storeID));
+      }
+    };
+
+    fetch_map();
+  }, [accepted, storeID]);
 
   return (
     <>
@@ -402,6 +474,7 @@ const Item: React.FC = () => {
         <Images id={id} />
         <Details id={id} />
       </div>
+      {show === "denied" && <ResultModal />}
       {!isDesktopOrLaptop && <MobileNavBottom />}
     </>
   );

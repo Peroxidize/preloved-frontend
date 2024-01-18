@@ -85,6 +85,11 @@
   cursor: pointer;
 }
 
+.mapsIcon {
+  height: 24px;
+  width: 24px;
+}
+
 .addToCart {
   width: 100%;
   background-color: white;
