@@ -34,31 +34,31 @@ export function capitalizeFirstLetter(string: string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
-const domain = "https://prelovedbackend.azurewebsites.net/";
+const domain = "http://preloved.westus3.cloudapp.azure.com/";
 const storeApi = "store/";
 const frontPageApi = "homepage/";
 const ticketApi = "tickets/";
 
-export const LINK_LOGIN = "https://prelovedbackend.azurewebsites.net/auth/login";
-export const LINK_LOGOUT = "https://prelovedbackend.azurewebsites.net/auth/logout";
-export const LINK_SIGNUP_USER = "https://prelovedbackend.azurewebsites.net/auth/new_shop_user";
-export const LINK_SIGNUP_SELLER = "https://prelovedbackend.azurewebsites.net/auth/new_shop_owner";
-export const LINK_IS_AUTH = "https://prelovedbackend.azurewebsites.net/auth/is_authenticated";
+export const LINK_LOGIN = "http://preloved.westus3.cloudapp.azure.com/auth/login";
+export const LINK_LOGOUT = "http://preloved.westus3.cloudapp.azure.com/auth/logout";
+export const LINK_SIGNUP_USER = "http://preloved.westus3.cloudapp.azure.com/auth/new_shop_user";
+export const LINK_SIGNUP_SELLER = "http://preloved.westus3.cloudapp.azure.com/auth/new_shop_owner";
+export const LINK_IS_AUTH = "http://preloved.westus3.cloudapp.azure.com/auth/is_authenticated";
 export const LINK_GET_CURRENT_USER =
-  "https://prelovedbackend.azurewebsites.net/auth/get_current_user";
+  "http://preloved.westus3.cloudapp.azure.com/auth/get_current_user";
 export const LINK_GET_PENDING_LIST =
-  "https://prelovedbackend.azurewebsites.net/auth/verification/get_list_pending";
+  "http://preloved.westus3.cloudapp.azure.com/auth/verification/get_list_pending";
 export const LINK_GET_SELLER_STATUS =
-  "https://prelovedbackend.azurewebsites.net/auth/verification/document_status";
-export const LINK_SHOP_ID1 = "https://prelovedbackend.azurewebsites.net/auth/shop_id_one";
-export const LINK_SHOP_ID2 = "https://prelovedbackend.azurewebsites.net/auth/shop_id_two";
-export const LINK_SHOP_IDSELFIE = "https://prelovedbackend.azurewebsites.net/auth/shop_id_selfie";
+  "http://preloved.westus3.cloudapp.azure.com/auth/verification/document_status";
+export const LINK_SHOP_ID1 = "http://preloved.westus3.cloudapp.azure.com/auth/shop_id_one";
+export const LINK_SHOP_ID2 = "http://preloved.westus3.cloudapp.azure.com/auth/shop_id_two";
+export const LINK_SHOP_IDSELFIE = "http://preloved.westus3.cloudapp.azure.com/auth/shop_id_selfie";
 export const LINK_GET_SELLER_DETAILS =
-  "https://prelovedbackend.azurewebsites.net/auth/verification/get_shop_owner_details";
+  "http://preloved.westus3.cloudapp.azure.com/auth/verification/get_shop_owner_details";
 export const LINK_GET_SHOPVERIFICATION_IMAGE =
-  "https://prelovedbackend.azurewebsites.net/auth/verification/get_image";
+  "http://preloved.westus3.cloudapp.azure.com/auth/verification/get_image";
 export const LINK_APPROVE_OR_REJECT =
-  "https://prelovedbackend.azurewebsites.net/auth/verification/approve_or_reject";
+  "http://preloved.westus3.cloudapp.azure.com/auth/verification/approve_or_reject";
 export const LINK_CREATE_SHOP = domain + storeApi + "create_new_shop";
 export const LINK_GET_ALL_TAGS = domain + storeApi + "get_all_tags";
 export const LINK_ADD_ITEM = domain + storeApi + "add_item";

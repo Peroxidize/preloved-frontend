@@ -12,7 +12,7 @@ import LoadingDialog, {
 } from "../fragments/commonstuff/Dialogs";
 import error from "../../assets/icons/error.svg";
 
-const domain = "https://prelovedbackend.azurewebsites.net/";
+const domain = "http://preloved.westus3.cloudapp.azure.com/";
 const userNavText = "Want to create a seller account?";
 const sellerNavText = "Want to create a user account?";
 let endpoint = "auth/new_shop_user";

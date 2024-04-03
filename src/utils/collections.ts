@@ -2,7 +2,7 @@ import axios from "axios";
 import { Collection } from "../components/Collections/collections";
 import { LINK_GET_ITEM_IMAGES } from "../components/misc";
 
-const API_URL = "https://prelovedbackend.azurewebsites.net/collections/";
+const API_URL = "http://preloved.westus3.cloudapp.azure.com/collections/";
 
 export const create_collection = async (name: any) => {
   const formData = new FormData();
