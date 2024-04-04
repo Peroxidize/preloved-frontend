@@ -12,6 +12,6 @@ export enum UserType {
 }
 
 export const link_auth =
-  "https://prelovedbackend.azurewebsites.net/auth/is_authenticated";
+  "https://preloved.westus3.cloudapp.azure.com/auth/is_authenticated";
 export const link_logout =
-  "https://prelovedbackend.azurewebsites.net/auth/logout";
+  "https://preloved.westus3.cloudapp.azure.com/auth/logout";
