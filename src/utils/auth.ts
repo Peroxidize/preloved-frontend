@@ -66,14 +66,14 @@ export const get_auth = async () => {
 };
 
 export const get_seller_status = async (id: any) => {
-  return await axios.get(API_URL + "/verification/document_status", {
+  return await axios.get(API_URL + "verification/document_status", {
     withCredentials: true,
     params: { id: id },
   });
 };
 
 export const get_shopowner_details = async (id: any) => {
-  return await axios.get(API_URL + "/verification/get_shop_owner_details", {
+  return await axios.get(API_URL + "verification/get_shop_owner_details", {
     withCredentials: true,
     params: { id: id },
   });
