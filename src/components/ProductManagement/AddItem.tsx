@@ -54,7 +54,12 @@ interface TagData {
 const MultipleImageInput: React.FC<ImageInputProps> = ({ photos, onChange, handleDeleteImg }) => {
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files) {
-      onChange(Array.from(event.target.files)); // Convert FileList to array
+      const filesArray = Array.from(event.target.files).map(file => {
+        const newName = file.name.replace(/\s/g, "_"); // Replace whitespace with underscore
+        return new File([file], newName, { type: file.type });
+      });
+      console.log(filesArray);
+      onChange(filesArray); // Convert FileList to array
     }
   };
   return (
@@ -287,6 +292,7 @@ const AddItem: React.FC = () => {
   });
 
   const onSubmit = async (data: ItemDetails) => {
+    console.log(data);
     const formData = new FormData();
     formData.append("name", data.name);
     formData.append("description", data.description);

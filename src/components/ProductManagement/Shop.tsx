@@ -74,6 +74,7 @@ const ShopItems: React.FC<ShopItemDetails> = ({ itemID, itemName }) => {
       },
       withCredentials: true,
     });
+    console.log(res);
     return res.data.image_links;
   });
   const navigate = useNavigate();
@@ -102,6 +103,7 @@ const Shop: React.FC = () => {
   const { status, data } = useQuery("shopDetails", getShopDetails);
   const getShopItems = useQuery<ShopItemDetails[]>("shopItems", async () => {
     const res = await axios.get(LINK_GET_SHOP_ITEMS, { withCredentials: true });
+    console.log(res);
     return res.data["items:"];
   });
 
