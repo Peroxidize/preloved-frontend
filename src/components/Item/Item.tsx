@@ -179,7 +179,7 @@ const Images: React.FC<{ id: string | undefined }> = ({ id }) => {
         ) : (
           <div className={`${css.image} ${utilcss.skeleton}`}>{""}</div>
         )}
-      </div>
+      </div>  
     </div>
   );
 };
@@ -190,7 +190,7 @@ interface Tags {
 }
 
 export interface ItemDetails {
-  description: string;
+  description : string;
   isFeminine: boolean;
   itemID: number;
   name: string;
@@ -465,7 +465,7 @@ const Item: React.FC = () => {
     <>
       {isDesktopOrLaptop ? <NavBar /> : <MobileNavTop />}
       <div className={css.wrapper}>
-        <img
+        <img  
           src={leftArrow}
           alt="Back to home icon"
           onClick={() => navigate(-1)}

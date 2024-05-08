@@ -42,7 +42,7 @@ export const get_current_user = async () => {
     return;
   }
 };
-
+q6x5heZp3EcMPefLZUeB
 export const login = async (formData: any) => {
   let response;
   try {
@@ -79,7 +79,7 @@ export const get_shopowner_details = async (id: any) => {
   });
 };
 
-async function handleResponse(response: AxiosResponse | undefined) {
+export async function handleResponse(response: AxiosResponse | undefined) {
   if (response === undefined) {
     return undefined;
   }
