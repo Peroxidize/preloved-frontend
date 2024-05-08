@@ -42,7 +42,7 @@ export const get_current_user = async () => {
     return;
   }
 };
-q6x5heZp3EcMPefLZUeB
+
 export const login = async (formData: any) => {
   let response;
   try {
