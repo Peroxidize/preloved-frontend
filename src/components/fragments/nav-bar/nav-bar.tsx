@@ -22,6 +22,9 @@ import { get_balance } from "../../../utils/store";
 export const UserMenu = () => {
   return (
     <div className={css.dropdown_content}>
+      <Link to="/" className={css.link}>
+        Home
+      </Link>
       <Link to="/collections" className={css.link}>
         Collections
       </Link>
