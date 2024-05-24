@@ -24,7 +24,8 @@
     "react-responsive": "^9.0.2",
     "react-router-dom": "^6.20.1",
     "serve": "^14.2.1",
-    "sort-by": "^1.2.0"
+    "sort-by": "^1.2.0",
+    "weaviate-ts-client": "^2.2.0"
   },
   "devDependencies": {
     "@types/react": "^18.2.37",
