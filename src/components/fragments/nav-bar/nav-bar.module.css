@@ -126,8 +126,6 @@
 @media (max-width: 1223px) {
   .search_bar {
     flex: 4;
-  }
-  .search_bar input {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   }
   .dropdown {

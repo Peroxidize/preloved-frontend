@@ -143,6 +143,7 @@ const MobileNavTop: React.FC = () => {
               }
             }}
           />
+          <ImageSearchIcon size={20} />
         </div>
       </div>
     </>
