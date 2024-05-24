@@ -18,6 +18,7 @@ import { get_current_user, logout } from "../../../utils/auth";
 import { useMediaQuery } from "react-responsive";
 import axios from "axios";
 import { get_balance } from "../../../utils/store";
+import { IconCamera, IconCameraFilled } from "@tabler/icons-react";
 
 export const UserMenu = () => {
   return (
@@ -84,6 +85,25 @@ function getMenu(userType: UserType) {
       return SellerMenu();
   }
 }
+
+const ImageSearchIcon: React.FC<{ size: number }> = ({ size }) => {
+  const [isHovered, setIsHovered] = useState(false);
+  return isHovered ? (
+    <IconCameraFilled
+      size={size}
+      color="gray-500"
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    />
+  ) : (
+    <IconCamera
+      size={size}
+      color="gray-500"
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    />
+  );
+};
 
 const MobileNavTop: React.FC = () => {
   // Component logic goes here

@@ -13,6 +13,7 @@
   "dependencies": {
     "@fontsource/roboto": "^5.0.8",
     "@mantine/hooks": "^7.4.1",
+    "@tabler/icons-react": "^3.5.0",
     "axios": "^1.6.2",
     "jotai": "^2.6.1",
     "localforage": "^1.10.0",
