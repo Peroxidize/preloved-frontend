@@ -32,7 +32,7 @@ const ImageInput: React.FC<ImageInputProps> = ({
             alt={photo ? "Photo uploaded" : "Upload here"}
             className={classes.imageIcon}
           />
-          <p>{fileName ? `Uploaded ${fileName}` : "Upload here"}</p>
+          <p className={classes.truncate}>{fileName ? `Uploaded ${fileName}` : "Upload here"}</p>
         </div>
       </label>
       <input
