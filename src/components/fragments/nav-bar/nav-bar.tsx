@@ -89,19 +89,25 @@ function getMenu(userType: UserType) {
 const ImageSearchIcon: React.FC<{ size: number }> = ({ size }) => {
   const [isHovered, setIsHovered] = useState(false);
   return isHovered ? (
-    <IconCameraFilled
-      size={size}
-      color="gray-500"
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-    />
+    <Link to="/searchimg">
+      <IconCameraFilled
+        size={size}
+        color="gray"
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+        style={{ cursor: "pointer" }}
+      />
+    </Link>
   ) : (
-    <IconCamera
-      size={size}
-      color="gray-500"
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-    />
+    <Link to="searchimg">
+      <IconCamera
+        size={size}
+        color="gray"
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+        style={{ cursor: "pointer" }}
+      />
+    </Link>
   );
 };
 
@@ -232,6 +238,7 @@ export default function DesktopNavUser() {
                     }
                   }}
                 />
+                <ImageSearchIcon size={20} />
               </div>
             </div>
           </>
