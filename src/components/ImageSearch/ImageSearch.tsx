@@ -7,6 +7,7 @@ import ImageInput from "../fragments/FormInputs/ImageInput";
 import { useQuery } from "react-query";
 import axios from "axios";
 import { LINK_SEARCH } from "../misc";
+import BackAndTitle from "../fragments/commonstuff/BackAndTitle";
 
 const client = weaviate.client({
   scheme: "https",
@@ -41,6 +42,10 @@ const ImageSearch: React.FC = () => {
   return (
     <>
       {isDesktopOrLaptop ? <NavBar /> : <MobileNavTop />}
+      <div className={css.spacer}></div>
+      <div className={css.back}>
+        <BackAndTitle title="Image search" backTo="/" />
+      </div>
       <div className={css.inputPadding}>
         <ImageInput onChange={onChange} name="Photo" photo={photo} fileName={file?.name} />
       </div>

@@ -2,6 +2,10 @@
   padding: 1rem;
 }
 
+.back {
+  padding-left: 2rem;
+}
+
 .inputPadding {
   padding-inline: 2rem;
 }
