@@ -4,10 +4,13 @@ import weaviate from "weaviate-ts-client";
 import NavBar, { MobileNavTop, MobileNavBottom } from "../fragments/nav-bar/nav-bar";
 import { useState } from "react";
 import ImageInput from "../fragments/FormInputs/ImageInput";
-import { useQuery } from "react-query";
+import { UseMutationResult, useMutation, useQuery } from "react-query";
 import axios from "axios";
-import { LINK_SEARCH } from "../misc";
+import { LINK_IMG_SEARCH, LINK_SEARCH } from "../misc";
 import BackAndTitle from "../fragments/commonstuff/BackAndTitle";
+import { SearchItem, SearchResults } from "../Search/Search";
+import loading from "../../assets/loading.gif";
+import search_css from "../Search/Search.module.css";
 
 const client = weaviate.client({
   scheme: "https",
@@ -39,15 +42,43 @@ const ImageSearch: React.FC = () => {
     query: "(min-device-width: 1224px)",
   });
 
+  const getItems = useMutation({
+    mutationFn: async (photo: string): Promise<SearchResults[]> => {
+      const formData = new FormData();
+      formData.append("photo", photo);
+      const res = await axios.post(LINK_IMG_SEARCH, formData, { withCredentials: true });
+      console.log(res);
+      return res.data.results;
+    },
+  });
+
   return (
     <>
       {isDesktopOrLaptop ? <NavBar /> : <MobileNavTop />}
-      <div className={css.spacer}></div>
-      <div className={css.back}>
-        <BackAndTitle title="Image search" backTo="/" />
-      </div>
-      <div className={css.inputPadding}>
-        <ImageInput onChange={onChange} name="Photo" photo={photo} fileName={file?.name} />
+      <div className={css.wrapper}>
+        <div className={css.spacer}></div>
+        {getItems.status === "success" ? (
+          <>
+            <BackAndTitle title="Results" backTo="/" />
+            <div className={search_css.display_clothing}>
+              {getItems.data &&
+                getItems.data.map((item) => (
+                  <SearchItem itemID={item.itemID} name={item.name} key={item.itemID} />
+                ))}
+            </div>
+          </>
+        ) : (
+          <>
+            <BackAndTitle title="Image search" backTo="/" />
+            <div className={css.inputPadding}>
+              <ImageInput onChange={onChange} name="Photo" photo={photo} fileName={file?.name} />
+            </div>
+          </>
+        )}
+
+        {getItems.status === "loading" && (
+          <img src={loading} alt="loading" className={css.loading} />
+        )}
       </div>
       {!isDesktopOrLaptop && <MobileNavBottom />}
     </>

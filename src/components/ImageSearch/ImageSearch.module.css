@@ -2,10 +2,13 @@
   padding: 1rem;
 }
 
-.back {
-  padding-left: 2rem;
+.wrapper {
+  padding-inline: 2rem;
 }
 
-.inputPadding {
-  padding-inline: 2rem;
+.loading {
+  margin: auto;
+  height: 3rem;
+  width: 3rem;
+  object-fit: cover;
 }

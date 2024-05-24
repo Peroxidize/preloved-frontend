@@ -11,12 +11,12 @@ import loading from "../../assets/loading.gif";
 import { LoadingImg } from "../fragments/commonstuff/Loading";
 import BackAndTitle from "../fragments/commonstuff/BackAndTitle";
 
-interface SearchResults {
+export interface SearchResults {
   itemID: number;
   name: string;
 }
 
-const SearchItem: React.FC<SearchResults> = ({ itemID, name }) => {
+export const SearchItem: React.FC<SearchResults> = ({ itemID, name }) => {
   const { status, data } = useQuery("getImages" + itemID, async () => {
     const res = await axios.get(LINK_GET_ITEM_IMAGES, {
       params: {
