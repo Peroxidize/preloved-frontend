@@ -19,6 +19,7 @@ import TicketCenterSeller from "../components/TicketCenter/TicketCenterSeller";
 import Cart from "../components/Cart/Cart";
 import Search from "../components/Search/Search";
 import Maps from "../components/ProductManagement/map";
+import ImageSearch from "../components/ImageSearch/ImageSearch";
 
 export const UserRoute = () => {
   return (
@@ -31,6 +32,7 @@ export const UserRoute = () => {
       <Route path="collections" element={<Collections />} />
       <Route path="cart" element={<Cart />} />
       <Route path="search" element={<Search />} />
+      <Route path="searchimg" element={<ImageSearch />} />
     </>
   );
 };
