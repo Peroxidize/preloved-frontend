@@ -6,6 +6,7 @@ import css from "./AddItem.module.css";
 import imageIcon from "../../assets/icons/imageIcon.svg";
 import TextInput from "../fragments/FormInputs/TextInput";
 import plus from "../../assets/icons/plus.svg";
+import ai from "../../assets/icons/ai-svgrepo-com.svg";
 import close from "../../assets/icons/close.svg";
 import success from "../../assets/icons/success.svg";
 import error from "../../assets/icons/error.svg";
@@ -13,6 +14,7 @@ import {
   LINK_ADD_ITEM,
   LINK_ADD_TAGS,
   LINK_ATTACH_PHOTO_ITEM,
+  LINK_AUTO_TAGGING,
   LINK_GET_ALL_TAGS,
   closeDialog,
   showAndCloseDialog,
@@ -45,19 +47,23 @@ interface AddTagProps {
   tag: number[];
   setTag: React.Dispatch<React.SetStateAction<number[]>>;
   submittedOnce: boolean;
+  setSubmitted: any;
 }
 
 interface TagData {
   [key: string]: number;
 }
 
+let images: any;
+
 const MultipleImageInput: React.FC<ImageInputProps> = ({ photos, onChange, handleDeleteImg }) => {
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files) {
-      const filesArray = Array.from(event.target.files).map(file => {
+      const filesArray = Array.from(event.target.files).map((file) => {
         const newName = file.name.replace(/\s/g, "_"); // Replace whitespace with underscore
         return new File([file], newName, { type: file.type });
       });
+      images = filesArray;
       console.log(filesArray);
       onChange(filesArray); // Convert FileList to array
     }
@@ -88,12 +94,14 @@ const MultipleImageInput: React.FC<ImageInputProps> = ({ photos, onChange, handl
   );
 };
 
-const AddTag: React.FC<AddTagProps> = ({ tag, setTag, submittedOnce }) => {
+const AddTag: React.FC<AddTagProps> = ({ tag, setTag, submittedOnce, setSubmitted }) => {
   const [searchText, setSearchText] = useState<string>("");
+  const [tags, setTags] = useState<any>();
 
   const getTags = async () => {
     const response = await axios.get(LINK_GET_ALL_TAGS, { withCredentials: true });
     console.log(response.data);
+    setTags(response.data);
     return response.data;
   };
 
@@ -101,6 +109,26 @@ const AddTag: React.FC<AddTagProps> = ({ tag, setTag, submittedOnce }) => {
     "tags",
     getTags
   );
+
+  const handleAutoTag = async () => {
+    try {
+      const image = images[0];
+      if (image === null || image === undefined) {
+        throw new Error("Upload atleast one image");
+      }
+
+      const formData = new FormData();
+      formData.append("img", image);
+      const response = await axios.post(LINK_AUTO_TAGGING, formData, { withCredentials: true });
+      console.log(response.data);
+      const selectedTags = response.data.map((tag_name: string) => tags[tag_name]);
+      console.log(selectedTags);
+      setTag(selectedTags);
+    } catch (e) {
+      setSubmitted(true);
+      console.log(e);
+    }
+  };
 
   const handleOpenDialog = () => {
     const tagDialog = document.querySelector("#tagDialog") as HTMLDialogElement;
@@ -139,6 +167,10 @@ const AddTag: React.FC<AddTagProps> = ({ tag, setTag, submittedOnce }) => {
       <div className={css.addTag} onClick={handleOpenDialog}>
         <img src={plus} alt="Add tag" className={css.plusIcon} />
         Add Tags
+      </div>
+      <div className={css.addTag} onClick={handleAutoTag}>
+        <img src={ai} alt="Auto Tagging with AI" className={css.plusIcon} />
+        Auto Tag
       </div>
       {tag.length === 0 && submittedOnce && <div className={css.errors}>Add a tag</div>}
       <dialog className={css.tagDialog} id="tagDialog" onClick={handleCloseDialogOutside}>
@@ -390,7 +422,12 @@ const AddItem: React.FC = () => {
                   containerClasses={css.name}
                   errors={errors.name?.message}
                 />
-                <AddTag tag={tag} setTag={setTag} submittedOnce={submittedOnce} />
+                <AddTag
+                  tag={tag}
+                  setTag={setTag}
+                  submittedOnce={submittedOnce}
+                  setSubmitted={setSubmittedOnce}
+                />
               </div>
             </div>
             <div className={css.secondColumn}>
