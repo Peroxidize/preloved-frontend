@@ -1,5 +1,5 @@
 import { Link, useNavigate } from "react-router-dom";
-import { LINK_GET_STORES, LINK_SEARCH, User, UserType } from "../../misc";
+import { LINK_GET_IMAGE_SEARCH, LINK_GET_STORES, LINK_SEARCH, User, UserType } from "../../misc";
 
 import css from "./nav-bar.module.css";
 import logo from "../../../assets/preloved-logo.jpg";
@@ -10,8 +10,9 @@ import profileFilledIcon from "../../../assets/icons/accountCircleFilled.svg";
 import shopping_cart from "../../../assets/icons/shopping_cart.svg";
 import shoppingFilledIcon from "../../../assets/icons/cartFilled.svg";
 import search_icon from "../../../assets/icons/search_icon.svg";
+import image_search_icon from "../../../assets/icons/google-lens-svgrepo-com.svg";
 
-import React, { useEffect, useState } from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
 import { useAtom } from "jotai";
 import { userAtom } from "../../../App";
 import { get_current_user, logout } from "../../../utils/auth";
@@ -178,6 +179,7 @@ export default function DesktopNavUser() {
   const [cartFilled, setCartFilled] = useState(false);
   const [storedUser, setUser] = useAtom(userAtom);
   const [searchText, setSearchText] = useState("");
+  const [img, setImage] = useState<any>();
   const navigate = useNavigate();
 
   const navigateFrontPage = () => {
@@ -186,6 +188,31 @@ export default function DesktopNavUser() {
 
   const handleSearchText = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchText(e.target.value);
+  };
+
+  const handleImageSearchClick = () => {
+    document.getElementById("imageInput")!.click();
+  };
+
+  const handleImageSearchChange = async (event: ChangeEvent<HTMLInputElement>) => {
+    const files = event.target.files;
+    if (!files || files.length === 0) {
+      return;
+    }
+
+    const file = files[0];
+    console.log(file);
+
+    try {
+      const formData = new FormData();
+      formData.append("photo", file);
+      const response = await axios.post(LINK_GET_IMAGE_SEARCH, formData, { withCredentials: true });
+      console.log(response.data.results);
+      const result = response.data.results;
+      navigate(`/search?q=`, { state: { image: file, image_search_result: result } });
+    } catch (e: any) {
+      console.log(e);
+    }
   };
 
   const handleSearch = () => {
@@ -199,9 +226,29 @@ export default function DesktopNavUser() {
         {storedUser?.type === UserType.User ? (
           <>
             <div className={css.center}>
-              <div className={css.search_bar}>
-                <img src={search_icon} alt="Search Icon" onClick={handleSearch} />
+              <div className={css.search_bar2}>
+                <img
+                  className={css.search_icon}
+                  src={search_icon}
+                  alt="Search Icon"
+                  onClick={handleSearch}
+                />
+                <img
+                  onClick={handleImageSearchClick}
+                  src={image_search_icon}
+                  alt="Search by Image"
+                  className={css.image_search_icon}
+                />
                 <input
+                  type="file"
+                  name="image"
+                  id="imageInput"
+                  accept="image/*"
+                  style={{ display: "none" }}
+                  onChange={handleImageSearchChange}
+                />
+                <input
+                  className={css.search_input}
                   type="text"
                   placeholder="Search"
                   onChange={handleSearchText}

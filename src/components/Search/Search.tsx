@@ -3,7 +3,7 @@ import NavBar, { MobileNavTop, MobileNavBottom } from "../fragments/nav-bar/nav-
 import css from "./Search.module.css";
 import utilcss from "../../utils/utils.module.css";
 import loadingcss from "../../assets/componentCSS/commonStuff/Loading.module.css";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams, useLocation } from "react-router-dom";
 import { useQuery } from "react-query";
 import axios from "axios";
 import { LINK_GET_ITEM_IMAGES, LINK_SEARCH } from "../misc";
@@ -38,6 +38,13 @@ const SearchItem: React.FC<SearchResults> = ({ itemID, name }) => {
 };
 
 const Search: React.FC = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const state = location.state !== null ? location.state : {};
+  const image = state.image !== undefined ? state.image : 1;
+  const image_search_result =
+    state.image_search_result !== undefined ? state.image_search_result : 1;
+
   const [searchParams, setSearchParams] = useSearchParams();
   const { status, data } = useQuery<SearchResults[]>(
     ["search", searchParams.get("q")],
@@ -58,10 +65,16 @@ const Search: React.FC = () => {
     <>
       {isDesktopOrLaptop ? <NavBar /> : <MobileNavTop />}
       <div className={css.wrapper}>
-        <BackAndTitle title="Results" backTo="/" />
+        {image === 1 && <BackAndTitle title="Results" backTo="/" />}
+        {image !== 1 && <BackAndTitle title="Results" backTo="/" image={image}/>}
         <div className={css.display_clothing}>
           {data &&
-            data.map((item) => (
+            image === 1 &&
+            data!.map((item) => (
+              <SearchItem itemID={item.itemID} name={item.name} key={item.itemID} />
+            ))}
+          {image_search_result !== 1 &&
+            image_search_result.map((item: SearchResults) => (
               <SearchItem itemID={item.itemID} name={item.name} key={item.itemID} />
             ))}
         </div>
