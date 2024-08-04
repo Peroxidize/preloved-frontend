@@ -79,6 +79,12 @@
 
 @media (min-width: 1200px) {
   .container {
-    width: 60%;
+    width: 40%;
+  }
+  .backgroundPhoto {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 }
