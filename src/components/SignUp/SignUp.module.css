@@ -67,8 +67,7 @@
 
 .imageIcon {
   width: 3rem;
-  filter: invert(62%) sepia(21%) saturate(0%) hue-rotate(276deg) brightness(77%)
-    contrast(88%);
+  filter: invert(62%) sepia(21%) saturate(0%) hue-rotate(276deg) brightness(77%) contrast(88%);
 }
 
 .signupButton {
@@ -159,7 +158,12 @@
 }
 
 @media (min-width: 1200px) {
+  .backgroundPhoto {
+    height: 100vh;
+  }
   .container {
-    width: 50%;
+    width: 40%;
+    height: 100%;
+    padding: 0 5rem;
   }
 }
