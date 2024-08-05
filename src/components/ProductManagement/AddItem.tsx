@@ -1,5 +1,5 @@
 import { useForm } from "react-hook-form";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios, { AxiosError } from "axios";
 
 import css from "./AddItem.module.css";
@@ -158,8 +158,18 @@ const AddTag: React.FC<AddTagProps> = ({ tag, setTag, submittedOnce, setSubmitte
     setSearchText(e.target.value);
   };
 
+  useEffect(() => {
+    console.log("Tags:", tag);
+  }, [tag]);
+
   const handleRemoveTag = (index: number) => {
-    setTag((prevTag) => prevTag.filter((_, i) => i !== index));
+    console.log("Removing tag at index:", index);
+    setTag((prevTag) => {
+      console.log("Previous Tags:", prevTag);
+      const newTags = prevTag.filter((_, i) => i !== index);
+      console.log("New Tags:", newTags);
+      return newTags;
+    });
   };
 
   return (
@@ -193,6 +203,8 @@ const AddTag: React.FC<AddTagProps> = ({ tag, setTag, submittedOnce, setSubmitte
             <div className={css.selectedTagsContainer}>
               <p>Selected tags: </p>
               {tag.map((tag, index) => {
+                console.log(tag);
+                console.log(Object.keys(data).find((key) => data[key] === tag));
                 return (
                   <label
                     className={css.addTag}
@@ -231,7 +243,8 @@ const AddTag: React.FC<AddTagProps> = ({ tag, setTag, submittedOnce, setSubmitte
                         className={css.tagRadio}
                         checked={tag.includes(data[key])}
                         onChange={() => {
-                          setTag((prevTag) => [...prevTag, data[key]]);
+                          if (!tag.includes(data[key]))
+                            setTag((prevTag) => [...prevTag, data[key]]);
                         }}
                       />
                       {!tag.includes(data[key]) && (
