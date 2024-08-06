@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import axios, { AxiosError } from "axios";
 
 import css from "./AddItem.module.css";
+import utilscss from "../../utils//utils.module.css";
 import imageIcon from "../../assets/icons/imageIcon.svg";
 import TextInput from "../fragments/FormInputs/TextInput";
 import plus from "../../assets/icons/plus.svg";
@@ -97,6 +98,7 @@ const MultipleImageInput: React.FC<ImageInputProps> = ({ photos, onChange, handl
 const AddTag: React.FC<AddTagProps> = ({ tag, setTag, submittedOnce, setSubmitted }) => {
   const [searchText, setSearchText] = useState<string>("");
   const [tags, setTags] = useState<any>();
+  const [isLoading, setLoading] = useState<boolean>(false);
 
   const getTags = async () => {
     const response = await axios.get(LINK_GET_ALL_TAGS, { withCredentials: true });
@@ -117,6 +119,7 @@ const AddTag: React.FC<AddTagProps> = ({ tag, setTag, submittedOnce, setSubmitte
         throw new Error("Upload atleast one image");
       }
 
+      setLoading(true);
       const formData = new FormData();
       formData.append("img", image);
       const response = await axios.post(LINK_AUTO_TAGGING, formData, { withCredentials: true });
@@ -124,8 +127,10 @@ const AddTag: React.FC<AddTagProps> = ({ tag, setTag, submittedOnce, setSubmitte
       const selectedTags = response.data.map((tag_name: string) => tags[tag_name]);
       console.log(selectedTags);
       setTag(selectedTags);
+      setLoading(false);
     } catch (e) {
       setSubmitted(true);
+      setLoading(false);
       console.log(e);
     }
   };
@@ -178,10 +183,6 @@ const AddTag: React.FC<AddTagProps> = ({ tag, setTag, submittedOnce, setSubmitte
         <img src={plus} alt="Add tag" className={css.plusIcon} />
         Add Tags
       </div>
-      <div className={css.addTag} onClick={handleAutoTag}>
-        <img src={ai} alt="Auto Tagging with AI" className={css.plusIcon} />
-        Auto Tag
-      </div>
       {tag.length === 0 && submittedOnce && <div className={css.errors}>Add a tag</div>}
       <dialog className={css.tagDialog} id="tagDialog" onClick={handleCloseDialogOutside}>
         <div className={css.dialogContainer}>
@@ -198,6 +199,10 @@ const AddTag: React.FC<AddTagProps> = ({ tag, setTag, submittedOnce, setSubmitte
             <button className={css.closeDialog} onClick={handleCloseDialog}>
               <img src={close} alt="Close Dialog" />
             </button>
+          </div>
+          <div className={`${css.autoTagging} ${isLoading ? utilscss.skeletonAI : ""}`} onClick={handleAutoTag}>
+            <img src={ai} alt="Auto Tagging with AI" className={css.plusIconAutoTagging} />
+            Auto Tagging
           </div>
           {data && tag.length > 0 && (
             <div className={css.selectedTagsContainer}>

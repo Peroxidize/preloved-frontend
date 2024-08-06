@@ -36,7 +36,7 @@ const BackAndTitle: React.FC<BackAndTitleProps> = ({ title, backTo, containerCla
     <div className={`${classes.backAndTitle} ${containerClass}`}>
       {!(isSeller && isTitleTicket) && <img src={leftArrow} alt="Back to home icon" onClick={() => navigate(backTo)} />}
       <h1>{title}</h1>
-      {imageSrc && <img src={imageSrc} alt="Uploaded preview" style={{height: "100px"}}/>}
+      {imageSrc && <img src={imageSrc} alt="Uploaded preview" style={{height: "100px", borderRadius: "10px"}}/>}
     </div>
   );
 };
