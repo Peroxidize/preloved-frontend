@@ -3,7 +3,7 @@
 }
 
 .skeletonAI {
-  animation: skeleton-loading 1s linear infinite alternate;
+  animation: skeleton-loadingAI 1s linear infinite alternate;
 }
 
 @keyframes skeleton-loading {
@@ -16,7 +16,7 @@
   }
 }
 
-@keyframes skeleton-loading {
+@keyframes skeleton-loadingAI {
   0% {
     background-color: hsl(0, 0%, 50%);
   }
