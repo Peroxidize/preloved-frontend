@@ -1,25 +1,47 @@
 .wrapper {
   overflow: hidden;
+  background-color: #f3f4f6;
 }
 
 .display_clothing {
   padding: 1rem 3rem;
-  display: flex;
-  flex-flow: row wrap;
+  width: 80%;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
   gap: 1rem;
-  justify-content: space-between;
+  justify-items: center;
+  align-items: center;
 }
 
-.display_clothing::after {
-  content: "";
-  flex: auto;
+/* For tablets and smaller screens */
+@media (max-width: 1024px) {
+  .display_clothing {
+    grid-template-columns: repeat(3, 1fr); /* 3 columns */
+  }
+}
+
+/* For mobile devices */
+@media (max-width: 768px) {
+  .display_clothing {
+    grid-template-columns: repeat(2, 1fr); /* 2 columns */
+  }
+}
+
+/* For very small mobile devices */
+@media (max-width: 480px) {
+  .display_clothing {
+    grid-template-columns: 1fr; /* 1 column */
+  }
 }
 
 .img {
-  border-radius: 10px;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
   background-color: white;
+  width: 15rem;
   height: 15rem;
-  object-fit: contain;
+  object-fit: cover;
   cursor: pointer;
   opacity: 1;
   transition: opacity 0.3s ease;
@@ -27,6 +49,46 @@
 
 .img:hover {
   opacity: 0.8;
+}
+
+.item_container {
+  display: flex;
+  flex-direction: column;
+  opacity: 1;
+  transition: opacity 0.3s ease;
+}
+
+.item_container:hover {
+  cursor: pointer;
+  opacity: 0.8;
+}
+
+.information_container {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  background-color: white;
+  padding: 0.75rem;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+  box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+  max-width: 15rem;
+}
+
+.information_container p {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.item_name {
+  font-weight: 600;
+  font-size: 16px;
+}
+
+.store_name {
+  color: gray;
+  font-size: 14px;
 }
 
 .loading {

@@ -26,6 +26,7 @@ interface Item {
   item_price: string;
   size: string;
   storeID: number;
+  storeName: string;
 }
 
 export default function FrontPage() {
@@ -75,24 +76,37 @@ export default function FrontPage() {
           {items?.map((item: Item, i) => {
             if (i === items.length - 1) {
               return (
-                <img
-                  src={item.images[0].link}
-                  alt={item.item_name}
-                  className={css.img}
-                  key={i}
-                  onClick={() => navigate(`/item/${item.item_id}`)}
-                  ref={ref}
-                />
+                <div className={css.item_container}>
+                  <img
+                    src={item.images[0].link}
+                    alt={item.item_name}
+                    className={css.img}
+                    key={i}
+                    onClick={() => navigate(`/item/${item.item_id}`)}
+                    ref={ref}
+                  />
+                  <div className={css.information_container}>
+                    <p className={css.item_name}>{item.item_name}</p>
+                    <p className={css.store_name}>{item.storeName}</p>
+                    <p className={css.item_name}>₱{item.item_price}</p>
+                  </div>
+                </div>
               );
             }
             return (
-              <img
-                src={item.images[0].link}
-                alt={item.item_name}
-                className={css.img}
-                key={i}
-                onClick={() => navigate(`/item/${item.item_id}`)}
-              />
+                <div className={css.item_container} onClick={() => navigate(`/item/${item.item_id}`)}>
+                  <img
+                    src={item.images[0].link}
+                    alt={item.item_name}
+                    className={css.img}
+                    key={i}
+                  />
+                  <div className={css.information_container}>
+                    <p className={css.item_name}>{item.item_name}</p>
+                    <p className={css.store_name}>{item.storeName}</p>
+                    <p className={css.item_name}>₱{item.item_price}</p>
+                  </div>
+                </div>
             );
           })}
         </div>
