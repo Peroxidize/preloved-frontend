@@ -1,12 +1,12 @@
 .wrapper {
   overflow: hidden;
   background-color: #f3f4f6;
+  display: flex;
+  justify-content: center;
 }
 
 .display_clothing {
-  padding: 1rem 3rem;
-  width: 80%;
-  margin: 0 auto;
+  padding-top: 1rem;
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 1rem;
@@ -114,5 +114,10 @@
 
   .img {
     height: 20rem;
+    width: 20rem;
+  }
+
+  .information_container {
+    max-width: 20rem;
   }
 }
