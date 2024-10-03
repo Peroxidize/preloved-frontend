@@ -109,17 +109,10 @@ export default function FrontPage() {
                 </div>
             );
           })}
+          {Array.from({ length: 16 }, (_, index: number) => (
+            <div className={`${utilcss.skeleton} ${css.placeholder}`}></div>
+          ))}
         </div>
-        {/* {(status === "loading" || isFetchingNextPage) && (
-          <img src={loading} alt="loading" className={css.loading} />
-        )} */}
-        {(status === "loading" || isFetchingNextPage) && (
-          <div className={css.display_clothing}>
-            {Array.from({ length: 24 }, (_, index: number) => (
-              <div className={`${utilcss.skeleton} ${css.placeholder}`}></div>
-            ))}
-          </div>
-        )}
       </div>
       {!isDesktopOrLaptop && <MobileNavBottom />}
     </>

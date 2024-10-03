@@ -55,6 +55,29 @@ async function getCompleteData(collection: Collection) {
     return { img_ids, img_links };
   });
   await Promise.all(get_img_links);
+
+  const n = img_ids.length;
+  let swapped;
+  do {
+    swapped = false; // Reset the swapped flag for this pass
+    for (let i = 0; i < n - 1; i++) {
+      // Compare adjacent elements
+      if (img_ids[i] > img_ids[i + 1]) {
+        // Swap img_ids
+        let temp = img_ids[i];
+        img_ids[i] = img_ids[i + 1];
+        img_ids[i + 1] = temp;
+
+        // Swap img_links
+        let temp2 = img_links[i];
+        img_links[i] = img_links[i + 1];
+        img_links[i + 1] = temp2;
+
+        swapped = true; // Set the flag to true to indicate a swap occurred
+      }
+    }
+  } while (swapped); // Continue until no swaps are made
+
   return { ...collection, img_ids, img_links };
 }
 

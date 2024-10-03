@@ -5,6 +5,8 @@ import NavBar, { MobileNavTop, MobileNavBottom } from "../fragments/nav-bar/nav-
 import { SubmitHandler, useForm } from "react-hook-form";
 import { atom, useAtom, useAtomValue, useSetAtom } from "jotai";
 import { useEffect, useRef, useState } from "react";
+import deleteSVG from "../../assets/icons/delete.svg";
+import editSVG from "../../assets/icons/edit-svgrepo-com.svg";
 import {
   create_collection,
   delete_collection,
@@ -325,8 +327,8 @@ function Collections() {
   }, []);
 
   useEffect(() => {
-    document.body.style.overflow = showModal !== "" ? "hidden" : "unset";
-  }, [showModal]);
+    console.log(collections);
+  }, [collections]);
 
   const create_modal = (modal: string) => {
     setShowModal(modal);
@@ -345,54 +347,34 @@ function Collections() {
   return (
     <>
       {isDesktopOrLaptop ? <NavBar /> : <MobileNavTop />}
-      <div className={css.container}>
-        <h1 className={css.page_title}>Collections</h1>
-        <div
-          className={`${css.secondary_button} ${css.create_button}`}
-          onClick={() => create_modal("create")}
-        >
-          <h3>Create Collection</h3>
+      <div className={css.container2}>
+        <div className={css.collections2}>
+          <h1>Your Collections</h1>
+          <div className={css.list_container}>
+            {collections?.map((collection: Collection) => (
+              <div className={css.collection_container} key={collection.name}>
+                <img src={collection.img_links[0]} className={css.img} />
+                <div className={css.list_info}>
+                  <p className={css.collection_name}>{collection.name}</p>
+                  <div className={css.icons_container}>
+                    <img
+                      src={editSVG}
+                      className={css.svg}
+                      onClick={() => set_data(collection, "rename")}
+                    />
+                    <img
+                      src={deleteSVG}
+                      className={css.svg}
+                      onClick={() => set_data(collection, "delete")}
+                    />
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
-
-        <div className={css.card_column}>
-          {/* {collections === null && <img src={loading} className={`${css.loading} ${css.center}`} />} */}
-          {collections === null && <div className={`${css.placeholder} ${utilcss.skeleton}`}></div>}
-          {collections?.map((collection: Collection) => (
-            <div className={css.card_container} key={collection.id}>
-              <h3 className={css.collection_title}>{collection.name}</h3>
-              <div className={css.images}>
-                {collection.img_ids.map((imgId, imgIndex) => (
-                  <img
-                    onClick={() =>
-                      set_item_data(
-                        String(collection.id),
-                        imgId,
-                        collection.img_links[imgIndex],
-                        "delete_item"
-                      )
-                    }
-                    className={css.image}
-                    src={collection.img_links[imgIndex]}
-                    key={imgId}
-                  />
-                ))}
-              </div>
-              <div className={css.button_row}>
-                <button
-                  onClick={() => set_data(collection, "rename")}
-                  className={css.secondary_button}
-                >
-                  Rename Collection
-                </button>
-                <button
-                  onClick={() => set_data(collection, "delete")}
-                  className={css.secondary_button}
-                >
-                  Delete Collection
-                </button>
-              </div>
-            </div>
-          ))}
+        <div className={css.foryou}>
+          <h1>For You</h1>
         </div>
       </div>
       {!isDesktopOrLaptop && <MobileNavBottom />}

@@ -1,3 +1,80 @@
+.container2 {
+  display: flex;
+  flex-direction: row;
+  width: 80%;
+  margin: 0.75rem auto;
+}
+
+.collections2 {
+  display: flex;
+  flex: 0 0 70%;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.list_container {
+  display: flex;
+  flex-direction: row;
+}
+
+.foryou {
+  display: flex;
+  flex: 0 0 30%;
+}
+
+.collection_container {
+  max-width: 15rem;
+}
+
+.img {
+  width: 15rem;
+  height: 15rem;
+  object-fit: cover;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+}
+
+.list_info {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  padding: 0.75rem;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+}
+
+.list_info p {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 9rem;
+}
+
+.collection_name {
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.icons_container {
+  display: flex;
+  flex-direction: row;
+  gap: 2px;
+}
+
+.svg {
+  width: 27px;
+  height: 27px;
+  padding: 3px;
+  border-radius: 3px;
+}
+
+.svg:hover {
+  background-color: #efefef;
+  cursor: pointer;
+}
+
 .container {
   display: flex;
   flex-direction: column;
