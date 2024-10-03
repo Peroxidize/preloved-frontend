@@ -225,6 +225,28 @@
   color: red;
 }
 
+.cropDialog {
+  margin: auto;
+  border: 0;
+  padding: 2rem;
+  border-radius: 1rem;
+}
+
+.dialogButtons {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+}
+
+.spacer {
+  padding: 0.5rem;
+}
+
+.closeIcon {
+  cursor: pointer;
+  margin-left: auto;
+}
+
 @media (min-width: 1200px) {
   .wrapper {
     padding-top: 1rem;

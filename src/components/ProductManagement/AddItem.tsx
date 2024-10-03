@@ -1,5 +1,5 @@
 import { useForm } from "react-hook-form";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import axios, { AxiosError } from "axios";
 
 import css from "./AddItem.module.css";
@@ -30,6 +30,8 @@ import { useMediaQuery } from "react-responsive";
 import NavBar, { MobileNavBottom, MobileNavTop } from "../fragments/nav-bar/nav-bar";
 import LoadingDialog, { IconTextDialog } from "../fragments/commonstuff/Dialogs";
 import deleteIcon from "../../assets/icons/delete.svg";
+import ReactCrop, { centerCrop, Crop, makeAspectCrop, PixelCrop } from "react-image-crop";
+import "react-image-crop/dist/ReactCrop.css";
 
 interface ItemDetails {
   description: string;
@@ -58,17 +60,81 @@ interface TagData {
 let images: any;
 
 const MultipleImageInput: React.FC<ImageInputProps> = ({ photos, onChange, handleDeleteImg }) => {
+  const [image, setImage] = useState<string | null>(null);
+  const [crop, setCrop] = useState<Crop>();
+  const [completedCrop, setCompletedCrop] = useState<Crop | null>(null);
+  const imageRef = useRef<HTMLImageElement | null>(null);
+  const dialogRef = useRef<HTMLDialogElement | null>(null);
+
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target.files) {
-      const filesArray = Array.from(event.target.files).map((file) => {
-        const newName = file.name.replace(/\s/g, "_"); // Replace whitespace with underscore
-        return new File([file], newName, { type: file.type });
+    if (event.target.files && event.target.files.length > 0) {
+      const reader = new FileReader();
+      reader.addEventListener("load", () => {
+        setImage(reader.result as string);
+        dialogRef.current?.showModal();
       });
-      images = filesArray;
-      console.log(filesArray);
-      onChange(filesArray); // Convert FileList to array
+      reader.readAsDataURL(event.target.files[0]);
     }
   };
+
+  const onImageLoad = useCallback((e: React.SyntheticEvent<HTMLImageElement>) => {
+    const { width, height } = e.currentTarget;
+    const crop = centerCrop(
+      makeAspectCrop(
+        {
+          unit: "%",
+          width: 100,
+          height: 100,
+        },
+        width / height,
+        width,
+        height
+      ),
+      width,
+      height
+    );
+    setCrop(crop);
+  }, []);
+
+  const handleComplete = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    if (completedCrop && imageRef.current) {
+      const canvas = document.createElement("canvas");
+      const scaleX = imageRef.current.naturalWidth / imageRef.current.width;
+      const scaleY = imageRef.current.naturalHeight / imageRef.current.height;
+      canvas.width = completedCrop.width;
+      canvas.height = completedCrop.height;
+      const ctx = canvas.getContext("2d");
+
+      if (ctx) {
+        ctx.drawImage(
+          imageRef.current,
+          completedCrop.x * scaleX,
+          completedCrop.y * scaleY,
+          completedCrop.width * scaleX,
+          completedCrop.height * scaleY,
+          0,
+          0,
+          completedCrop.width,
+          completedCrop.height
+        );
+      }
+
+      canvas.toBlob((blob) => {
+        if (blob) {
+          const croppedFile = new File([blob], "cropped_image.jpg", { type: "image/jpeg" });
+          onChange([croppedFile]);
+        }
+      }, "image/jpeg");
+    }
+    dialogRef.current?.close();
+  };
+
+  const handleCancel = () => {
+    dialogRef.current?.close();
+    setImage(null);
+  };
+
   return (
     <div className={css.imageContainer}>
       <label htmlFor="image" className={css.imageInput}>
@@ -86,15 +152,33 @@ const MultipleImageInput: React.FC<ImageInputProps> = ({ photos, onChange, handl
         name="image"
         id="image"
         accept="image/*"
-        multiple={true}
+        multiple={false}
         onChange={handleChange}
         className={css.fileInput}
         required={true}
       />
+      <dialog ref={dialogRef} className={css.cropDialog}>
+        <img src={close} alt="" className={css.closeIcon} onClick={handleCancel} />
+        <div className={css.spacer}></div>
+        <h1>Edit Image</h1>
+        <div className={css.spacer}></div>
+        {image && (
+          <ReactCrop
+            crop={crop}
+            onChange={(c) => setCrop(c)}
+            onComplete={(c) => setCompletedCrop(c)}
+          >
+            <img ref={imageRef} src={image} alt="Crop me" onLoad={onImageLoad} />
+          </ReactCrop>
+        )}
+        <div className={css.spacer}></div>
+        <div className={css.dialogButtons}>
+          <Button text="Complete" handleClick={handleComplete} isPrimary={true} />
+        </div>
+      </dialog>
     </div>
   );
 };
-
 const AddTag: React.FC<AddTagProps> = ({ tag, setTag, submittedOnce, setSubmitted }) => {
   const [searchText, setSearchText] = useState<string>("");
   const [tags, setTags] = useState<any>();
@@ -200,7 +284,10 @@ const AddTag: React.FC<AddTagProps> = ({ tag, setTag, submittedOnce, setSubmitte
               <img src={close} alt="Close Dialog" />
             </button>
           </div>
-          <div className={`${css.autoTagging} ${isLoading ? utilscss.skeletonAI : ""}`} onClick={handleAutoTag}>
+          <div
+            className={`${css.autoTagging} ${isLoading ? utilscss.skeletonAI : ""}`}
+            onClick={handleAutoTag}
+          >
             <img src={ai} alt="Auto Tagging with AI" className={css.plusIconAutoTagging} />
             Auto Tagging
           </div>
