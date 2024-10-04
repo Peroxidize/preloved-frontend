@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "https://preloved.westus3.cloudapp.azure.com/store/";
+const API_URL = "https://preloved.westus2.cloudapp.azure.com/store/";
 
 export const get_balance = async (shop_user_id: any) => {
   let response;

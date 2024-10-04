@@ -1,7 +1,7 @@
 import axios, { AxiosResponse } from "axios";
 import { LINK_GET_PENDING_LIST, User, UserType } from "../components/misc";
 
-const API_URL = "https://preloved.westus3.cloudapp.azure.com/auth/";
+const API_URL = "https://preloved.westus2.cloudapp.azure.com/auth/";
 
 export const get_location_link = async (long: string, lat: string, shopID: string) => {
   try {
