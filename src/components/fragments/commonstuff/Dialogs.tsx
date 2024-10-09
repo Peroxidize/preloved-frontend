@@ -36,10 +36,12 @@ const IconTextDialog: React.FC<IconTextProps> = ({ text, icon, id }) => {
   );
 };
 
-const LoadingDialog: React.FC = () => {
+const LoadingDialog: React.FC<{ loadingDialogRef?: React.RefObject<HTMLDialogElement> }> = ({
+  loadingDialogRef,
+}) => {
   return (
     <>
-      <dialog id="loadingDialog" className={css.dialog}>
+      <dialog id="loadingDialog" ref={loadingDialogRef} className={css.dialog}>
         <img src={loading} alt="" className={css.loading} />
       </dialog>
     </>

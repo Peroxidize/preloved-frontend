@@ -12,13 +12,14 @@ import shoppingFilledIcon from "../../../assets/icons/cartFilled.svg";
 import search_icon from "../../../assets/icons/search_icon.svg";
 import image_search_icon from "../../../assets/icons/google-lens-svgrepo-com.svg";
 
-import React, { ChangeEvent, useEffect, useState } from "react";
+import React, { ChangeEvent, useEffect, useRef, useState } from "react";
 import { useAtom } from "jotai";
 import { userAtom } from "../../../App";
 import { get_current_user, logout } from "../../../utils/auth";
 import { useMediaQuery } from "react-responsive";
 import axios from "axios";
 import { get_balance } from "../../../utils/store";
+import LoadingDialog from "../commonstuff/Dialogs";
 
 export const UserMenu = () => {
   return (
@@ -204,6 +205,7 @@ export default function DesktopNavUser() {
     console.log(file);
 
     try {
+      loadingDialogRef.current!.showModal();
       const formData = new FormData();
       formData.append("photo", file);
       const response = await axios.post(LINK_GET_IMAGE_SEARCH, formData, { withCredentials: true });
@@ -219,8 +221,11 @@ export default function DesktopNavUser() {
     navigate(`/search?q=${searchText}`);
   };
 
+  const loadingDialogRef = useRef<HTMLDialogElement>(null);
+
   return (
     <>
+      <LoadingDialog loadingDialogRef={loadingDialogRef} />
       <div className={css.nav_bar}>
         <img src={logo} onClick={navigateFrontPage} className={css.logo} alt="Preloved Logo" />
         {storedUser?.type === UserType.User ? (
