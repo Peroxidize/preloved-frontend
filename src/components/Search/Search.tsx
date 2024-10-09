@@ -14,26 +14,32 @@ import BackAndTitle from "../fragments/commonstuff/BackAndTitle";
 interface SearchResults {
   itemID: number;
   name: string;
+  price: string;
+  image: string;
+  storeName: string;
 }
 
-const SearchItem: React.FC<SearchResults> = ({ itemID, name }) => {
-  const { status, data } = useQuery("getImages" + itemID, async () => {
-    const res = await axios.get(LINK_GET_ITEM_IMAGES, {
-      params: {
-        id: itemID,
-      },
-      withCredentials: true,
-    });
-    console.log(res);
-    return res.data.image_links;
-  });
+const SearchItem: React.FC<SearchResults> = ({ itemID, name, price, image, storeName }) => {
   const navigate = useNavigate();
 
   if (status === "loading") {
     return <LoadingImg />;
   }
   return (
-    <img src={data[0]} alt={name} className={css.img} onClick={() => navigate(`/item/${itemID}`)} />
+    <div className={css.item_container}>
+      <img
+        src={image}
+        alt={name}
+        className={css.img}
+        key={itemID}
+        onClick={() => navigate(`/item/${itemID}`)}
+      />
+      <div className={css.information_container}>
+        <p className={css.item_name}>{name}</p>
+        <p className={css.store_name}>{storeName}</p>
+        <p className={css.item_name}>₱{price}</p>
+      </div>
+    </div>
   );
 };
 
@@ -65,17 +71,33 @@ const Search: React.FC = () => {
     <>
       {isDesktopOrLaptop ? <NavBar /> : <MobileNavTop />}
       <div className={css.wrapper}>
-        {image === 1 && <BackAndTitle title="Results" backTo="/" />}
-        {image !== 1 && <BackAndTitle title="Results" backTo="/" image={image}/>}
+        <div className={css.back_and_title_wrapper}>
+          {image === 1 && <BackAndTitle title="Results" backTo="/" />}
+          {image !== 1 && <BackAndTitle title="Results" backTo="/" image={image} />}
+        </div>
         <div className={css.display_clothing}>
           {data &&
             image === 1 &&
             data!.map((item) => (
-              <SearchItem itemID={item.itemID} name={item.name} key={item.itemID} />
+              <SearchItem
+                itemID={item.itemID}
+                name={item.name}
+                price={item.price}
+                image={item.image}
+                storeName={item.storeName}
+                key={item.itemID}
+              />
             ))}
           {image_search_result !== 1 &&
             image_search_result.map((item: SearchResults) => (
-              <SearchItem itemID={item.itemID} name={item.name} key={item.itemID} />
+              <SearchItem
+                itemID={item.itemID}
+                name={item.name}
+                price={item.price}
+                image={item.image}
+                storeName={item.storeName}
+                key={item.itemID}
+              />
             ))}
         </div>
         {status === "loading" && <img src={loading} alt="loading" className={css.loading} />}
