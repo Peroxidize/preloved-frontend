@@ -6,6 +6,11 @@
   margin-bottom: 2rem;
 }
 
+.text {
+  text-align: center;
+  margin-top: 2rem;
+}
+
 .similar_container {
   width: 80%;
   padding-top: 2rem;

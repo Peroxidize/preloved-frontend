@@ -504,6 +504,7 @@ const Item: React.FC = () => {
         <Images id={id} />
         <Details id={id} />
       </div>
+      <h2 className={css.text}>Similar Items</h2>
       <div className={css.similar_container}>
         {similarItems.map((item, i) => (
             <div className={exportedcss.item_container} onClick={() => handleClick(item.itemID)}>
