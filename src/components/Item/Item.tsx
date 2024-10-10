@@ -521,6 +521,7 @@ const Item: React.FC = () => {
             </div>
         ))}
       </div>
+      <div className={css.text}></div>
       {show === "denied" && <ResultModal />}
       {!isDesktopOrLaptop && <MobileNavBottom />}
     </>
