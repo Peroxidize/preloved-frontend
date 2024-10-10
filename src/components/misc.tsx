@@ -36,6 +36,7 @@ export function capitalizeFirstLetter(string: string) {
 
 const domain = "https://preloved.westus2.cloudapp.azure.com/";
 const storeApi = "store/";
+const modelAPI = "models/";
 const frontPageApi = "homepage/";
 const ticketApi = "tickets/";
 
@@ -82,3 +83,4 @@ export const LINK_SEARCH = domain + frontPageApi + "search";
 export const LINK_PURCHASE_CART = domain + frontPageApi + "purchase_cart";
 export const LINK_GET_SHOP_ITEMS = domain + storeApi + "get_shop_items";
 export const LINK_ADD_TAGS = domain + storeApi + "attach_tag_to_item";
+export const LINK_GET_SIMILAR_ITEMS = domain + modelAPI + "get_similar_items/";

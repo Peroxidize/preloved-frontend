@@ -12,7 +12,7 @@ import loading from "../../assets/loading.gif";
 import { useEffect, useRef } from "react";
 import { useIntersection } from "@mantine/hooks";
 
-interface Image {
+export interface Image {
   link: string;
   slugID: number;
 }
@@ -33,6 +33,7 @@ export default function FrontPage() {
   const navigate = useNavigate();
   const getItems = async ({ pageParam = 0 }) => {
     const res = await axios.get(LINK_GET_FRONTPAGE, { withCredentials: true });
+    // console.log(res);
     const itemsWithImg = res.data.items.filter((item: Item) => {
       return item.images.length > 0;
     });

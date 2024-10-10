@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from "react";
 import modalcss from "../Collections/collections.module.css";
 import css from "./Item.module.css";
+import exportedcss from "../FrontPage/frontpage.module.css";
 import utilcss from "../../utils/utils.module.css";
 import { useMediaQuery } from "react-responsive";
 import NavBar, { MobileNavBottom, MobileNavTop } from "../fragments/nav-bar/nav-bar";
-import { useNavigate, useParams } from "react-router-dom";
+import { redirect, useLocation, useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import {
   LINK_ADD_TO_CART,
   LINK_GET_ITEM_DETAILS,
   LINK_GET_ITEM_IMAGES,
+  LINK_GET_SIMILAR_ITEMS,
   LINK_PURCHASE_ITEM,
   closeDialog,
   showAndCloseDialog,
@@ -37,6 +39,7 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import { showModalAtom, collectionsAtom, Collection } from "../Collections/collections";
 import { add_item_to_collection, get_collection } from "../../utils/collections";
 import { get_location_link } from "../../utils/auth";
+import { Image } from "../FrontPage/FrontPage";
 
 const itemDataAtom = atom<{ itemID: number; name: string } | null>(null);
 const storeIDAtom = atom<string | null>(null);
@@ -44,6 +47,19 @@ const linkAtom = atom<string | null>(null);
 
 interface IFormInput {
   collectionID: number;
+}
+
+interface similarImage {
+  link: string;
+  slugID: number;
+}
+
+interface similarItems {
+  images: string;
+  item_id: number;
+  item_name: string;
+  item_price: string;
+  storeName: string;
 }
 
 const ResultModal = () => {
@@ -179,7 +195,7 @@ const Images: React.FC<{ id: string | undefined }> = ({ id }) => {
         ) : (
           <div className={`${css.image} ${utilcss.skeleton}`}>{""}</div>
         )}
-      </div>  
+      </div>
     </div>
   );
 };
@@ -190,7 +206,7 @@ interface Tags {
 }
 
 export interface ItemDetails {
-  description : string;
+  description: string;
   isFeminine: boolean;
   itemID: number;
   name: string;
@@ -336,11 +352,7 @@ const Details: React.FC<{ id: string | undefined }> = ({ id }) => {
                   <div className={css.icon_tooltip}>
                     <span>Google Maps Location</span>
                     <a href={mapsLink!} target="_blank" rel="noopener noreferrer">
-                      <img
-                        src={mapsIcon}
-                        alt="Description of the image"
-                        className={css.mapsIcon}
-                      />
+                      <img src={mapsIcon} alt="Description of the image" className={css.mapsIcon} />
                     </a>
                   </div>
                 </>
@@ -424,12 +436,18 @@ const Item: React.FC = () => {
   const storeID = useAtomValue(storeIDAtom);
   const [show, setShow] = useAtom(showModalAtom);
   const [link, setLink] = useAtom(linkAtom);
+  const [similarItems, setSimilarItems] = useState<any[]>([]);
   const setCollections = useSetAtom(collectionsAtom);
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
   const isDesktopOrLaptop = useMediaQuery({
     query: "(min-device-width: 1224px)",
   });
+
+  const handleClick = (itemID: number) => {
+    navigate(`/item/${itemID}`, { state: { toRefresh: true }});
+    window.location.reload();
+  };
 
   const successCallback = (position: any) => {
     console.log(position);
@@ -447,7 +465,19 @@ const Item: React.FC = () => {
       setCollections(await get_collection());
     };
 
+    const fetch_similar_items = async () => {
+      const response = await axios.get(LINK_GET_SIMILAR_ITEMS, {
+          params: {
+              item_id: Number(id),
+              num: 4,
+          },
+          withCredentials: true,
+      });
+      setSimilarItems(response.data.items);
+    };
+
     fetch_user_collection();
+    fetch_similar_items();
     navigator.geolocation.getCurrentPosition(successCallback, errorCallback);
   }, []);
 
@@ -465,7 +495,7 @@ const Item: React.FC = () => {
     <>
       {isDesktopOrLaptop ? <NavBar /> : <MobileNavTop />}
       <div className={css.wrapper}>
-        <img  
+        <img
           src={leftArrow}
           alt="Back to home icon"
           onClick={() => navigate(-1)}
@@ -473,6 +503,22 @@ const Item: React.FC = () => {
         />
         <Images id={id} />
         <Details id={id} />
+      </div>
+      <div className={css.similar_container}>
+        {similarItems.map((item, i) => (
+            <div className={exportedcss.item_container} onClick={() => handleClick(item.itemID)}>
+              <img
+                src={item.image}
+                className={exportedcss.img}
+                key={item.itemID}
+              />
+              <div className={exportedcss.information_container}>
+                <p className={exportedcss.item_name}>{item.name}</p>
+                <p className={exportedcss.store_name}>{item.storeName}</p>
+                <p className={exportedcss.item_name}>₱{item.price}</p>
+              </div>
+            </div>
+        ))}
       </div>
       {show === "denied" && <ResultModal />}
       {!isDesktopOrLaptop && <MobileNavBottom />}
