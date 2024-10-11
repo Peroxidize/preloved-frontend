@@ -212,6 +212,7 @@ export default function DesktopNavUser() {
       console.log(response.data.results);
       const result = response.data.results;
       navigate(`/search?q=`, { state: { image: file, image_search_result: result } });
+      loadingDialogRef.current!.close();
     } catch (e: any) {
       console.log(e);
     }
