@@ -51,6 +51,7 @@ interface AddTagProps {
   setTag: React.Dispatch<React.SetStateAction<number[]>>;
   submittedOnce: boolean;
   setSubmitted: any;
+  imageFiles: File[];
 }
 
 interface TagData {
@@ -179,7 +180,13 @@ const MultipleImageInput: React.FC<ImageInputProps> = ({ photos, onChange, handl
     </div>
   );
 };
-const AddTag: React.FC<AddTagProps> = ({ tag, setTag, submittedOnce, setSubmitted }) => {
+const AddTag: React.FC<AddTagProps> = ({
+  tag,
+  setTag,
+  submittedOnce,
+  setSubmitted,
+  imageFiles,
+}) => {
   const [searchText, setSearchText] = useState<string>("");
   const [tags, setTags] = useState<any>();
   const [isLoading, setLoading] = useState<boolean>(false);
@@ -198,7 +205,7 @@ const AddTag: React.FC<AddTagProps> = ({ tag, setTag, submittedOnce, setSubmitte
 
   const handleAutoTag = async () => {
     try {
-      const image = images[0];
+      const image = imageFiles[0];
       if (image === null || image === undefined) {
         throw new Error("Upload atleast one image");
       }
@@ -208,7 +215,7 @@ const AddTag: React.FC<AddTagProps> = ({ tag, setTag, submittedOnce, setSubmitte
       formData.append("img", image);
       const response = await axios.post(LINK_AUTO_TAGGING, formData, { withCredentials: true });
       console.log(response.data);
-      const selectedTags = response.data.map((tag_name: string) => tags[tag_name]);
+      const selectedTags = response.data.data.map((tag_name: string) => tags[tag_name]);
       console.log(selectedTags);
       setTag(selectedTags);
       setLoading(false);
@@ -532,6 +539,7 @@ const AddItem: React.FC = () => {
                   setTag={setTag}
                   submittedOnce={submittedOnce}
                   setSubmitted={setSubmittedOnce}
+                  imageFiles={files}
                 />
               </div>
             </div>
