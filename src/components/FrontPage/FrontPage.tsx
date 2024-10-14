@@ -31,8 +31,11 @@ interface Item {
 
 export default function FrontPage() {
   const navigate = useNavigate();
-  const getItems = async ({ pageParam = 0 }) => {
-    const res = await axios.get(LINK_GET_FRONTPAGE, { withCredentials: true });
+  const getItems = async ({ pageParam = 1 }) => {
+    const res = await axios.get(LINK_GET_FRONTPAGE, {
+      params: { page: pageParam },
+      withCredentials: true,
+    });
     // console.log(res);
     const itemsWithImg = res.data.items.filter((item: Item) => {
       return item.images.length > 0;
@@ -95,19 +98,14 @@ export default function FrontPage() {
               );
             }
             return (
-                <div className={css.item_container} onClick={() => navigate(`/item/${item.item_id}`)}>
-                  <img
-                    src={item.images[0].link}
-                    alt={item.item_name}
-                    className={css.img}
-                    key={i}
-                  />
-                  <div className={css.information_container}>
-                    <p className={css.item_name}>{item.item_name}</p>
-                    <p className={css.store_name}>{item.storeName}</p>
-                    <p className={css.item_name}>₱{item.item_price}</p>
-                  </div>
+              <div className={css.item_container} onClick={() => navigate(`/item/${item.item_id}`)}>
+                <img src={item.images[0].link} alt={item.item_name} className={css.img} key={i} />
+                <div className={css.information_container}>
+                  <p className={css.item_name}>{item.item_name}</p>
+                  <p className={css.store_name}>{item.storeName}</p>
+                  <p className={css.item_name}>₱{item.item_price}</p>
                 </div>
+              </div>
             );
           })}
           {Array.from({ length: 16 }, (_, index: number) => (
