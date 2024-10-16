@@ -30,6 +30,7 @@ export const UserMenu = () => {
       <Link to="/collections" className={css.link}>
         Collections
       </Link>
+      <div className={css.link}>Seppe</div>
       <Link to="" onClick={logout} className={css.link}>
         Logout
       </Link>

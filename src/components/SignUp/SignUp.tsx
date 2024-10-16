@@ -12,6 +12,7 @@ import LoadingDialog, {
 } from "../fragments/commonstuff/Dialogs";
 import error from "../../assets/icons/error.svg";
 import Preferences from "./preferences";
+import { LINK_SIGNUP_USER } from "../misc";
 
 const domain = "https://preloved.westus3.cloudapp.azure.com/";
 const userNavText = "Want to create a seller account?";
@@ -63,7 +64,7 @@ export default function SignUp() {
 
   const [isLoading, setIsLoading] = useState(false);
   const mutation = useMutation(
-    (data: FormData) => axios.post(domain + endpoint, data, { withCredentials: true }),
+    (data: FormData) => axios.post(LINK_SIGNUP_USER, data, { withCredentials: true }),
     {
       onSuccess: (data) => {
         console.log(data);
@@ -107,7 +108,10 @@ export default function SignUp() {
         "address",
         `${formState.street} ${formState.barangay} ${formState.municipality}`
       );
-    else formData.append("isFeminine", formState.isFeminine.toString());
+    else {
+      formData.append("isFeminine", formState.isFeminine.toString());
+      selectedTags.forEach((tag) => formData.append("tagIDs", tag.toString()));
+    }
 
     console.log(formData);
     console.log(formState);
@@ -199,7 +203,9 @@ export default function SignUp() {
             + Add preferences
           </button>
           {selectedTagsText.map((tag) => (
-            <div className={classes.selectedTags}>{tag}</div>
+            <div className={classes.selectedTags} key={tag}>
+              {tag}
+            </div>
           ))}
         </div>
         <Preferences

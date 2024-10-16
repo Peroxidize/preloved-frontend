@@ -68,7 +68,10 @@ const Preferences = forwardRef<HTMLDialogElement, PreferencesProps>(
         </div>
         <div className={css.spacer}></div>
         <Button
-          handleClick={() => (ref as React.RefObject<HTMLDialogElement>).current?.close()}
+          handleClick={(e) => {
+            e.preventDefault();
+            (ref as React.RefObject<HTMLDialogElement>).current?.close();
+          }}
           text="Save"
         />
       </dialog>
