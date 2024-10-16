@@ -54,7 +54,7 @@ interface AddTagProps {
   imageFiles: File[];
 }
 
-interface TagData {
+export interface TagData {
   [key: string]: number;
 }
 

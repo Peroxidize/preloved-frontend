@@ -3,6 +3,10 @@
   background-size: cover;
 }
 
+.spacer {
+  padding: 0.25rem 0;
+}
+
 .container {
   padding: 2rem;
   display: flex;
@@ -115,6 +119,35 @@
 .radioContainer {
   display: flex;
   gap: 0.5rem;
+}
+
+.addPreferencesButton {
+  background-color: white;
+  color: black;
+  border: 1px solid black;
+  padding: 0.25rem 1rem;
+  cursor: pointer;
+  align-self: flex-start;
+  border-radius: 100vw;
+}
+
+.addPreferencesButton:hover {
+  background-color: rgb(245, 245, 245);
+}
+
+.addPreferencesContainer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.selectedTags {
+  border: 1px solid black;
+  border-radius: 100vw;
+  padding: 0.25rem 1rem;
+  cursor: pointer;
+  background-color: black;
+  color: white;
 }
 
 @media (min-width: 500px) and (max-width: 768px) {

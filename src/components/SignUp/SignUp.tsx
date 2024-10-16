@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { useMutation } from "react-query";
 
@@ -11,6 +11,7 @@ import LoadingDialog, {
   SuccessDialog,
 } from "../fragments/commonstuff/Dialogs";
 import error from "../../assets/icons/error.svg";
+import Preferences from "./preferences";
 
 const domain = "https://preloved.westus3.cloudapp.azure.com/";
 const userNavText = "Want to create a seller account?";
@@ -33,6 +34,22 @@ export default function SignUp() {
     barangay: "",
     municipality: "",
   });
+  const [selectedTags, setSelectedTags] = useState<number[]>([]);
+  const [selectedTagsText, setSelectedTagsText] = useState<string[]>([]);
+  const handleTagChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (selectedTags.includes(parseInt(event.target.value))) {
+      setSelectedTags((prevTags) => prevTags.filter((tag) => tag !== parseInt(event.target.value)));
+      setSelectedTagsText((prevTags) =>
+        prevTags.filter((tag) => tag !== event.target.getAttribute("data-tag"))
+      );
+    } else {
+      setSelectedTags((prevTags) => [...prevTags, parseInt(event.target.value)]);
+      setSelectedTagsText((prevTags) => [
+        ...prevTags,
+        event.target.getAttribute("data-tag") as string,
+      ]);
+    }
+  };
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
@@ -97,6 +114,8 @@ export default function SignUp() {
     setIsLoading(true);
     mutation.mutate(formData);
   }
+
+  const preferencesRef = useRef<HTMLDialogElement>(null);
 
   if (isStore) {
     storeInput = (
@@ -168,6 +187,26 @@ export default function SignUp() {
             <label htmlFor="Feminine">Feminine</label>
           </div>
         </div>
+        <div className={classes.spacer}></div>
+        <div className={classes.addPreferencesContainer}>
+          <button
+            onClick={(e) => {
+              e.preventDefault();
+              preferencesRef.current?.showModal();
+            }}
+            className={classes.addPreferencesButton}
+          >
+            + Add preferences
+          </button>
+          {selectedTagsText.map((tag) => (
+            <div className={classes.selectedTags}>{tag}</div>
+          ))}
+        </div>
+        <Preferences
+          ref={preferencesRef}
+          selectedTags={selectedTags}
+          handleChange={handleTagChange}
+        />
       </div>
     );
   }
@@ -195,122 +234,120 @@ export default function SignUp() {
   }, [mutation.isLoading, mutation.isError, mutation.isSuccess]);
 
   return (
-    <div className={classes.backgroundPhoto}>
-      <LoadingDialog />
-      <SuccessDialog text="Sign up successful!" />
-      <ErrorDialog text="Sign up failed!" />
-      <IconTextDialog
-        text="Passwords do not match!"
-        icon={error}
-        id="passwordErrorDialog"
-      />
-      <div className={classes.container}>
-        <img src={logo} alt="Preloved logo" className={classes.logo} />
-        <form action="post" onSubmit={handleSubmit}>
-          <legend className={classes.legend}>
-            <h1>Create your account</h1>
-            <p>
-              {isStore ? sellerNavText : userNavText}{" "}
-              <a href="#" onClick={() => setIsStore(!isStore)} className={classes.link}>
-                Click Here
-              </a>
-            </p>
-            <p>
-              Already have an account?{" "}
-              <Link to="/" className={classes.link}>
-                Click Here
-              </Link>
-            </p>
-          </legend>
-          <div className={classes.inputContainer}>
-            <label htmlFor="email">E-mail</label>
-            <input
-              type="email"
-              name="email"
-              id="email"
-              className={classes.textInput}
-              value={formState.email}
-              onChange={handleChange}
-              required
-            />
-          </div>
-          <div className={classes.oneRowResponsive}>
+    <>
+      <div className={classes.backgroundPhoto}>
+        <LoadingDialog />
+        <SuccessDialog text="Sign up successful!" />
+        <ErrorDialog text="Sign up failed!" />
+        <IconTextDialog text="Passwords do not match!" icon={error} id="passwordErrorDialog" />
+        <div className={classes.container}>
+          <img src={logo} alt="Preloved logo" className={classes.logo} />
+          <form action="post" onSubmit={handleSubmit}>
+            <legend className={classes.legend}>
+              <h1>Create your account</h1>
+              <p>
+                {isStore ? sellerNavText : userNavText}{" "}
+                <a href="#" onClick={() => setIsStore(!isStore)} className={classes.link}>
+                  Click Here
+                </a>
+              </p>
+              <p>
+                Already have an account?{" "}
+                <Link to="/" className={classes.link}>
+                  Click Here
+                </Link>
+              </p>
+            </legend>
             <div className={classes.inputContainer}>
-              <label htmlFor="password">Password</label>
+              <label htmlFor="email">E-mail</label>
               <input
-                type="password"
-                name="password"
-                id="password"
+                type="email"
+                name="email"
+                id="email"
                 className={classes.textInput}
-                value={formState.password}
+                value={formState.email}
                 onChange={handleChange}
                 required
               />
             </div>
-            <div className={classes.inputContainer}>
-              <label htmlFor="confirmPass">Confirm Password</label>
-              <input
-                type="password"
-                name="confirmPass"
-                id="confirmPass"
-                className={classes.textInput}
-                value={formState.confirmPass}
-                onChange={handleChange}
-                required
-              />
+            <div className={classes.oneRowResponsive}>
+              <div className={classes.inputContainer}>
+                <label htmlFor="password">Password</label>
+                <input
+                  type="password"
+                  name="password"
+                  id="password"
+                  className={classes.textInput}
+                  value={formState.password}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+              <div className={classes.inputContainer}>
+                <label htmlFor="confirmPass">Confirm Password</label>
+                <input
+                  type="password"
+                  name="confirmPass"
+                  id="confirmPass"
+                  className={classes.textInput}
+                  value={formState.confirmPass}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
             </div>
-          </div>
-          <div className={classes.oneRowResponsive}>
-            <div className={classes.inputContainer}>
-              <label htmlFor="fName">First Name</label>
-              <input
-                type="text"
-                name="fName"
-                id="fName"
-                className={classes.textInput}
-                value={formState.fName}
-                onChange={handleChange}
-                required
-              />
+            <div className={classes.oneRowResponsive}>
+              <div className={classes.inputContainer}>
+                <label htmlFor="fName">First Name</label>
+                <input
+                  type="text"
+                  name="fName"
+                  id="fName"
+                  className={classes.textInput}
+                  value={formState.fName}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+              <div className={classes.inputContainer}>
+                <label htmlFor="lName">Last Name</label>
+                <input
+                  type="text"
+                  name="lName"
+                  id="lName"
+                  className={classes.textInput}
+                  value={formState.lName}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
             </div>
-            <div className={classes.inputContainer}>
-              <label htmlFor="lName">Last Name</label>
-              <input
-                type="text"
-                name="lName"
-                id="lName"
-                className={classes.textInput}
-                value={formState.lName}
-                onChange={handleChange}
-                required
-              />
+            <div className={classes.oneRowResponsive}>
+              <div className={classes.inputContainer}>
+                <label htmlFor="phone">Phone Number</label>
+                <input
+                  type="tel"
+                  name="phone"
+                  id="phone"
+                  pattern="[0-9]{11}"
+                  placeholder="Ex. 09325469943"
+                  className={classes.textInput}
+                  value={formState.phone}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
             </div>
-          </div>
-          <div className={classes.oneRowResponsive}>
-            <div className={classes.inputContainer}>
-              <label htmlFor="phone">Phone Number</label>
-              <input
-                type="tel"
-                name="phone"
-                id="phone"
-                pattern="[0-9]{11}"
-                placeholder="Ex. 09325469943"
-                className={classes.textInput}
-                value={formState.phone}
-                onChange={handleChange}
-                required
-              />
-            </div>
-          </div>
-          {storeInput}
-          <button
-            type="submit"
-            className={`${classes.signupButton} ${isLoading && classes.signupLoading}`}
-          >
-            Sign Up
-          </button>
-        </form>
+            {storeInput}
+            <button
+              type="submit"
+              className={`${classes.signupButton} ${isLoading && classes.signupLoading}`}
+            >
+              Sign Up
+            </button>
+          </form>
+        </div>
       </div>
-    </div>
+    </>
   );
 }
