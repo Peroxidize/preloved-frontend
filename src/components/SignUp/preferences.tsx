@@ -11,10 +11,11 @@ import Button from "../fragments/FormInputs/Button";
 interface PreferencesProps {
   handleChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   selectedTags: number[];
+  handleSubmit?: () => void;
 }
 
 const Preferences = forwardRef<HTMLDialogElement, PreferencesProps>(
-  ({ handleChange, selectedTags }, ref) => {
+  ({ handleChange, selectedTags, handleSubmit }, ref) => {
     const [tags, setTags] = useState<TagData[]>();
 
     const getTags = async () => {
@@ -70,6 +71,9 @@ const Preferences = forwardRef<HTMLDialogElement, PreferencesProps>(
         <Button
           handleClick={(e) => {
             e.preventDefault();
+            if (handleSubmit) {
+              handleSubmit();
+            }
             (ref as React.RefObject<HTMLDialogElement>).current?.close();
           }}
           text="Save"

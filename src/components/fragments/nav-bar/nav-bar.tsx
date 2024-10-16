@@ -1,5 +1,13 @@
 import { Link, useNavigate } from "react-router-dom";
-import { LINK_GET_IMAGE_SEARCH, LINK_GET_STORES, LINK_SEARCH, User, UserType } from "../../misc";
+import {
+  LINK_ADD_PREF,
+  LINK_GET_IMAGE_SEARCH,
+  LINK_GET_PREF,
+  LINK_GET_STORES,
+  LINK_SEARCH,
+  User,
+  UserType,
+} from "../../misc";
 
 import css from "./nav-bar.module.css";
 import logo from "../../../assets/preloved-logo.jpg";
@@ -17,24 +25,81 @@ import { useAtom } from "jotai";
 import { userAtom } from "../../../App";
 import { get_current_user, logout } from "../../../utils/auth";
 import { useMediaQuery } from "react-responsive";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { get_balance } from "../../../utils/store";
 import LoadingDialog from "../commonstuff/Dialogs";
+import Preferences from "../../SignUp/preferences";
+import { TagData } from "../../ProductManagement/AddItem";
+import { useMutation, useQuery } from "react-query";
+
+const PreferencesMenu = React.forwardRef<HTMLDialogElement>((props, ref) => {
+  const getTags = async () => {
+    const response = await axios.get(LINK_GET_PREF, { withCredentials: true });
+    setSelectedTags(Object.keys(response.data).map((tag) => response.data[tag]));
+    console.log("Here are the tags", response.data);
+    return response.data;
+  };
+  const { status, data } = useQuery<"idle" | "error" | "loading" | "success", AxiosError, TagData>(
+    "preferences",
+    getTags
+  );
+
+  const addTags = useMutation<"idle" | "error" | "loading" | "success", AxiosError, number[]>(
+    async (tags: number[]) => {
+      const formData = new FormData();
+      selectedTags.forEach((tag) => {
+        formData.append("tagIDs", tag.toString());
+      });
+      const response = await axios.post(LINK_ADD_PREF, formData, { withCredentials: true });
+      console.log(response);
+      return response.data;
+    }
+  );
+
+  const handleSubmit = () => {
+    addTags.mutate(selectedTags);
+  };
+
+  const [selectedTags, setSelectedTags] = useState<number[]>([]);
+  return (
+    <>
+      <Preferences
+        handleChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+          if (e.target.checked) {
+            setSelectedTags([...selectedTags, parseInt(e.target.value)]);
+          } else {
+            setSelectedTags(selectedTags.filter((tag) => tag !== parseInt(e.target.value)));
+          }
+        }}
+        selectedTags={selectedTags}
+        ref={ref}
+        handleSubmit={handleSubmit}
+      />
+    </>
+  );
+});
 
 export const UserMenu = () => {
+  const preferencesRef = useRef<HTMLDialogElement>(null);
+
   return (
-    <div className={css.dropdown_content}>
-      <Link to="/" className={css.link}>
-        Home
-      </Link>
-      <Link to="/collections" className={css.link}>
-        Collections
-      </Link>
-      <div className={css.link}>Seppe</div>
-      <Link to="" onClick={logout} className={css.link}>
-        Logout
-      </Link>
-    </div>
+    <>
+      <PreferencesMenu ref={preferencesRef} />
+      <div className={css.dropdown_content}>
+        <Link to="/" className={css.link}>
+          Home
+        </Link>
+        <Link to="/collections" className={css.link}>
+          Collections
+        </Link>
+        <div className={css.link} onClick={() => preferencesRef.current?.showModal()}>
+          Preferences
+        </div>
+        <Link to="" onClick={logout} className={css.link}>
+          Logout
+        </Link>
+      </div>
+    </>
   );
 };
 
