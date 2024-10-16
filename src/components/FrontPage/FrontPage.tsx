@@ -29,6 +29,11 @@ interface Item {
   storeName: string;
 }
 
+interface FrontPageData {
+  itemsWithImg: Item[];
+  hasNext: boolean;
+}
+
 export default function FrontPage() {
   const navigate = useNavigate();
   const getItems = async ({ pageParam = 1 }) => {
@@ -36,18 +41,24 @@ export default function FrontPage() {
       params: { page: pageParam },
       withCredentials: true,
     });
-    // console.log(res);
     const itemsWithImg = res.data.items.filter((item: Item) => {
       return item.images.length > 0;
     });
-    return itemsWithImg;
+    console.log({ itemsWithImg, hasNext: res.data.has_next });
+    return { itemsWithImg, hasNext: res.data.has_next };
   };
-  const { status, data, fetchNextPage, isFetchingNextPage } = useInfiniteQuery({
-    queryKey: "getItems",
-    queryFn: getItems,
-    staleTime: Infinity,
-    getNextPageParam: (lastPage, pages) => pages.length + 1,
-  });
+  const { status, data, fetchNextPage, isFetchingNextPage, hasNextPage } =
+    useInfiniteQuery<FrontPageData>({
+      queryKey: "getItems",
+      queryFn: getItems,
+      staleTime: Infinity,
+      getNextPageParam: (lastPage, pages) => {
+        if (lastPage.hasNext) {
+          return pages.length + 1;
+        }
+        return undefined;
+      },
+    });
 
   const lastItemRef = useRef<HTMLElement>(null);
   const { ref, entry } = useIntersection({
@@ -59,7 +70,7 @@ export default function FrontPage() {
       fetchNextPage();
     }
   }, [entry, fetchNextPage]);
-  const items = data?.pages.flatMap((page) => page);
+  const items = data?.pages.flatMap((page) => page.itemsWithImg);
   // (async () => {
   //   await axios.get(domain + downloadfiles)
   //   .then(response => {
@@ -108,9 +119,11 @@ export default function FrontPage() {
               </div>
             );
           })}
-          {Array.from({ length: 16 }, (_, index: number) => (
-            <div className={`${utilcss.skeleton} ${css.placeholder}`}></div>
-          ))}
+          {hasNextPage
+            ? Array.from({ length: 16 }, (_, index: number) => (
+                <div className={`${utilcss.skeleton} ${css.placeholder}`}></div>
+              ))
+            : null}
         </div>
       </div>
       {!isDesktopOrLaptop && <MobileNavBottom />}
