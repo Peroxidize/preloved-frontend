@@ -41,6 +41,7 @@ export const create_collection = async (name: any) => {
 
 async function getCompleteData(collection: Collection) {
   const ids = await get_collection_items(String(collection.id));
+  const itemInformation = ids.itemInformation;
 
   let img_ids: string[] = [];
   let img_links: string[] = [];
@@ -78,7 +79,7 @@ async function getCompleteData(collection: Collection) {
     }
   } while (swapped); // Continue until no swaps are made
 
-  return { ...collection, img_ids, img_links };
+  return { ...collection, img_ids, img_links, itemInformation};
 }
 
 export const get_collection = async () => {

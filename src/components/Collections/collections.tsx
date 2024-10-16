@@ -1,4 +1,5 @@
 import utilcss from "../../utils/utils.module.css";
+import frontcss from "../FrontPage/frontpage.module.css";
 import css from "./collections.module.css";
 import { useMediaQuery } from "react-responsive";
 import NavBar, { MobileNavTop, MobileNavBottom } from "../fragments/nav-bar/nav-bar";
@@ -7,6 +8,8 @@ import { atom, useAtom, useAtomValue, useSetAtom } from "jotai";
 import { useEffect, useRef, useState } from "react";
 import deleteSVG from "../../assets/icons/delete.svg";
 import editSVG from "../../assets/icons/edit-svgrepo-com.svg";
+import plusSVG from "../../assets/icons/plus.svg";
+import left_arrow from "../../assets/icons/leftArrow.svg";
 import {
   create_collection,
   delete_collection,
@@ -21,15 +24,32 @@ interface IFormInput {
   name: string;
 }
 
+interface ItemInformation {
+  image: string;
+  itemID: number;
+  name: string;
+  price: string;
+  storeName: string;
+}
+
+interface DisplayClothingProps {
+  collection: Collection; // Ensure this matches the expected type
+  item_informaion?: ItemInformation; // Optional if it can be undefined
+  setDisplayClothing: any;
+}
+
 export interface Collection {
   id: number;
   name: string;
   created_at: string;
   img_ids: string[];
   img_links: string[];
+  itemInformation: ItemInformation[];
 }
 
 export const resultAtom = atom<string>(""); // success, failed
+export const resultDeleteAtom = atom<string>(""); // success, failed
+export const itemIDAtom = atom<number>(-1); // success, failed
 export const showModalAtom = atom<string>("");
 export const collectionsAtom = atom<any>(null);
 export const collectionDataAtom = atom<{ name: string; id: number } | null>(null);
@@ -51,11 +71,17 @@ const RemoveItemModal = ({
   const [fetching, setFetching] = useState<boolean>(false);
   const [result, setResult] = useState<string>("");
   const setShowModal = useSetAtom(showModalAtom);
+  const setItemID = useSetAtom(itemIDAtom);
+  const setResultDelete = useSetAtom(resultDeleteAtom);
   const setCollections = useSetAtom(collectionsAtom);
 
   const delete_item = async () => {
     setFetching(true);
-    setResult(await remove_item_from_collection(collectionID, itemID));
+    const result = await remove_item_from_collection(collectionID, itemID);
+    console.log(result);
+    setItemID(Number(itemID));
+    setResult(result);
+    setResultDelete(String(result));
     setFetching(false);
     setCollections(fetch_collection());
   };
@@ -69,7 +95,7 @@ const RemoveItemModal = ({
     <div className={css.modal_container}>
       <div className={css.dialog_container}>
         <div className={css.dialog_header}>
-          <h2>Remove or Navigate</h2>
+          <h2>Remove</h2>
         </div>
         <div className={css.dialog_body}>
           <img src={img_link} onClick={nav} className={`${css.image} ${css.image_display}`} />
@@ -308,10 +334,100 @@ export const CreateCollectionModal = () => {
   );
 };
 
+const DisplayClothing = ({
+  collection,
+  item_information,
+  setDisplayClothing,
+  setItemData,
+}: {
+  collection: Collection;
+  item_information: ItemInformation[];
+  setDisplayClothing: any;
+  setItemData: any;
+}) => {
+  const navigate = useNavigate();
+  const [deleteResult, setDeleteResult] = useAtom(resultDeleteAtom);
+  const itemID = useAtomValue(itemIDAtom);
+  const [updatedItems, setUpdatedItems] = useState(item_information);
+  const [isAllItems, setAllItems] = useState(true);
+
+  useEffect(() => {
+    // If deleteResult is "success", filter out the deleted item by itemID
+    if (deleteResult === "success") {
+      setUpdatedItems((prevItems) => prevItems.filter((item) => item.itemID !== itemID));
+      setDeleteResult(""); // Reset delete result after processing
+      console.log("TEST@!#!@");
+      console.log(itemID);
+    }
+  }, [deleteResult, itemID]);
+
+  return (
+    <>
+      <div className={css.collection_wrapper}>
+        <div className={css.collection_content}>
+          <div className={css.collection_header}>
+            <img
+              src={left_arrow}
+              className={css.left_arrow}
+              onClick={() => setDisplayClothing(false)}
+            />
+            <h1>{collection?.name}</h1>
+          </div>
+          <div className={css.fyp}>
+            <p className={isAllItems ? css.bg_white : ""} onClick={() => setAllItems(true)}>
+              All Items
+            </p>
+            <p className={isAllItems ? "" : css.bg_white} onClick={() => setAllItems(false)}>
+              For You
+            </p>
+          </div>
+          <div className={css.collection_body}>
+            <div className={css.clothing_display}>
+              {updatedItems.map((item_information: ItemInformation) => {
+                return (
+                  <div className={css.item_container} key={item_information.itemID}>
+                    <img
+                      src={item_information?.image}
+                      className={css.img}
+                      onClick={() => navigate(`/item/${item_information.itemID}`)}
+                    />
+                    <div className={css.information_container}>
+                      <p className={css.item_name}>{item_information.name}</p>
+                      <p className={css.store_name}>{item_information.storeName}</p>
+                      <div className={css.space_between}>
+                        <p className={css.item_name}>₱{item_information.price}</p>
+                        <img
+                          src={deleteSVG}
+                          className={css.svg}
+                          onClick={() =>
+                            setItemData(
+                              String(collection.id),
+                              item_information.itemID,
+                              item_information.image,
+                              "delete_item"
+                            )
+                          }
+                        />
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+      </div>
+    </>
+  );
+};
+
 function Collections() {
   const [collections, setCollections] = useAtom(collectionsAtom);
   const [showModal, setShowModal] = useAtom(showModalAtom);
   const [collectionData, setCollectionData] = useAtom(collectionDataAtom);
+  const [displayClothing, setDisplayClothing] = useState<boolean>(false);
+  const [itemInformation, setItemInformation] = useState<ItemInformation[]>();
+  const [collectionInformation, setCollectionInformation] = useState<Collection>();
   const [itemData, setItemData] = useState<{
     collectionID: string;
     itemID: string;
@@ -344,6 +460,12 @@ function Collections() {
     setShowModal(modal);
   };
 
+  const handleCollectionClick = (collection: Collection, item_information: ItemInformation[]) => {
+    setCollectionInformation(collection);
+    setItemInformation(item_information);
+    setDisplayClothing(true);
+  };
+
   return (
     <>
       {isDesktopOrLaptop ? <NavBar /> : <MobileNavTop />}
@@ -351,9 +473,16 @@ function Collections() {
         <div className={css.collections2}>
           <h1>Your Collections</h1>
           <div className={css.list_container}>
+            <div className={css.createCollection} onClick={() => create_modal("create")}>
+              <img src={plusSVG} className={css.addIcon} />
+            </div>
             {collections?.map((collection: Collection) => (
               <div className={css.collection_container} key={collection.name}>
-                <img src={collection.img_links[0]} className={css.img} />
+                <img
+                  src={collection.img_links[0]}
+                  className={css.img}
+                  onClick={() => handleCollectionClick(collection, collection.itemInformation)}
+                />
                 <div className={css.list_info}>
                   <p className={css.collection_name}>{collection.name}</p>
                   <div className={css.icons_container}>
@@ -373,9 +502,6 @@ function Collections() {
             ))}
           </div>
         </div>
-        <div className={css.foryou}>
-          <h1>For You</h1>
-        </div>
       </div>
       {!isDesktopOrLaptop && <MobileNavBottom />}
       {showModal === "delete_item" && itemData && (
@@ -391,6 +517,14 @@ function Collections() {
       )}
       {showModal === "rename" && (
         <RenameCollectionModal name={collectionData!.name} id={collectionData!.id} />
+      )}
+      {displayClothing && (
+        <DisplayClothing
+          collection={collectionInformation!}
+          item_information={itemInformation!}
+          setDisplayClothing={setDisplayClothing}
+          setItemData={set_item_data}
+        />
       )}
     </>
   );
