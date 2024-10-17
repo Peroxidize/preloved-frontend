@@ -10,10 +10,13 @@ import deleteSVG from "../../assets/icons/delete.svg";
 import editSVG from "../../assets/icons/edit-svgrepo-com.svg";
 import plusSVG from "../../assets/icons/plus.svg";
 import left_arrow from "../../assets/icons/leftArrow.svg";
+import checkSVG from "../../assets/icons/check.svg";
 import {
+  add_item_to_collection,
   create_collection,
   delete_collection,
   get_collection,
+  get_similar_items_collection,
   remove_item_from_collection,
   rename_collection,
 } from "../../utils/collections";
@@ -36,6 +39,18 @@ interface DisplayClothingProps {
   collection: Collection; // Ensure this matches the expected type
   item_informaion?: ItemInformation; // Optional if it can be undefined
   setDisplayClothing: any;
+}
+
+interface SimilarItems {
+  image: string;
+  is_feminine: boolean;
+  item_description: string;
+  item_id: number;
+  item_name: string;
+  item_price: number;
+  size: string;
+  storeID: number;
+  storeName: string;
 }
 
 export interface Collection {
@@ -95,7 +110,7 @@ const RemoveItemModal = ({
     <div className={css.modal_container}>
       <div className={css.dialog_container}>
         <div className={css.dialog_header}>
-          <h2>Remove</h2>
+          <h2>Remove?</h2>
         </div>
         <div className={css.dialog_body}>
           <img src={img_link} onClick={nav} className={`${css.image} ${css.image_display}`} />
@@ -334,6 +349,73 @@ export const CreateCollectionModal = () => {
   );
 };
 
+const DisplaySimilarItem = ({
+  item_information,
+  collection,
+  removeSimilarItem,
+  updatedItems,
+  setUpdatedItems,
+}: {
+  item_information: SimilarItems;
+  collection: Collection;
+  removeSimilarItem: any;
+  updatedItems: ItemInformation[];
+  setUpdatedItems: any,
+}) => {
+  const navigate = useNavigate();
+  const [is_querying, set_is_querying] = useState<boolean>(false);
+  const [is_added, set_is_added] = useState<boolean>(false);
+  const setCollection = useSetAtom(collectionsAtom);
+
+  const addToCollection = async (collectionID: string, itemID: string) => {
+    if (is_added) {
+      return;
+    }
+    set_is_querying(true);
+    const response = await add_item_to_collection(String(collectionID), String(itemID));
+    if (response === "success") {
+      set_is_added(true);
+      const item: ItemInformation = {
+        image: item_information.image,
+        itemID: item_information.item_id,
+        name: item_information.item_name,
+        price: String(item_information.item_price),
+        storeName: item_information.storeName,
+      };
+      updatedItems.push(item);
+      setUpdatedItems(updatedItems);
+      removeSimilarItem(item_information);
+    }
+    set_is_querying(false);
+  };
+
+  const onClick = (collectionID: string, itemID: string) => {
+    addToCollection(collectionID, itemID);
+  };
+
+  return (
+    <div className={css.item_container} key={item_information.item_name + item_information.item_id}>
+      <img
+        src={item_information?.image}
+        className={css.img}
+        onClick={() => navigate(`/item/${item_information.item_id}`)}
+      />
+      <div className={css.information_container}>
+        <p className={css.item_name}>{item_information.item_name}</p>
+        <p className={css.store_name}>{item_information.storeName}</p>
+        <div className={css.space_between}>
+          <p className={css.item_name}>₱{item_information.item_price}</p>
+          <img
+            src={is_querying ? loading : is_added ? checkSVG : plusSVG}
+            className={css.svg}
+            onClick={() => onClick(String(collection.id), String(item_information.item_id))}
+          />
+        </div>
+      </div>
+    </div>
+  );
+};
+
 const DisplayClothing = ({
   collection,
   item_information,
@@ -348,8 +430,27 @@ const DisplayClothing = ({
   const navigate = useNavigate();
   const [deleteResult, setDeleteResult] = useAtom(resultDeleteAtom);
   const itemID = useAtomValue(itemIDAtom);
-  const [updatedItems, setUpdatedItems] = useState(item_information);
+  const [updatedItems, setUpdatedItems] = useState<ItemInformation[]>(item_information);
   const [isAllItems, setAllItems] = useState(true);
+  const [similar_items, setSimilarItems] = useState<SimilarItems[] | number>(0);
+
+  const fetch_similar_items = async () => {
+    setSimilarItems(await get_similar_items_collection(collection.id));
+  };
+
+  const removeSimilarItem = (itemToRemove: SimilarItems) => {
+    console.log(similar_items);
+    setSimilarItems((prevItems) => {
+      if (Array.isArray(prevItems)) {
+        return prevItems.filter((item) => item.item_id !== itemToRemove.item_id);
+      }
+      return []; // Return an empty array if prevItems is not an array
+    });
+  };
+
+  useEffect(() => {
+    console.log(similar_items);
+  }, [similar_items]);
 
   useEffect(() => {
     // If deleteResult is "success", filter out the deleted item by itemID
@@ -360,6 +461,10 @@ const DisplayClothing = ({
       console.log(itemID);
     }
   }, [deleteResult, itemID]);
+
+  useEffect(() => {
+    fetch_similar_items();
+  }, []);
 
   return (
     <>
@@ -382,37 +487,57 @@ const DisplayClothing = ({
             </p>
           </div>
           <div className={css.collection_body}>
-            <div className={css.clothing_display}>
-              {updatedItems.map((item_information: ItemInformation) => {
-                return (
-                  <div className={css.item_container} key={item_information.itemID}>
-                    <img
-                      src={item_information?.image}
-                      className={css.img}
-                      onClick={() => navigate(`/item/${item_information.itemID}`)}
-                    />
-                    <div className={css.information_container}>
-                      <p className={css.item_name}>{item_information.name}</p>
-                      <p className={css.store_name}>{item_information.storeName}</p>
-                      <div className={css.space_between}>
-                        <p className={css.item_name}>₱{item_information.price}</p>
-                        <img
-                          src={deleteSVG}
-                          className={css.svg}
-                          onClick={() =>
-                            setItemData(
-                              String(collection.id),
-                              item_information.itemID,
-                              item_information.image,
-                              "delete_item"
-                            )
-                          }
-                        />
+            <div className={css.clothing_display} key={"test123"}>
+              {isAllItems ? (
+                updatedItems.map((item_information: ItemInformation) => {
+                  return (
+                    <div className={css.item_container} key={item_information.itemID + item_information.name}>
+                      <img
+                        src={item_information?.image}
+                        className={css.img}
+                        onClick={() => navigate(`/item/${item_information.itemID}`)}
+                      />
+                      <div className={css.information_container}>
+                        <p className={css.item_name}>{item_information.name}</p>
+                        <p className={css.store_name}>{item_information.storeName}</p>
+                        <div className={css.space_between}>
+                          <p className={css.item_name}>₱{item_information.price}</p>
+                          <img
+                            src={deleteSVG}
+                            className={css.svg}
+                            onClick={() =>
+                              setItemData(
+                                String(collection.id),
+                                item_information.itemID,
+                                item_information.image,
+                                "delete_item"
+                              )
+                            }
+                          />
+                        </div>
                       </div>
                     </div>
-                  </div>
-                );
-              })}
+                  );
+                })
+              ) : similar_items === 0 ? (
+                <div className={css.loading2}>
+                  <h1>Loading...</h1>
+                </div>
+              ) : (
+                Array.isArray(similar_items) &&
+                similar_items?.map((item_information: SimilarItems) => {
+                  return (
+                    <DisplaySimilarItem
+                      item_information={item_information}
+                      collection={collection}
+                      removeSimilarItem={removeSimilarItem}
+                      updatedItems={updatedItems}
+                      setUpdatedItems={setUpdatedItems}
+                      key={item_information.item_price}
+                    />
+                  );
+                })
+              )}
             </div>
           </div>
         </div>

@@ -368,7 +368,7 @@
 
 .clothing_display {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(5, 1fr);
   gap: 1rem;
   justify-items: center;
   align-items: center;
@@ -440,6 +440,14 @@
 
 .bg_white {
   background-color: white;
+}
+
+.loading2 {
+  min-width: 200px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 
 @media (min-width: 320px) and (max-width: 480px) {

@@ -196,3 +196,18 @@ export const remove_item_from_collection = async (collectionID: string, itemID: 
     return "failed";
   }
 };
+
+export const get_similar_items_collection = async (collectionID: number) => {
+  try {
+    const response = await axios.get(API_URL + "get_similar_items_collection", {
+      params: { collection_id: collectionID },
+      withCredentials: true,
+    });
+    console.log("similar items");
+    console.log(response.data);
+    return response.data.item_list;
+  } catch (error: any) {
+    console.log(error.data);
+    return "failed";
+  }
+};
