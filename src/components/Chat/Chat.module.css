@@ -6,6 +6,7 @@
   padding: 0 5rem;
   height: 80vh;
   display: flex;
+  gap: 2rem;
 }
 
 .chatrooms {
@@ -43,4 +44,67 @@
 
 .messages {
   flex: 2;
+  background-color: #eeeeee;
+  border-radius: 1rem;
+  display: flex;
+  flex-direction: column;
+  padding: 1rem 2rem;
+}
+
+.messagesContainer {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1rem 0;
+}
+
+.message {
+  max-width: 70%;
+  padding: 0.5rem 1rem;
+  border-radius: 1rem;
+  word-wrap: break-word;
+}
+
+.sender {
+  align-self: flex-end;
+  background-color: black;
+  color: white;
+}
+
+.recipient {
+  align-self: flex-start;
+  background-color: white;
+  color: black;
+}
+
+.messageInputContainer {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.messageInputContainer input {
+  flex: 1;
+  padding: 0.75rem 1rem;
+  border: 0;
+  border-radius: 100vw;
+  outline: none;
+}
+
+.messageInputContainer button {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  background-color: transparent;
+}
+
+.messageInputContainer button:hover {
+  background-color: #eaeaea;
+}
+
+.receiver {
+  font-size: 2rem;
 }
