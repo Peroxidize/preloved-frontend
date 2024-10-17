@@ -1,0 +1,46 @@
+.spacer {
+  padding: 0.5rem 0;
+}
+
+.wrapper {
+  padding: 0 5rem;
+  height: 80vh;
+  display: flex;
+}
+
+.chatrooms {
+  flex: 1;
+  background-color: #f5f5f5;
+  padding: 1rem 0.5rem;
+  border-radius: 1rem;
+}
+
+.chatroomsHeader,
+.chatroom {
+  padding-left: 2rem;
+}
+
+.chatroomsContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.chatroom {
+  padding: 1rem 1rem 1rem 2rem;
+  font-size: 1.1rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+}
+
+.chatroom:hover {
+  background-color: #eaeaea;
+}
+
+.selected {
+  background-color: #eaeaea;
+}
+
+.messages {
+  flex: 2;
+}

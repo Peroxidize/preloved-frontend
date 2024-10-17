@@ -92,6 +92,9 @@ export const UserMenu = () => {
         <Link to="/collections" className={css.link}>
           Collections
         </Link>
+        <Link to="/chat" className={css.link}>
+          Chat
+        </Link>
         <div className={css.link} onClick={() => preferencesRef.current?.showModal()}>
           Preferences
         </div>

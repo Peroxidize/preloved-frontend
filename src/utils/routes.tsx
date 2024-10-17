@@ -19,6 +19,7 @@ import TicketCenterSeller from "../components/TicketCenter/TicketCenterSeller";
 import Cart from "../components/Cart/Cart";
 import Search from "../components/Search/Search";
 import Maps from "../components/ProductManagement/map";
+import { Chat } from "../components/Chat/Chat";
 
 export const UserRoute = () => {
   return (
@@ -31,6 +32,7 @@ export const UserRoute = () => {
       <Route path="collections" element={<Collections />} />
       <Route path="cart" element={<Cart />} />
       <Route path="search" element={<Search />} />
+      <Route path="chat" element={<Chat />} />
     </>
   );
 };
@@ -47,6 +49,7 @@ export const VerifiedSellerRoute = () => {
       <Route path="shop/map" element={<Maps />} />
       <Route path="ticketcenter" element={<TicketCenterSeller />} />
       <Route path="item/:id" element={<Item />} />
+      <Route path="chat" element={<Chat />} />
     </>
   );
 };
