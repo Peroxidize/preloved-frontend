@@ -85,7 +85,7 @@ const Messages = () => {
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
           >
-            <img src={isHovered ? sendIconFilled : sendIcon} alt="Send" />
+            <img src={isHovered ? sendIconFilled : sendIcon} alt="Send" className={css.sendIcon} />
           </button>
         </div>
       </form>
