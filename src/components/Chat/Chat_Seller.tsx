@@ -151,6 +151,13 @@ const Messages = () => {
     }
   }, [messages]); // Trigger scroll when `messages` change
 
+  const handleKeyPress = (event: any) => {
+    if (event.key === "Enter") {
+      event.preventDefault(); // prevents the default action, like form submission
+      sendMessage();
+    }
+  };
+
   return (
     <div className={css.messages}>
       <h2 className={css.receiver}>{selectedChat?.name}</h2>
@@ -171,6 +178,7 @@ const Messages = () => {
           placeholder="Type your message here"
           value={newMessage}
           onChange={(e) => setNewMessage(e.target.value)}
+          onKeyDown={handleKeyPress}
         />
         <button
           onClick={sendMessage}
