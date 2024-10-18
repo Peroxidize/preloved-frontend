@@ -40,6 +40,8 @@ import { showModalAtom, collectionsAtom, Collection } from "../Collections/colle
 import { add_item_to_collection, get_collection } from "../../utils/collections";
 import { get_location_link } from "../../utils/auth";
 import { Image } from "../FrontPage/FrontPage";
+import { sellerIDAtom, storeNameAtom } from "../Chat/Chat";
+import { get_seller_id } from "../../utils/chat";
 
 const itemDataAtom = atom<{ itemID: number; name: string } | null>(null);
 const storeIDAtom = atom<string | null>(null);
@@ -218,8 +220,11 @@ export interface ItemDetails {
 }
 
 const Details: React.FC<{ id: string | undefined }> = ({ id }) => {
+  const navigate = useNavigate();
   const mapsLink = useAtomValue(linkAtom);
   const setStore = useSetAtom(storeIDAtom);
+  const setShopOwnerID = useSetAtom(sellerIDAtom);
+  const setStoreName = useSetAtom(storeNameAtom);
   const [storeID, setStoreID] = useState("");
   const setItemData = useSetAtom(itemDataAtom);
 
@@ -284,6 +289,9 @@ const Details: React.FC<{ id: string | undefined }> = ({ id }) => {
     setStoreID(String(res.data.storeID));
     setStore(String(res.data.storeID));
     setItemData({ itemID: res.data.itemID, name: res.data.name });
+    const response = await get_seller_id(String(res.data.storeID));
+    setShopOwnerID(response.shopOwnerID);
+    setStoreName(response.storeName);
     return res.data;
   };
   const { status, data, isFetchedAfterMount } = useQuery<ItemDetails>(
@@ -359,6 +367,9 @@ const Details: React.FC<{ id: string | undefined }> = ({ id }) => {
               )}
             </div>
           </div>
+          <p className={css.talkToSeller} onClick={() => navigate("/chat")}>
+            Talk to Seller
+          </p>
           <div className={css.descAndSize}>
             <p className={css.desc}>
               <strong>Description: </strong>
@@ -445,7 +456,7 @@ const Item: React.FC = () => {
   });
 
   const handleClick = (itemID: number) => {
-    navigate(`/item/${itemID}`, { state: { toRefresh: true }});
+    navigate(`/item/${itemID}`, { state: { toRefresh: true } });
     window.location.reload();
   };
 
@@ -467,11 +478,11 @@ const Item: React.FC = () => {
 
     const fetch_similar_items = async () => {
       const response = await axios.get(LINK_GET_SIMILAR_ITEMS, {
-          params: {
-              item_id: Number(id),
-              num: 4,
-          },
-          withCredentials: true,
+        params: {
+          item_id: Number(id),
+          num: 4,
+        },
+        withCredentials: true,
       });
       setSimilarItems(response.data.items);
     };
@@ -507,18 +518,14 @@ const Item: React.FC = () => {
       <h2 className={css.text}>Similar Items</h2>
       <div className={css.similar_container}>
         {similarItems.map((item, i) => (
-            <div className={exportedcss.item_container} onClick={() => handleClick(item.itemID)}>
-              <img
-                src={item.image}
-                className={exportedcss.img}
-                key={item.itemID}
-              />
-              <div className={exportedcss.information_container}>
-                <p className={exportedcss.item_name}>{item.name}</p>
-                <p className={exportedcss.store_name}>{item.storeName}</p>
-                <p className={exportedcss.item_name}>₱{item.price}</p>
-              </div>
+          <div className={exportedcss.item_container} onClick={() => handleClick(item.itemID)}>
+            <img src={item.image} className={exportedcss.img} key={item.itemID} />
+            <div className={exportedcss.information_container}>
+              <p className={exportedcss.item_name}>{item.name}</p>
+              <p className={exportedcss.store_name}>{item.storeName}</p>
+              <p className={exportedcss.item_name}>₱{item.price}</p>
             </div>
+          </div>
         ))}
       </div>
       <div className={css.text}></div>

@@ -20,6 +20,7 @@ import Cart from "../components/Cart/Cart";
 import Search from "../components/Search/Search";
 import Maps from "../components/ProductManagement/map";
 import { Chat } from "../components/Chat/Chat";
+import { Chat_Seller } from "../components/Chat/Chat_Seller";
 
 export const UserRoute = () => {
   return (
@@ -50,6 +51,7 @@ export const VerifiedSellerRoute = () => {
       <Route path="ticketcenter" element={<TicketCenterSeller />} />
       <Route path="item/:id" element={<Item />} />
       <Route path="chat" element={<Chat />} />
+      <Route path="chat_seller" element={<Chat_Seller />} />
     </>
   );
 };

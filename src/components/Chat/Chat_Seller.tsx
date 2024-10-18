@@ -13,7 +13,7 @@ import {
 } from "react";
 import sendIcon from "../../assets/icons/send.svg";
 import sendIconFilled from "../../assets/icons/sendFilled.svg";
-import { fetch_all_messages, fetch_chat_history_user, long_poll_messages, send_message } from "../../utils/chat";
+import { fetch_all_messages, fetch_chat_history_seller, fetch_chat_history_user, long_poll_messages, send_message } from "../../utils/chat";
 import { atom, useAtomValue } from "jotai";
 import { userAtom } from "../../App";
 import { User } from "../misc";
@@ -22,6 +22,11 @@ import { useAtom } from "jotai/react";
 interface SellerInformation {
   sellerID: string;
   storeName: string;
+}
+
+interface CustomerInformation {
+  id: string;
+  name: string;
 }
 
 export interface ChatMessage {
@@ -34,44 +39,23 @@ export interface ChatMessage {
   userID: string; // The ID of the user
 }
 
-export const sellerIDAtom = atom<number | null>(null);
-export const storeNameAtom = atom<string | null>(null);
-const activeChatAtom = atom<SellerInformation | null>(null);
+const activeChatAtom = atom<CustomerInformation | null>(null);
 
 const Chatrooms = () => {
-  const [selectedChat, setSelectedChat] = useState<SellerInformation[]>([]);
+  const [selectedChat, setSelectedChat] = useState<CustomerInformation[]>([]);
   const [activeChatID, setActiveChatID] = useAtom(activeChatAtom);
-  const sellerID = useAtomValue(sellerIDAtom);
-  const storeName = useAtomValue(storeNameAtom);
 
   const fetch_history = async () => {
-    const response = await fetch_chat_history_user();
-    const chats: SellerInformation[] = response.map((chat: any) => ({
-      sellerID: chat.id,
-      storeName: chat.name,
+    const response = await fetch_chat_history_seller();
+    const chats: CustomerInformation[] = response.map((chat: CustomerInformation) => ({
+      id: chat.id,
+      name: chat.name,
     }));
 
-    setSelectedChat((prevSelectedChat) => {
-      // Create a new array that includes previous chats
-      const combinedChats = [...prevSelectedChat, ...chats];
-
-      // Filter to keep only unique chats based on sellerID
-      return combinedChats.filter(
-        (c, index, self) => index === self.findIndex((x) => x.sellerID === c.sellerID)
-      );
-    });
+    setSelectedChat((prevSelectedChat) => [...prevSelectedChat, ...chats]);
   };
 
   useEffect(() => {
-    if (sellerID !== null || storeName !== null) {
-      const chat_info: SellerInformation = {
-        sellerID: String(sellerID),
-        storeName: storeName!,
-      };
-      setActiveChatID(chat_info);
-      setSelectedChat((prevSelectedChat) => [...prevSelectedChat, chat_info]);
-    }
-
     const updateChat = async () => {
       await fetch_history();
     };
@@ -85,17 +69,17 @@ const Chatrooms = () => {
         <h1 className={css.chat}>Chat</h1>
       </div>
       <div className={css.spacer}></div>
-      <div className={css.chatroomsContainer}>
+      <div className={css.chatroomsContainer} key={"127848"}>
         {selectedChat.length > 0 &&
           selectedChat.map((chat) => (
             <div
-              key={chat.sellerID}
-              className={`${css.chatroom} ${activeChatID?.sellerID === chat.sellerID && css.selected}`}
+              key={chat.id}
+              className={`${css.chatroom} ${activeChatID?.id === chat.id && css.selected}`}
               onClick={() =>
-                setActiveChatID({ sellerID: chat.sellerID, storeName: chat.storeName })
+                setActiveChatID({ id: chat.id, name: chat.name })
               }
             >
-              <p>{chat.storeName}</p>
+              <p>{chat.name}</p>
             </div>
           ))}
       </div>
@@ -114,8 +98,10 @@ const Messages = () => {
     if (newMessage.trim().length === 0) {
       return;
     }
+    const seller_id = String(user!.user_id);
+    const customer_id = String(selectedChat?.id);
 
-    send_message(newMessage, String(user!.user_id), String(selectedChat?.sellerID), String(user!.user_id));
+    send_message(newMessage, customer_id, seller_id, seller_id);
     setNewMessage("");
     fetch_messages();
   };
@@ -138,8 +124,8 @@ const Messages = () => {
   }
 
   useEffect(() => {
-    const user_id = String(user?.user_id);
-    const seller_id = String(selectedChat?.sellerID);
+    const user_id = String(selectedChat?.id);
+    const seller_id = String(user?.user_id);
     const intervalID = setInterval(() => {
       shortPolling(user_id, seller_id);
     }, 5000);
@@ -148,8 +134,8 @@ const Messages = () => {
   }, [selectedChat]);
 
   const fetch_messages = async () => {
-    const user_id: string = String(user?.user_id);
-    const seller_id: string = String(selectedChat?.sellerID);
+    const user_id: string = String(selectedChat?.id);
+    const seller_id: string = String(user?.user_id);
     const response = await fetch_all_messages(user_id, seller_id);
     setMessages(response);
   }; 
@@ -160,7 +146,7 @@ const Messages = () => {
 
   return (
     <div className={css.messages}>
-      <h2 className={css.receiver}>{selectedChat?.storeName}</h2>
+      <h2 className={css.receiver}>{selectedChat?.name}</h2>
       <div className={css.messagesContainer}>
         {messages.map((message: ChatMessage) => (
           <div
@@ -190,7 +176,7 @@ const Messages = () => {
   );
 };
 
-export const Chat = () => {
+export const Chat_Seller = () => {
   const isDesktopOrLaptop = useMediaQuery({
     query: "(min-device-width: 1224px)",
   });

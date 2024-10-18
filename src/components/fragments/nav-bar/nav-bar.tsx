@@ -134,6 +134,9 @@ export const SellerMenu = () => {
       <Link to={hasStore ? "/shop" : "/shop/create"} className={css.link}>
         {hasStore ? "My Shop" : "Create Shop"}
       </Link>
+      <Link to="/chat_seller" className={css.link}>
+        Chat
+      </Link>
       <Link to="/topup" className={css.link}>
         Top-up
       </Link>

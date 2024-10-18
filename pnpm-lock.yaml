@@ -53,7 +53,13 @@ importers:
       sort-by:
         specifier: ^1.2.0
         version: 1.2.0
+      websockets:
+        specifier: ^0.2.0
+        version: 0.2.0
     devDependencies:
+      '@types/node':
+        specifier: ^22.7.6
+        version: 22.7.6
       '@types/react':
         specifier: ^18.2.37
         version: 18.3.1
@@ -68,7 +74,7 @@ importers:
         version: 6.21.0(eslint@8.57.0)(typescript@5.4.5)
       '@vitejs/plugin-react':
         specifier: ^4.2.0
-        version: 4.2.1(vite@5.2.10)
+        version: 4.2.1(vite@5.2.10(@types/node@22.7.6))
       eslint:
         specifier: ^8.53.0
         version: 8.57.0
@@ -86,7 +92,7 @@ importers:
         version: 5.4.5
       vite:
         specifier: ^5.0.0
-        version: 5.2.10
+        version: 5.2.10(@types/node@22.7.6)
 
 packages:
 
@@ -507,6 +513,9 @@ packages:
 
   '@types/json-schema@7.0.15':
     resolution: {integrity: sha512-5+fP8P8MFNC+AyZCDxrB2pkZFPGzqQWUzpSeuuVLvm8VMcorNYavBqoFcxK8bQz4Qsbn4oUEEem4wDLfcysGHA==}
+
+  '@types/node@22.7.6':
+    resolution: {integrity: sha512-/d7Rnj0/ExXDMcioS78/kf1lMzYk4BZV8MZGTBKzTGZ6/406ukkbYlIsZmMPhcR5KlkunDHQLrtAVmSq7r+mSw==}
 
   '@types/prop-types@15.7.12':
     resolution: {integrity: sha512-5zvhXYtRNRluoE/jAp4GVsSduVUzNWKkOZrCDBWYtE7biZywwdC2AcEzg+cSMLFRfVgeAFqpfNabiPjxFddV1Q==}
@@ -1526,6 +1535,9 @@ packages:
     engines: {node: '>=14.17'}
     hasBin: true
 
+  undici-types@6.19.8:
+    resolution: {integrity: sha512-ve2KP6f/JnbPBFyobGHuerC9g1FYGn/F8n1LWTwNxCEzd6IfqTwUQcNXgEtmmQ6DlRrC1hrSrBnCZPokRrDHjw==}
+
   unload@2.2.0:
     resolution: {integrity: sha512-B60uB5TNBLtN6/LsgAf3udH9saB5p7gqJwcFfbOEZ8BcBHnGwCf6G/TGiEqkRAxX7zAFIUtzdrXQSdL3Q/wqNA==}
 
@@ -1572,6 +1584,10 @@ packages:
         optional: true
       terser:
         optional: true
+
+  websockets@0.2.0:
+    resolution: {integrity: sha512-GjhUvj0PfZMpsRI7BdyyM7wsaGDkDd3uMrFThWNyb3lQy8BxmLWxtE22W7pQpI7z703xht8j1fqVOjRkZIulUw==}
+    engines: {node: '>=0.4.10'}
 
   which@2.0.2:
     resolution: {integrity: sha512-BLI3Tl1TW3Pvl70l3yq3Y64i+awpwXqsGBYWkkqMtnbXgrMD+yj7rhW0kuEDxzJaYXGjEW5ogapKNMEKNMjibA==}
@@ -1966,6 +1982,10 @@ snapshots:
 
   '@types/json-schema@7.0.15': {}
 
+  '@types/node@22.7.6':
+    dependencies:
+      undici-types: 6.19.8
+
   '@types/prop-types@15.7.12': {}
 
   '@types/react-dom@18.3.0':
@@ -2067,14 +2087,14 @@ snapshots:
 
   '@ungap/structured-clone@1.2.0': {}
 
-  '@vitejs/plugin-react@4.2.1(vite@5.2.10)':
+  '@vitejs/plugin-react@4.2.1(vite@5.2.10(@types/node@22.7.6))':
     dependencies:
       '@babel/core': 7.24.4
       '@babel/plugin-transform-react-jsx-self': 7.24.1(@babel/core@7.24.4)
       '@babel/plugin-transform-react-jsx-source': 7.24.1(@babel/core@7.24.4)
       '@types/babel__core': 7.20.5
       react-refresh: 0.14.2
-      vite: 5.2.10
+      vite: 5.2.10(@types/node@22.7.6)
     transitivePeerDependencies:
       - supports-color
 
@@ -2991,6 +3011,8 @@ snapshots:
 
   typescript@5.4.5: {}
 
+  undici-types@6.19.8: {}
+
   unload@2.2.0:
     dependencies:
       '@babel/runtime': 7.24.4
@@ -3013,13 +3035,16 @@ snapshots:
 
   vary@1.1.2: {}
 
-  vite@5.2.10:
+  vite@5.2.10(@types/node@22.7.6):
     dependencies:
       esbuild: 0.20.2
       postcss: 8.4.38
       rollup: 4.17.0
     optionalDependencies:
+      '@types/node': 22.7.6
       fsevents: 2.3.3
+
+  websockets@0.2.0: {}
 
   which@2.0.2:
     dependencies:
