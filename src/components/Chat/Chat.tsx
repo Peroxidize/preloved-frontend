@@ -63,7 +63,7 @@ const Chatrooms = () => {
   };
 
   useEffect(() => {
-    if (sellerID !== null || storeName !== null) {
+    if (sellerID !== null && storeName !== null) {
       const chat_info: SellerInformation = {
         sellerID: String(sellerID),
         storeName: storeName!,
@@ -141,8 +141,8 @@ const Messages = () => {
     const user_id = String(user?.user_id);
     const seller_id = String(selectedChat?.sellerID);
     const intervalID = setInterval(() => {
-      shortPolling(user_id, seller_id);
-    }, 5000);
+      fetch_messages();
+    }, 500);
 
     return () => clearInterval(intervalID);
   }, [selectedChat]);

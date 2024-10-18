@@ -127,8 +127,8 @@ const Messages = () => {
     const user_id = String(selectedChat?.id);
     const seller_id = String(user?.user_id);
     const intervalID = setInterval(() => {
-      shortPolling(user_id, seller_id);
-    }, 5000);
+      fetch_messages();
+    }, 500);
 
     return () => clearInterval(intervalID);
   }, [selectedChat]);
