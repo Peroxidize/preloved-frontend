@@ -93,6 +93,7 @@ const Messages = () => {
   const [isHovered, setIsHovered] = useState(false);
   const user = useAtomValue<User | null>(userAtom);
   const selectedChat = useAtomValue(activeChatAtom);
+  const messagesEndRef = useRef<HTMLDivElement | null>(null);
 
   const sendMessage = async () => {
     if (newMessage.trim().length === 0) {
@@ -144,6 +145,12 @@ const Messages = () => {
     fetch_messages();
   }, [selectedChat]);
 
+  useEffect(() => {
+    if (messagesEndRef.current) {
+      messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, [messages]); // Trigger scroll when `messages` change
+
   return (
     <div className={css.messages}>
       <h2 className={css.receiver}>{selectedChat?.name}</h2>
@@ -152,6 +159,7 @@ const Messages = () => {
           <div
             key={message.timestamp}
             className={`${css.message} ${message.sender === String(user!.user_id) ? css.sender : css.recipient}`}
+            ref={messagesEndRef}
           >
             {message.message}
           </div>
