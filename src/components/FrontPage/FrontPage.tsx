@@ -10,6 +10,7 @@ import { useInfiniteQuery } from "react-query";
 import { useNavigate } from "react-router-dom";
 import { createContext, useEffect, useRef } from "react";
 import { useIntersection } from "@mantine/hooks";
+import { LoadingCard } from "../fragments/commonstuff/Loading";
 
 export interface Image {
   link: string;
@@ -48,7 +49,7 @@ export default function FrontPage() {
     console.log({ itemsWithImg, hasNext: res.data.has_next });
     return { itemsWithImg, hasNext: res.data.has_next };
   };
-  const { data, fetchNextPage, hasNextPage, refetch } = useInfiniteQuery<FrontPageData>({
+  const { status, data, fetchNextPage, hasNextPage, refetch } = useInfiniteQuery<FrontPageData>({
     queryKey: "getItems",
     queryFn: getItems,
     staleTime: Infinity,
@@ -88,40 +89,50 @@ export default function FrontPage() {
       {isDesktopOrLaptop ? <NavBar /> : <MobileNavTop />}
       <div className={css.wrapper}>
         <div className={css.display_clothing}>
-          {items?.map((item: Item, i) => {
-            if (i === items.length - 1) {
-              return (
-                <div className={css.item_container}>
-                  <img
-                    src={item.images[0].link}
-                    alt={item.item_name}
-                    className={css.img}
-                    key={i}
+          {status === "success" && items
+            ? items.map((item: Item, i) => {
+                if (i === items.length - 1) {
+                  return (
+                    <div key={i} className={css.item_container}>
+                      <img
+                        src={item.images[0].link}
+                        alt={item.item_name}
+                        className={css.img}
+                        key={i}
+                        onClick={() => navigate(`/item/${item.item_id}`)}
+                        ref={ref}
+                      />
+                      <div className={css.information_container}>
+                        <p className={css.item_name}>{item.item_name}</p>
+                        <p className={css.store_name}>{item.storeName}</p>
+                        <p className={css.item_name}>₱{item.item_price}</p>
+                      </div>
+                    </div>
+                  );
+                }
+                return (
+                  <div
+                    className={css.item_container}
                     onClick={() => navigate(`/item/${item.item_id}`)}
-                    ref={ref}
-                  />
-                  <div className={css.information_container}>
-                    <p className={css.item_name}>{item.item_name}</p>
-                    <p className={css.store_name}>{item.storeName}</p>
-                    <p className={css.item_name}>₱{item.item_price}</p>
+                  >
+                    <img
+                      src={item.images[0].link}
+                      alt={item.item_name}
+                      className={css.img}
+                      key={i}
+                    />
+                    <div className={css.information_container}>
+                      <p className={css.item_name}>{item.item_name}</p>
+                      <p className={css.store_name}>{item.storeName}</p>
+                      <p className={css.item_name}>₱{item.item_price}</p>
+                    </div>
                   </div>
-                </div>
-              );
-            }
-            return (
-              <div className={css.item_container} onClick={() => navigate(`/item/${item.item_id}`)}>
-                <img src={item.images[0].link} alt={item.item_name} className={css.img} key={i} />
-                <div className={css.information_container}>
-                  <p className={css.item_name}>{item.item_name}</p>
-                  <p className={css.store_name}>{item.storeName}</p>
-                  <p className={css.item_name}>₱{item.item_price}</p>
-                </div>
-              </div>
-            );
-          })}
+                );
+              })
+            : Array.from({ length: 16 }).map((_, index) => <LoadingCard key={index} />)}
           {hasNextPage
-            ? Array.from({ length: 16 }, (_) => (
-                <div className={`${utilcss.skeleton} ${css.placeholder}`}></div>
+            ? Array.from({ length: 16 }, (_, i) => (
+                <div className={`${utilcss.skeleton} ${css.placeholder}`} key={i}></div>
               ))
             : null}
         </div>

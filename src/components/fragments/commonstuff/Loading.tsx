@@ -1,4 +1,5 @@
 import css from "../../../assets/componentCSS/commonStuff/Loading.module.css";
+import frontPageCSS from "../../FrontPage/frontpage.module.css";
 import utilcss from "../../../utils/utils.module.css";
 
 const LoadingBigText: React.FC = () => {
@@ -25,5 +26,18 @@ const LoadingSmallText: React.FC = () => {
   return <div className={`${css.loadingSmallText} ${utilcss.skeleton}`}>{""}</div>;
 };
 
-export { LoadingBigText, LoadingTag, LoadingButton, LoadingImg, LoadingSmallText };
+const LoadingCard: React.FC = () => {
+  return (
+    <div className={frontPageCSS.item_container}>
+      <div className={`${frontPageCSS.img} ${utilcss.skeleton}`} />
+      <div className={frontPageCSS.information_container}>
+        <div className={`${utilcss.skeleton} ${frontPageCSS.loadingTitle}`} />
+        <div className={`${utilcss.skeleton} ${frontPageCSS.loadingStore}`} />
+        <div className={`${utilcss.skeleton} ${frontPageCSS.loadingPrice}`} />
+      </div>
+    </div>
+  );
+};
+
+export { LoadingBigText, LoadingTag, LoadingButton, LoadingImg, LoadingSmallText, LoadingCard };
 export default LoadingText;
