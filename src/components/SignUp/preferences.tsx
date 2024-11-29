@@ -2,7 +2,6 @@ import React, { forwardRef } from "react";
 import axios, { AxiosError } from "axios";
 import css from "./preferences.module.css";
 import { LINK_GET_ALL_TAGS } from "../misc";
-import { useState } from "react";
 import { useQuery } from "react-query";
 import { TagData } from "../ProductManagement/AddItem";
 import close from "../../assets/icons/close.svg";
@@ -16,20 +15,14 @@ interface PreferencesProps {
 
 const Preferences = forwardRef<HTMLDialogElement, PreferencesProps>(
   ({ handleChange, selectedTags, handleSubmit }, ref) => {
-    const [tags, setTags] = useState<TagData[]>();
-
-    const getTags = async () => {
-      const response = await axios.get(LINK_GET_ALL_TAGS, { withCredentials: true });
-      console.log(response.data);
-      setTags(response.data);
-      return response.data;
-    };
-
     const { status, data } = useQuery<
       "idle" | "error" | "loading" | "success",
       AxiosError,
       TagData
-    >("tags", getTags);
+    >("tags", async () => {
+      const response = await axios.get(LINK_GET_ALL_TAGS, { withCredentials: true });
+      return response.data;
+    });
 
     return (
       <dialog ref={ref} className={css.preferencesDialog}>
@@ -42,17 +35,22 @@ const Preferences = forwardRef<HTMLDialogElement, PreferencesProps>(
             }}
             className={css.closeButton}
           >
-            <img src={close} alt="" className={css.closeIcon} />
+            <img src={close} alt="Close" className={css.closeIcon} />
           </button>
         </div>
         <div className={css.spacer}></div>
         <div className={css.preferences}>
-          {data &&
+          {status === "loading" && <p>Loading tags...</p>}
+          {status === "error" && <p>Error loading tags</p>}
+          {status === "success" &&
+            data &&
             Object.keys(data).map((tag) => (
               <span key={tag} className={css.tagSpan}>
                 <label
                   htmlFor={tag}
-                  className={`${css.tagLabel} ${selectedTags.includes(data[tag]) ? css.selected : ""}`}
+                  className={`${css.tagLabel} ${
+                    selectedTags.includes(data[tag]) ? css.selected : ""
+                  }`}
                 >
                   {tag}
                 </label>
@@ -60,6 +58,7 @@ const Preferences = forwardRef<HTMLDialogElement, PreferencesProps>(
                   type="checkbox"
                   id={tag}
                   name={tag}
+                  checked={selectedTags.includes(data[tag])}
                   value={data[tag].toString()}
                   data-tag={tag}
                   onChange={handleChange}
@@ -71,9 +70,7 @@ const Preferences = forwardRef<HTMLDialogElement, PreferencesProps>(
         <Button
           handleClick={(e) => {
             e.preventDefault();
-            if (handleSubmit) {
-              handleSubmit();
-            }
+            handleSubmit?.();
             (ref as React.RefObject<HTMLDialogElement>).current?.close();
           }}
           text="Save"
