@@ -49,17 +49,18 @@ export default function FrontPage() {
     console.log({ itemsWithImg, hasNext: res.data.has_next });
     return { itemsWithImg, hasNext: res.data.has_next };
   };
-  const { status, data, fetchNextPage, hasNextPage, refetch } = useInfiniteQuery<FrontPageData>({
-    queryKey: "getItems",
-    queryFn: getItems,
-    staleTime: Infinity,
-    getNextPageParam: (lastPage, pages) => {
-      if (lastPage.hasNext) {
-        return pages.length + 1;
-      }
-      return undefined;
-    },
-  });
+  const { status, data, fetchNextPage, hasNextPage, refetch, isFetching } =
+    useInfiniteQuery<FrontPageData>({
+      queryKey: "getItems",
+      queryFn: getItems,
+      staleTime: Infinity,
+      getNextPageParam: (lastPage, pages) => {
+        if (lastPage.hasNext) {
+          return pages.length + 1;
+        }
+        return undefined;
+      },
+    });
 
   const lastItemRef = useRef<HTMLElement>(null);
   const { ref, entry } = useIntersection({
@@ -89,7 +90,7 @@ export default function FrontPage() {
       {isDesktopOrLaptop ? <NavBar /> : <MobileNavTop />}
       <div className={css.wrapper}>
         <div className={css.display_clothing}>
-          {status === "success" && items
+          {status === "success" && items && !isFetching
             ? items.map((item: Item, i) => {
                 if (i === items.length - 1) {
                   return (
@@ -114,13 +115,9 @@ export default function FrontPage() {
                   <div
                     className={css.item_container}
                     onClick={() => navigate(`/item/${item.item_id}`)}
+                    key={i}
                   >
-                    <img
-                      src={item.images[0].link}
-                      alt={item.item_name}
-                      className={css.img}
-                      key={i}
-                    />
+                    <img src={item.images[0].link} alt={item.item_name} className={css.img} />
                     <div className={css.information_container}>
                       <p className={css.item_name}>{item.item_name}</p>
                       <p className={css.store_name}>{item.storeName}</p>
