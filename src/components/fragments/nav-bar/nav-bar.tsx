@@ -20,7 +20,7 @@ import shoppingFilledIcon from "../../../assets/icons/cartFilled.svg";
 import search_icon from "../../../assets/icons/search_icon.svg";
 import image_search_icon from "../../../assets/icons/google-lens-svgrepo-com.svg";
 
-import React, { ChangeEvent, useEffect, useRef, useState } from "react";
+import React, { ChangeEvent, useContext, useEffect, useRef, useState } from "react";
 import { useAtom } from "jotai";
 import { userAtom } from "../../../App";
 import { get_current_user, logout } from "../../../utils/auth";
@@ -31,6 +31,7 @@ import LoadingDialog from "../commonstuff/Dialogs";
 import Preferences from "../../SignUp/preferences";
 import { TagData } from "../../ProductManagement/AddItem";
 import { useMutation, useQuery } from "react-query";
+import { RefetchContext } from "../../FrontPage/FrontPage";
 
 const PreferencesMenu = React.forwardRef<HTMLDialogElement>((props, ref) => {
   const getTags = async () => {
@@ -44,17 +45,22 @@ const PreferencesMenu = React.forwardRef<HTMLDialogElement>((props, ref) => {
     getTags
   );
 
-  const addTags = useMutation<"idle" | "error" | "loading" | "success", AxiosError, number[]>(
-    async (tags: number[]) => {
+  const refetchFrontPage = useContext(RefetchContext);
+
+  const addTags = useMutation({
+    mutationFn: async (tags: number[]) => {
       const formData = new FormData();
       selectedTags.forEach((tag) => {
         formData.append("tagIDs", tag.toString());
       });
       const response = await axios.post(LINK_ADD_PREF, formData, { withCredentials: true });
       console.log(response);
-      return response.data;
-    }
-  );
+      if (refetchFrontPage) {
+        refetchFrontPage();
+      }
+      return response;
+    },
+  });
 
   const handleSubmit = () => {
     addTags.mutate(selectedTags);

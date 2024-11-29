@@ -6,10 +6,9 @@ import { useMediaQuery } from "react-responsive";
 import { MobileNavTop } from "../fragments/nav-bar/nav-bar";
 import axios from "axios";
 import { LINK_GET_FRONTPAGE } from "../misc";
-import { useInfiniteQuery, useQuery } from "react-query";
+import { useInfiniteQuery } from "react-query";
 import { useNavigate } from "react-router-dom";
-import loading from "../../assets/loading.gif";
-import { useEffect, useRef } from "react";
+import { createContext, useEffect, useRef } from "react";
 import { useIntersection } from "@mantine/hooks";
 
 export interface Image {
@@ -34,6 +33,8 @@ interface FrontPageData {
   hasNext: boolean;
 }
 
+export const RefetchContext = createContext<(() => void) | undefined>(undefined);
+
 export default function FrontPage() {
   const navigate = useNavigate();
   const getItems = async ({ pageParam = 1 }) => {
@@ -47,18 +48,17 @@ export default function FrontPage() {
     console.log({ itemsWithImg, hasNext: res.data.has_next });
     return { itemsWithImg, hasNext: res.data.has_next };
   };
-  const { status, data, fetchNextPage, isFetchingNextPage, hasNextPage } =
-    useInfiniteQuery<FrontPageData>({
-      queryKey: "getItems",
-      queryFn: getItems,
-      staleTime: Infinity,
-      getNextPageParam: (lastPage, pages) => {
-        if (lastPage.hasNext) {
-          return pages.length + 1;
-        }
-        return undefined;
-      },
-    });
+  const { data, fetchNextPage, hasNextPage, refetch } = useInfiniteQuery<FrontPageData>({
+    queryKey: "getItems",
+    queryFn: getItems,
+    staleTime: Infinity,
+    getNextPageParam: (lastPage, pages) => {
+      if (lastPage.hasNext) {
+        return pages.length + 1;
+      }
+      return undefined;
+    },
+  });
 
   const lastItemRef = useRef<HTMLElement>(null);
   const { ref, entry } = useIntersection({
@@ -84,7 +84,7 @@ export default function FrontPage() {
   });
 
   return (
-    <>
+    <RefetchContext.Provider value={refetch}>
       {isDesktopOrLaptop ? <NavBar /> : <MobileNavTop />}
       <div className={css.wrapper}>
         <div className={css.display_clothing}>
@@ -120,13 +120,13 @@ export default function FrontPage() {
             );
           })}
           {hasNextPage
-            ? Array.from({ length: 16 }, (_, index: number) => (
+            ? Array.from({ length: 16 }, (_) => (
                 <div className={`${utilcss.skeleton} ${css.placeholder}`}></div>
               ))
             : null}
         </div>
       </div>
       {!isDesktopOrLaptop && <MobileNavBottom />}
-    </>
+    </RefetchContext.Provider>
   );
 }
