@@ -14,7 +14,7 @@
   justify-content: center;
   background-color: white;
   border-radius: 1rem;
-  }
+}
 
 .logo {
   width: 275px;
@@ -176,14 +176,12 @@
 }
 
 @media (min-width: 900px) {
-  .backgroundPhoto {
-    padding: 2rem 0;
-  }
-
   .container {
     margin: auto;
     width: 60%;
     padding: 4rem;
+    border-radius: 0;
+    height: 100%;
   }
 
   .dateInput {
@@ -193,11 +191,11 @@
 
 @media (min-width: 1200px) {
   .backgroundPhoto {
-    height: 100%;
+    min-height: 100vh;
   }
   .container {
     width: 40%;
-    height: 100%;
-    padding: 2rem 5rem;
+    padding: 5rem 5rem;
+    min-height: 100vh;
   }
 }
