@@ -12,7 +12,7 @@ import LoadingDialog, {
 } from "../fragments/commonstuff/Dialogs";
 import error from "../../assets/icons/error.svg";
 import Preferences from "./preferences";
-import { LINK_SIGNUP_USER } from "../misc";
+import { LINK_SIGNUP_SELLER, LINK_SIGNUP_USER } from "../misc";
 
 const domain = "https://preloved.westus3.cloudapp.azure.com/";
 const userNavText = "Want to create a seller account?";
@@ -64,12 +64,21 @@ export default function SignUp() {
 
   const [isLoading, setIsLoading] = useState(false);
   const mutation = useMutation(
-    (data: FormData) => axios.post(endpoint, data, { withCredentials: true }),
+    (data: FormData) =>
+      axios.post(isStore ? LINK_SIGNUP_SELLER : LINK_SIGNUP_USER, data, { withCredentials: true }),
     {
       onSuccess: (data) => {
         console.log(data);
         setIsLoading(false);
         setSuccessful(true);
+      },
+      onError: (error: any) => {
+        console.error("Signup failed:", error);
+        setIsLoading(false);
+        // Show error dialog with specific error message from backend
+        const errorDialog = document.querySelector("#errorDialog") as HTMLDialogElement;
+        errorDialog.showModal();
+        setTimeout(() => errorDialog.close(), 3000);
       },
     }
   );
