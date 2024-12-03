@@ -38,6 +38,9 @@
   .display_clothing {
     grid-template-columns: repeat(2, 1fr); /* 2 columns */
   }
+  .back_and_title_wrapper {
+    margin-left: 2rem;
+  }
 }
 
 /* For very small mobile devices */
