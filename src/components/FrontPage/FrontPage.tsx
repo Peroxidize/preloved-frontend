@@ -49,7 +49,7 @@ export default function FrontPage() {
     console.log({ itemsWithImg, hasNext: res.data.has_next });
     return { itemsWithImg, hasNext: res.data.has_next };
   };
-  const { status, data, fetchNextPage, hasNextPage, refetch, isFetching } =
+  const { status, data, fetchNextPage, hasNextPage, refetch, isRefetching, isFetchingNextPage } =
     useInfiniteQuery<FrontPageData>({
       queryKey: "getItems",
       queryFn: getItems,
@@ -90,8 +90,13 @@ export default function FrontPage() {
       {isDesktopOrLaptop ? <NavBar /> : <MobileNavTop />}
       <div className={css.wrapper}>
         <div className={css.display_clothing}>
-          {status === "success" && items && !isFetching
-            ? items.map((item: Item, i) => {
+          {/* Initial loading or manual refetch */}
+          {(status === "loading" || isRefetching) && !isFetchingNextPage ? (
+            Array.from({ length: 16 }).map((_, index) => <LoadingCard key={index} />)
+          ) : status === "success" && items ? (
+            // Show items once loaded
+            <>
+              {items.map((item: Item, i) => {
                 if (i === items.length - 1) {
                   return (
                     <div key={i} className={css.item_container}>
@@ -125,13 +130,15 @@ export default function FrontPage() {
                     </div>
                   </div>
                 );
-              })
-            : Array.from({ length: 16 }).map((_, index) => <LoadingCard key={index} />)}
-          {hasNextPage
-            ? Array.from({ length: 16 }, (_, i) => (
-                <div className={`${utilcss.skeleton} ${css.placeholder}`} key={i}></div>
-              ))
-            : null}
+              })}
+
+              {/* Show loading cards at bottom only during infinite scroll */}
+              {isFetchingNextPage &&
+                Array.from({ length: 8 }).map((_, index) => (
+                  <LoadingCard key={`scroll-${index}`} />
+                ))}
+            </>
+          ) : null}
         </div>
       </div>
       {!isDesktopOrLaptop && <MobileNavBottom />}
