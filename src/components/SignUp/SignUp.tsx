@@ -64,7 +64,7 @@ export default function SignUp() {
 
   const [isLoading, setIsLoading] = useState(false);
   const mutation = useMutation(
-    (data: FormData) => axios.post(LINK_SIGNUP_USER, data, { withCredentials: true }),
+    (data: FormData) => axios.post(endpoint, data, { withCredentials: true }),
     {
       onSuccess: (data) => {
         console.log(data);
@@ -113,7 +113,6 @@ export default function SignUp() {
       selectedTags.forEach((tag) => formData.append("tagIDs", tag.toString()));
     }
 
-    console.log(formData);
     console.log(formState);
     setIsLoading(true);
     mutation.mutate(formData);
