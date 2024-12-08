@@ -6,6 +6,9 @@
 .container {
   background-color: white;
   padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .backAndTitle {
@@ -67,9 +70,6 @@
 }
 
 @media (min-width: 800px) {
-  .backgroundPhoto {
-    padding: 2rem;
-  }
   .container {
     padding: 4rem;
     width: 80%;
