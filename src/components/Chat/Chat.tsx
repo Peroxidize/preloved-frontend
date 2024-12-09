@@ -13,7 +13,12 @@ import {
 } from "react";
 import sendIcon from "../../assets/icons/send.svg";
 import sendIconFilled from "../../assets/icons/sendFilled.svg";
-import { fetch_all_messages, fetch_chat_history_user, long_poll_messages, send_message } from "../../utils/chat";
+import {
+  fetch_all_messages,
+  fetch_chat_history_user,
+  long_poll_messages,
+  send_message,
+} from "../../utils/chat";
 import { atom, useAtomValue } from "jotai";
 import { userAtom } from "../../App";
 import { User } from "../misc";
@@ -116,7 +121,12 @@ const Messages = () => {
       return;
     }
 
-    send_message(newMessage, String(user!.user_id), String(selectedChat?.sellerID), String(user!.user_id));
+    send_message(
+      newMessage,
+      String(user!.user_id),
+      String(selectedChat?.sellerID),
+      String(user!.user_id)
+    );
     setNewMessage("");
     fetch_messages();
   };
@@ -124,16 +134,16 @@ const Messages = () => {
   async function shortPolling(user_id: string, seller_id: string) {
     const response = await long_poll_messages(user_id, seller_id);
     const chats: ChatMessage[] = Array.isArray(response)
-    ? response.map((chat: ChatMessage) => ({
-        id: chat.id, // Unique identifier for the message
-        is_read: chat.is_read, // Indicates if the message has been read
-        message: chat.message, // The content of the message
-        sellerID: chat.sellerID, // The ID of the seller (updated this, it was wrong before)
-        sender: chat.sender, // The ID or name of the sender
-        timestamp: chat.timestamp, // ISO 8601 format timestamp (e.g., "2024-10-17T21:52:51.105Z")
-        userID: chat.userID // The ID of the user
-      }))
-    : [];
+      ? response.map((chat: ChatMessage) => ({
+          id: chat.id, // Unique identifier for the message
+          is_read: chat.is_read, // Indicates if the message has been read
+          message: chat.message, // The content of the message
+          sellerID: chat.sellerID, // The ID of the seller (updated this, it was wrong before)
+          sender: chat.sender, // The ID or name of the sender
+          timestamp: chat.timestamp, // ISO 8601 format timestamp (e.g., "2024-10-17T21:52:51.105Z")
+          userID: chat.userID, // The ID of the user
+        }))
+      : [];
 
     setMessages(chats);
   }
@@ -153,17 +163,11 @@ const Messages = () => {
     const seller_id: string = String(selectedChat?.sellerID);
     const response = await fetch_all_messages(user_id, seller_id);
     setMessages(response);
-  }; 
+  };
 
   useEffect(() => {
     fetch_messages();
   }, [selectedChat]);
-
-  useEffect(() => {
-    if (messagesEndRef.current) {
-      messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
-    }
-  }, [messages]); // Trigger scroll when `messages` change
 
   const handleKeyPress = (event: any) => {
     if (event.key === "Enter") {
