@@ -145,12 +145,6 @@ const Messages = () => {
     fetch_messages();
   }, [selectedChat]);
 
-  useEffect(() => {
-    if (messagesEndRef.current) {
-      messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
-    }
-  }, [messages]); // Trigger scroll when `messages` change
-
   const handleKeyPress = (event: any) => {
     if (event.key === "Enter") {
       event.preventDefault(); // prevents the default action, like form submission
